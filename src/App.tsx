@@ -3,10 +3,6 @@ import { toast, Toaster } from "sonner";
 import { useTranslation } from "react-i18next";
 import { listen } from "@tauri-apps/api/event";
 import { platform } from "@tauri-apps/plugin-os";
-import {
-  checkAccessibilityPermission,
-  checkMicrophonePermission,
-} from "tauri-plugin-macos-permissions-api";
 import { ModelStateEvent, RecordingErrorEvent } from "./lib/types/events";
 import "./App.css";
 import AccessibilityPermissions from "./components/AccessibilityPermissions";
@@ -16,6 +12,7 @@ import { Sidebar, SidebarSection, SECTIONS_CONFIG } from "./components/Sidebar";
 import { useSettings } from "./hooks/useSettings";
 import { useSettingsStore } from "./stores/settingsStore";
 import { commands } from "@/bindings";
+import { checkMacOSPermissionState } from "@/lib/utils/permissions";
 import { getLanguageDirection, initializeRTL } from "@/lib/utils/rtl";
 
 type OnboardingStep = "accessibility" | "model" | "done";
@@ -178,10 +175,10 @@ function App() {
 
         if (currentPlatform === "macos") {
           try {
-            const [hasAccessibility, hasMicrophone] = await Promise.all([
-              checkAccessibilityPermission(),
-              checkMicrophonePermission(),
-            ]);
+            const {
+              accessibilityGranted: hasAccessibility,
+              microphoneGranted: hasMicrophone,
+            } = await checkMacOSPermissionState();
             if (!hasAccessibility || !hasMicrophone) {
               await revealMainWindowForPermissions();
               setOnboardingStep("accessibility");

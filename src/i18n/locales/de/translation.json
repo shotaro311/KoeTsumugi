@@ -352,10 +352,26 @@
       "customWords": {
         "title": "Benutzerdefinierte Wörter",
         "description": "Wörter hinzufügen, die oft falsch gehört oder geschrieben werden. Das System korrigiert automatisch ähnlich klingende Wörter entsprechend deiner Liste.",
-        "placeholder": "Wort hinzufügen",
+        "outputLabel": "Preferred output",
+        "outputPlaceholder": "ChatGPT",
+        "aliasesLabel": "Aliases / readings",
+        "aliasesPlaceholder": "chat gpt, チャットgpt, ちゃっとじーぴーてぃー",
+        "aliasesHint": "Separate aliases with commas or new lines. If a match is found, Handy replaces it with the preferred output.",
         "add": "Hinzufügen",
+        "save": "Save entry",
+        "cancelEdit": "Cancel",
         "remove": "{{word}} entfernen",
-        "duplicate": "\"{{word}}\" existiert bereits"
+        "removeShort": "Remove",
+        "duplicate": "\"{{word}}\" existiert bereits",
+        "selectUsage": "Enable at least one usage option.",
+        "useInModelPrompt": "Use in model prompt",
+        "useInPostProcess": "Use in post-processing",
+        "modelPromptTag": "Model prompt",
+        "postProcessTag": "Post-process",
+        "aliasesValue": "Aliases: {{aliases}}",
+        "noAliases": "No aliases or readings yet",
+        "edit": "Edit",
+        "placeholder": "Wort hinzufügen"
       }
     },
     "postProcessing": {

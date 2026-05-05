@@ -42,6 +42,23 @@ use crate::settings::{self, get_settings, ShortcutBinding};
 
 use super::handler::handle_shortcut_event;
 
+#[cfg(target_os = "macos")]
+fn ensure_accessibility_permission() -> Result<(), String> {
+    if macos_accessibility_client::accessibility::application_is_trusted() {
+        return Ok(());
+    }
+
+    Err(
+        "Accessibility permission not granted. Please enable it in System Settings > Privacy & Security > Accessibility"
+            .to_string(),
+    )
+}
+
+#[cfg(not(target_os = "macos"))]
+fn ensure_accessibility_permission() -> Result<(), String> {
+    Ok(())
+}
+
 /// Commands that can be sent to the hotkey manager thread
 enum ManagerCommand {
     Register {
@@ -88,6 +105,8 @@ pub struct FrontendKeyEvent {
 impl HandyKeysState {
     /// Create a new HandyKeysState
     pub fn new(app: AppHandle) -> Result<Self, String> {
+        ensure_accessibility_permission()?;
+
         let (cmd_tx, cmd_rx) = mpsc::channel::<ManagerCommand>();
 
         // Start the manager thread
@@ -261,6 +280,8 @@ impl HandyKeysState {
 
     /// Start recording mode for a specific binding
     pub fn start_recording(&self, app: &AppHandle, binding_id: String) -> Result<(), String> {
+        ensure_accessibility_permission()?;
+
         if self.is_recording.load(Ordering::SeqCst) {
             return Err("Already recording".into());
         }

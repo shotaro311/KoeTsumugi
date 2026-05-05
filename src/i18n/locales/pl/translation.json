@@ -352,10 +352,26 @@
       "customWords": {
         "title": "Własne słowa",
         "description": "Dodaj słowa, które często są źle rozpoznawane lub zapisywane podczas transkrypcji. System automatycznie poprawi podobnie brzmiące słowa, aby pasowały do Twojej listy.",
-        "placeholder": "Dodaj słowo",
+        "outputLabel": "Preferred output",
+        "outputPlaceholder": "ChatGPT",
+        "aliasesLabel": "Aliases / readings",
+        "aliasesPlaceholder": "chat gpt, チャットgpt, ちゃっとじーぴーてぃー",
+        "aliasesHint": "Separate aliases with commas or new lines. If a match is found, Handy replaces it with the preferred output.",
         "add": "Dodaj",
+        "save": "Save entry",
+        "cancelEdit": "Cancel",
         "remove": "Usuń {{word}}",
-        "duplicate": "\"{{word}}\" już istnieje"
+        "removeShort": "Remove",
+        "duplicate": "\"{{word}}\" już istnieje",
+        "selectUsage": "Enable at least one usage option.",
+        "useInModelPrompt": "Use in model prompt",
+        "useInPostProcess": "Use in post-processing",
+        "modelPromptTag": "Model prompt",
+        "postProcessTag": "Post-process",
+        "aliasesValue": "Aliases: {{aliases}}",
+        "noAliases": "No aliases or readings yet",
+        "edit": "Edit",
+        "placeholder": "Dodaj słowo"
       }
     },
     "postProcessing": {

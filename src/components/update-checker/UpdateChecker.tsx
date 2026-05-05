@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { check } from "@tauri-apps/plugin-updater";
-import { relaunch } from "@tauri-apps/plugin-process";
 import { listen } from "@tauri-apps/api/event";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { ProgressBar } from "../shared";
@@ -11,6 +10,9 @@ import { commands } from "../../bindings";
 interface UpdateCheckerProps {
   className?: string;
 }
+
+const HANDY_UPSTREAM_RELEASE_URL =
+  "https://github.com/cjpais/Handy/releases/latest";
 
 const UpdateChecker: React.FC<UpdateCheckerProps> = ({ className = "" }) => {
   const { t } = useTranslation();
@@ -111,37 +113,9 @@ const UpdateChecker: React.FC<UpdateCheckerProps> = ({ className = "" }) => {
     try {
       setIsInstalling(true);
       setDownloadProgress(0);
-      downloadedBytesRef.current = 0;
-      contentLengthRef.current = 0;
-      const update = await check();
-
-      if (!update) {
-        console.log("No update available during install attempt");
-        return;
-      }
-
-      await update.downloadAndInstall((event) => {
-        switch (event.event) {
-          case "Started":
-            downloadedBytesRef.current = 0;
-            contentLengthRef.current = event.data.contentLength ?? 0;
-            break;
-          case "Progress":
-            downloadedBytesRef.current += event.data.chunkLength;
-            const progress =
-              contentLengthRef.current > 0
-                ? Math.round(
-                    (downloadedBytesRef.current / contentLengthRef.current) *
-                      100,
-                  )
-                : 0;
-            setDownloadProgress(Math.min(progress, 100));
-            break;
-        }
-      });
-      await relaunch();
+      await openUrl(HANDY_UPSTREAM_RELEASE_URL);
     } catch (error) {
-      console.error("Failed to install update:", error);
+      console.error("Failed to open update page:", error);
     } finally {
       setIsInstalling(false);
       setDownloadProgress(0);
@@ -203,7 +177,7 @@ const UpdateChecker: React.FC<UpdateCheckerProps> = ({ className = "" }) => {
               <button
                 className="px-3 py-1.5 text-sm rounded bg-logo-primary text-white hover:bg-logo-primary/80 transition-colors"
                 onClick={() => {
-                  openUrl("https://github.com/cjpais/Handy/releases/latest");
+                  openUrl(HANDY_UPSTREAM_RELEASE_URL);
                   setShowPortableUpdateDialog(false);
                 }}
               >

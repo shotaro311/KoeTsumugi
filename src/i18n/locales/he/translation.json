@@ -352,10 +352,26 @@
       "customWords": {
         "title": "מילים מותאמות אישית",
         "description": "הוסף מילים שנשמעות או נכתבות לא נכון לעיתים קרובות במהלך התמלול. המערכת תתקן אוטומטית מילים דומות כך שיתאימו לרשימה שלך.",
-        "placeholder": "הוסף מילה",
+        "outputLabel": "Preferred output",
+        "outputPlaceholder": "ChatGPT",
+        "aliasesLabel": "Aliases / readings",
+        "aliasesPlaceholder": "chat gpt, チャットgpt, ちゃっとじーぴーてぃー",
+        "aliasesHint": "Separate aliases with commas or new lines. If a match is found, Handy replaces it with the preferred output.",
         "add": "הוסף",
+        "save": "Save entry",
+        "cancelEdit": "Cancel",
         "remove": "הסר את {{word}}",
-        "duplicate": "\"{{word}}\" כבר קיימת"
+        "removeShort": "Remove",
+        "duplicate": "\"{{word}}\" כבר קיימת",
+        "selectUsage": "Enable at least one usage option.",
+        "useInModelPrompt": "Use in model prompt",
+        "useInPostProcess": "Use in post-processing",
+        "modelPromptTag": "Model prompt",
+        "postProcessTag": "Post-process",
+        "aliasesValue": "Aliases: {{aliases}}",
+        "noAliases": "No aliases or readings yet",
+        "edit": "Edit",
+        "placeholder": "הוסף מילה"
       }
     },
     "postProcessing": {

@@ -350,12 +350,28 @@
         }
       },
       "customWords": {
-        "title": "カスタム単語",
-        "description": "よく誤認識または誤入力される単語を追加します。システムは自動的に類似した発音の単語をリストに合わせて修正します。",
-        "placeholder": "単語を追加",
-        "add": "追加",
+        "title": "カスタム辞書",
+        "description": "正しい表記と、拾いたい別名・読みをセットで登録します。モデル用ヒントと後処理置換を分けて使えます。",
+        "outputLabel": "正しい表記",
+        "outputPlaceholder": "ChatGPT",
+        "aliasesLabel": "別名・読み",
+        "aliasesPlaceholder": "chat gpt、チャットgpt、ちゃっとじーぴーてぃー",
+        "aliasesHint": "カンマまたは改行で区切って入力します。一致した場合、この表記に置き換えます。",
+        "add": "登録",
+        "save": "更新",
+        "cancelEdit": "キャンセル",
         "remove": "{{word}}を削除",
-        "duplicate": "「{{word}}」は既に存在します"
+        "removeShort": "削除",
+        "duplicate": "「{{word}}」は既に存在します",
+        "selectUsage": "使い方を1つ以上選んでください",
+        "useInModelPrompt": "モデル用ヒントに使う",
+        "useInPostProcess": "後処理置換に使う",
+        "modelPromptTag": "モデル",
+        "postProcessTag": "後処理",
+        "aliasesValue": "別名・読み: {{aliases}}",
+        "noAliases": "別名・読みは未登録",
+        "edit": "編集",
+        "placeholder": "単語を追加"
       }
     },
     "postProcessing": {

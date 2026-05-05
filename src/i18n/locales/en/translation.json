@@ -350,12 +350,28 @@
         }
       },
       "customWords": {
-        "title": "Custom Words",
-        "description": "Add words that are often misheard or misspelled during transcription. The system will automatically correct similar-sounding words to match your list.",
-        "placeholder": "Add a word",
-        "add": "Add",
+        "title": "Custom Dictionary",
+        "description": "Save a preferred output plus aliases or readings. Use model prompt for a small hint list, and post-process for replacements after transcription.",
+        "outputLabel": "Preferred output",
+        "outputPlaceholder": "ChatGPT",
+        "aliasesLabel": "Aliases / readings",
+        "aliasesPlaceholder": "chat gpt, チャットgpt, ちゃっとじーぴーてぃー",
+        "aliasesHint": "Separate aliases with commas or new lines. If a match is found, Handy replaces it with the preferred output.",
+        "add": "Add entry",
+        "save": "Save entry",
+        "cancelEdit": "Cancel",
         "remove": "Remove {{word}}",
-        "duplicate": "\"{{word}}\" already exists"
+        "removeShort": "Remove",
+        "duplicate": "\"{{word}}\" already exists",
+        "selectUsage": "Enable at least one usage option.",
+        "useInModelPrompt": "Use in model prompt",
+        "useInPostProcess": "Use in post-processing",
+        "modelPromptTag": "Model prompt",
+        "postProcessTag": "Post-process",
+        "aliasesValue": "Aliases: {{aliases}}",
+        "noAliases": "No aliases or readings yet",
+        "edit": "Edit",
+        "placeholder": "Add a word"
       }
     },
     "postProcessing": {

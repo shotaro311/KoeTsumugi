@@ -352,10 +352,26 @@
       "customWords": {
         "title": "Anpassade ord",
         "description": "Lägg till ord som ofta hörs fel eller stavas fel under transkription. Systemet kommer automatiskt att korrigera liknande ord för att matcha din lista.",
-        "placeholder": "Lägg till ett ord",
+        "outputLabel": "Preferred output",
+        "outputPlaceholder": "ChatGPT",
+        "aliasesLabel": "Aliases / readings",
+        "aliasesPlaceholder": "chat gpt, チャットgpt, ちゃっとじーぴーてぃー",
+        "aliasesHint": "Separate aliases with commas or new lines. If a match is found, Handy replaces it with the preferred output.",
         "add": "Lägg till",
+        "save": "Save entry",
+        "cancelEdit": "Cancel",
         "remove": "Ta bort {{word}}",
-        "duplicate": "\"{{word}}\" finns redan"
+        "removeShort": "Remove",
+        "duplicate": "\"{{word}}\" finns redan",
+        "selectUsage": "Enable at least one usage option.",
+        "useInModelPrompt": "Use in model prompt",
+        "useInPostProcess": "Use in post-processing",
+        "modelPromptTag": "Model prompt",
+        "postProcessTag": "Post-process",
+        "aliasesValue": "Aliases: {{aliases}}",
+        "noAliases": "No aliases or readings yet",
+        "edit": "Edit",
+        "placeholder": "Lägg till ett ord"
       }
     },
     "postProcessing": {

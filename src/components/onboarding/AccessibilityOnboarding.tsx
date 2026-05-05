@@ -2,13 +2,12 @@ import { useEffect, useState, useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { platform } from "@tauri-apps/plugin-os";
 import {
-  checkAccessibilityPermission,
   requestAccessibilityPermission,
-  checkMicrophonePermission,
   requestMicrophonePermission,
 } from "tauri-plugin-macos-permissions-api";
 import { toast } from "sonner";
 import { commands } from "@/bindings";
+import { checkMacOSPermissionState } from "@/lib/utils/permissions";
 import { useSettingsStore } from "@/stores/settingsStore";
 import HandyTextLogo from "../icons/HandyTextLogo";
 import { Keyboard, Mic, Check, Loader2 } from "lucide-react";
@@ -95,22 +94,8 @@ const AccessibilityOnboarding: React.FC<AccessibilityOnboardingProps> = ({
     const checkInitial = async () => {
       if (nextPlatform === "macos") {
         try {
-          const [accessibilityGranted, microphoneGranted] = await Promise.all([
-            checkAccessibilityPermission(),
-            checkMicrophonePermission(),
-          ]);
-
-          // If accessibility is granted, initialize Enigo and shortcuts
-          if (accessibilityGranted) {
-            try {
-              await Promise.all([
-                commands.initializeEnigo(),
-                commands.initializeShortcuts(),
-              ]);
-            } catch (e) {
-              console.warn("Failed to initialize after permission grant:", e);
-            }
-          }
+          const { accessibilityGranted, microphoneGranted } =
+            await checkMacOSPermissionState();
 
           const newState: PermissionsState = {
             accessibility: accessibilityGranted ? "granted" : "needed",
@@ -182,23 +167,14 @@ const AccessibilityOnboarding: React.FC<AccessibilityOnboardingProps> = ({
           return;
         }
 
-        const [accessibilityGranted, microphoneGranted] = await Promise.all([
-          checkAccessibilityPermission(),
-          checkMicrophonePermission(),
-        ]);
+        const { accessibilityGranted, microphoneGranted } =
+          await checkMacOSPermissionState();
 
         setPermissions((prev) => {
           const newState = { ...prev };
 
           if (accessibilityGranted && prev.accessibility !== "granted") {
             newState.accessibility = "granted";
-            // Initialize Enigo and shortcuts when accessibility is granted
-            Promise.all([
-              commands.initializeEnigo(),
-              commands.initializeShortcuts(),
-            ]).catch((e) => {
-              console.warn("Failed to initialize after permission grant:", e);
-            });
           }
 
           if (microphoneGranted && prev.microphone !== "granted") {
@@ -341,9 +317,19 @@ const AccessibilityOnboarding: React.FC<AccessibilityOnboardingProps> = ({
                     {t("onboarding.permissions.granted")}
                   </div>
                 ) : permissions.microphone === "waiting" ? (
-                  <div className="flex items-center gap-2 text-text/50 text-sm">
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    {t("onboarding.permissions.waiting")}
+                  <div className="flex flex-col items-start gap-2 text-text/50 text-sm">
+                    <div className="flex items-center gap-2">
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      {t("onboarding.permissions.waiting")}
+                    </div>
+                    <button
+                      onClick={handleGrantMicrophone}
+                      className="text-xs text-text/70 underline underline-offset-2 hover:text-text transition-colors"
+                    >
+                      {isWindows
+                        ? t("accessibility.openSettings")
+                        : t("onboarding.permissions.grant")}
+                    </button>
                   </div>
                 ) : (
                   <button
@@ -380,9 +366,17 @@ const AccessibilityOnboarding: React.FC<AccessibilityOnboardingProps> = ({
                     {t("onboarding.permissions.granted")}
                   </div>
                 ) : permissions.accessibility === "waiting" ? (
-                  <div className="flex items-center gap-2 text-text/50 text-sm">
-                    <Loader2 className="w-4 h-4 animate-spin" />
-                    {t("onboarding.permissions.waiting")}
+                  <div className="flex flex-col items-start gap-2 text-text/50 text-sm">
+                    <div className="flex items-center gap-2">
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      {t("onboarding.permissions.waiting")}
+                    </div>
+                    <button
+                      onClick={handleGrantAccessibility}
+                      className="text-xs text-text/70 underline underline-offset-2 hover:text-text transition-colors"
+                    >
+                      {t("accessibility.openSettings")}
+                    </button>
                   </div>
                 ) : (
                   <button

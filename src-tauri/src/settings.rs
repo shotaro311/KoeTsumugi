@@ -93,6 +93,68 @@ pub struct LLMPrompt {
     pub prompt: String,
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone, PartialEq, Eq, Type)]
+pub struct CustomDictionaryEntry {
+    pub output: String,
+    #[serde(default)]
+    pub aliases: Vec<String>,
+    #[serde(default = "default_true")]
+    pub use_in_model_prompt: bool,
+    #[serde(default = "default_true")]
+    pub use_in_post_process: bool,
+}
+
+#[derive(Deserialize)]
+#[serde(untagged)]
+enum CustomDictionaryEntryInput {
+    Legacy(String),
+    Structured(CustomDictionaryEntry),
+}
+
+fn deserialize_custom_words<'de, D>(deserializer: D) -> Result<Vec<CustomDictionaryEntry>, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    let entries = Vec::<CustomDictionaryEntryInput>::deserialize(deserializer)?;
+
+    Ok(entries
+        .into_iter()
+        .filter_map(|entry| match entry {
+            CustomDictionaryEntryInput::Legacy(output) => {
+                let trimmed = output.trim();
+                if trimmed.is_empty() {
+                    None
+                } else {
+                    Some(CustomDictionaryEntry {
+                        output: trimmed.to_string(),
+                        aliases: Vec::new(),
+                        use_in_model_prompt: true,
+                        use_in_post_process: true,
+                    })
+                }
+            }
+            CustomDictionaryEntryInput::Structured(entry) => {
+                let trimmed = entry.output.trim();
+                if trimmed.is_empty() {
+                    None
+                } else {
+                    Some(CustomDictionaryEntry {
+                        output: trimmed.to_string(),
+                        aliases: entry
+                            .aliases
+                            .into_iter()
+                            .map(|alias| alias.trim().to_string())
+                            .filter(|alias| !alias.is_empty())
+                            .collect(),
+                        use_in_model_prompt: entry.use_in_model_prompt,
+                        use_in_post_process: entry.use_in_post_process,
+                    })
+                }
+            }
+        })
+        .collect())
+}
+
 #[derive(Serialize, Deserialize, Debug, Clone, Type)]
 pub struct PostProcessProvider {
     pub id: String,
@@ -172,9 +234,9 @@ pub enum KeyboardImplementation {
 
 impl Default for KeyboardImplementation {
     fn default() -> Self {
-        #[cfg(target_os = "linux")]
+        #[cfg(any(target_os = "linux", target_os = "macos"))]
         return KeyboardImplementation::Tauri;
-        #[cfg(not(target_os = "linux"))]
+        #[cfg(not(any(target_os = "linux", target_os = "macos")))]
         return KeyboardImplementation::HandyKeys;
     }
 }
@@ -369,8 +431,8 @@ pub struct AppSettings {
     pub debug_mode: bool,
     #[serde(default = "default_log_level")]
     pub log_level: LogLevel,
-    #[serde(default)]
-    pub custom_words: Vec<String>,
+    #[serde(default, deserialize_with = "deserialize_custom_words")]
+    pub custom_words: Vec<CustomDictionaryEntry>,
     #[serde(default)]
     pub model_unload_timeout: ModelUnloadTimeout,
     #[serde(default = "default_word_correction_threshold")]
@@ -453,7 +515,7 @@ fn default_autostart_enabled() -> bool {
 }
 
 fn default_update_checks_enabled() -> bool {
-    true
+    false
 }
 
 fn default_selected_language() -> String {
@@ -477,6 +539,10 @@ fn default_log_level() -> LogLevel {
 
 fn default_word_correction_threshold() -> f64 {
     0.18
+}
+
+fn default_true() -> bool {
+    true
 }
 
 fn default_paste_delay_ms() -> u64 {
@@ -774,7 +840,7 @@ pub fn get_default_settings() -> AppSettings {
         autostart_enabled: default_autostart_enabled(),
         update_checks_enabled: default_update_checks_enabled(),
         selected_model: "".to_string(),
-        always_on_microphone: false,
+        always_on_microphone: true,
         selected_microphone: None,
         clamshell_microphone: None,
         selected_output_device: None,
@@ -803,7 +869,7 @@ pub fn get_default_settings() -> AppSettings {
         append_trailing_space: false,
         app_language: default_app_language(),
         experimental_enabled: false,
-        lazy_stream_close: false,
+        lazy_stream_close: true,
         keyboard_implementation: KeyboardImplementation::default(),
         show_tray_icon: default_show_tray_icon(),
         paste_delay_ms: default_paste_delay_ms(),

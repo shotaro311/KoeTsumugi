@@ -2429,6 +2429,7 @@ dependencies = [
  "handy-keys",
  "hound",
  "log",
+ "macos-accessibility-client",
  "natural",
  "once_cell",
  "rdev 0.5.0-2",

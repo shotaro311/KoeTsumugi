@@ -1,0 +1,4 @@
+- After frontend changes, run `bun run lint` and `bun run build`.
+- When translations change, also run `bun run check:translations`.
+- For app-launch-affecting changes, rebuild and verify with `./script/build_and_run.sh --verify`.
+- If Rust formatting is touched, use `bun run format` or `cd src-tauri && cargo fmt`.

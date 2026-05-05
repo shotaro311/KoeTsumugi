@@ -1,0 +1,11 @@
+- Install deps: `bun install`
+- Frontend dev: `bun run dev`
+- Tauri dev app: `bun tauri dev`
+- Frontend build: `bun run build`
+- Lint: `bun run lint`
+- Format all: `bun run format`
+- Check formatting: `bun run format:check`
+- Translation consistency: `bun run check:translations`
+- Build macOS app bundle: `bun tauri build --bundles app`
+- Preferred local run loop: `./script/build_and_run.sh` or `./script/build_and_run.sh --verify`
+- Rust toolchain in this workspace should come from rustup stable (`$HOME/.cargo/bin` on PATH).

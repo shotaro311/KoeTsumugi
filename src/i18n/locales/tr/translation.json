@@ -352,10 +352,26 @@
       "customWords": {
         "title": "Özel Kelimeler",
         "description": "Transkripsiyon sırasında sıkça yanlış duyulan veya yanlış yazılan kelimeleri ekleyin. Sistem, benzer sesli kelimeleri listenize göre otomatik olarak düzeltir.",
-        "placeholder": "Kelime ekle",
+        "outputLabel": "Preferred output",
+        "outputPlaceholder": "ChatGPT",
+        "aliasesLabel": "Aliases / readings",
+        "aliasesPlaceholder": "chat gpt, チャットgpt, ちゃっとじーぴーてぃー",
+        "aliasesHint": "Separate aliases with commas or new lines. If a match is found, Handy replaces it with the preferred output.",
         "add": "Ekle",
+        "save": "Save entry",
+        "cancelEdit": "Cancel",
         "remove": "{{word}} Kaldır",
-        "duplicate": "\"{{word}}\" zaten mevcut"
+        "removeShort": "Remove",
+        "duplicate": "\"{{word}}\" zaten mevcut",
+        "selectUsage": "Enable at least one usage option.",
+        "useInModelPrompt": "Use in model prompt",
+        "useInPostProcess": "Use in post-processing",
+        "modelPromptTag": "Model prompt",
+        "postProcessTag": "Post-process",
+        "aliasesValue": "Aliases: {{aliases}}",
+        "noAliases": "No aliases or readings yet",
+        "edit": "Edit",
+        "placeholder": "Kelime ekle"
       }
     },
     "postProcessing": {

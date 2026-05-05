@@ -1,0 +1,4 @@
+- Handy_m is a Tauri v2 desktop transcription app forked from Handy.
+- Purpose: local audio transcription / dictation with model management, permissions onboarding, tray integration, and post-processing.
+- Stack: React + TypeScript + Vite frontend, Rust backend under src-tauri, Bun package manager, Tauri plugins for OS integration.
+- Rough structure: src/ contains React UI, hooks, stores, i18n, bindings, and utilities. src-tauri/ contains Rust commands, managers, audio toolkit, settings, and Tauri config. tests/ contains Playwright tests. script/ contains local run entrypoints.

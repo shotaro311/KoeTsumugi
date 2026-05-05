@@ -1,0 +1,5 @@
+- Frontend uses function components with hooks, TypeScript, and path alias imports like `@/bindings`.
+- Keep comments minimal and practical.
+- Existing code favors small utility helpers in `src/lib/utils/` for cross-component logic.
+- i18n strings live in `src/i18n/locales/*/translation.json`; keep key structure aligned across locales.
+- Rust backend uses command functions in `src-tauri/src/commands`, managers in `src-tauri/src/managers`, and logging for runtime diagnostics.

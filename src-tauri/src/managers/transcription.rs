@@ -540,13 +540,20 @@ impl TranscriptionManager {
                                 Some(normalized)
                             };
 
+                            let prompt_terms = settings
+                                .custom_words
+                                .iter()
+                                .filter(|entry| entry.use_in_model_prompt)
+                                .map(|entry| entry.output.as_str())
+                                .collect::<Vec<_>>();
+
                             let params = WhisperInferenceParams {
                                 language: whisper_language,
                                 translate: settings.translate_to_english,
-                                initial_prompt: if settings.custom_words.is_empty() {
+                                initial_prompt: if prompt_terms.is_empty() {
                                     None
                                 } else {
-                                    Some(settings.custom_words.join(", "))
+                                    Some(prompt_terms.join(", "))
                                 },
                                 ..Default::default()
                             };
@@ -682,15 +689,11 @@ impl TranscriptionManager {
             }
         };
 
-        // Apply word correction if custom words are configured.
-        // Skip for Whisper models since custom words are already passed as initial_prompt.
-        let is_whisper = self
-            .model_manager
-            .get_model_info(&settings.selected_model)
-            .map(|info| matches!(info.engine_type, EngineType::Whisper))
-            .unwrap_or(false);
-
-        let corrected_result = if !settings.custom_words.is_empty() && !is_whisper {
+        let corrected_result = if settings
+            .custom_words
+            .iter()
+            .any(|entry| entry.use_in_post_process)
+        {
             apply_custom_words(
                 &result.text,
                 &settings.custom_words,

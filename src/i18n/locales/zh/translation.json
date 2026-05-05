@@ -352,10 +352,26 @@
       "customWords": {
         "title": "自定义词汇",
         "description": "添加经常被误听或拼写错误的词汇。系统将自动将发音相似的词汇修正为您列表中的词汇。",
-        "placeholder": "添加词汇",
+        "outputLabel": "Preferred output",
+        "outputPlaceholder": "ChatGPT",
+        "aliasesLabel": "Aliases / readings",
+        "aliasesPlaceholder": "chat gpt, チャットgpt, ちゃっとじーぴーてぃー",
+        "aliasesHint": "Separate aliases with commas or new lines. If a match is found, Handy replaces it with the preferred output.",
         "add": "添加",
+        "save": "Save entry",
+        "cancelEdit": "Cancel",
         "remove": "删除 {{word}}",
-        "duplicate": "\"{{word}}\" 已存在"
+        "removeShort": "Remove",
+        "duplicate": "\"{{word}}\" 已存在",
+        "selectUsage": "Enable at least one usage option.",
+        "useInModelPrompt": "Use in model prompt",
+        "useInPostProcess": "Use in post-processing",
+        "modelPromptTag": "Model prompt",
+        "postProcessTag": "Post-process",
+        "aliasesValue": "Aliases: {{aliases}}",
+        "noAliases": "No aliases or readings yet",
+        "edit": "Edit",
+        "placeholder": "添加词汇"
       }
     },
     "postProcessing": {

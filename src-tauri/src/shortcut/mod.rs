@@ -22,9 +22,9 @@ use tauri_plugin_autostart::ManagerExt;
 #[cfg(all(target_os = "macos", target_arch = "aarch64"))]
 use crate::settings::APPLE_INTELLIGENCE_DEFAULT_MODEL_ID;
 use crate::settings::{
-    self, get_settings, AutoSubmitKey, ClipboardHandling, KeyboardImplementation, LLMPrompt,
-    OverlayPosition, PasteMethod, ShortcutBinding, SoundTheme, TypingTool,
-    APPLE_INTELLIGENCE_PROVIDER_ID,
+    self, get_settings, AutoSubmitKey, ClipboardHandling, CustomDictionaryEntry,
+    KeyboardImplementation, LLMPrompt, OverlayPosition, PasteMethod, ShortcutBinding, SoundTheme,
+    TypingTool, APPLE_INTELLIGENCE_PROVIDER_ID,
 };
 use crate::tray;
 
@@ -641,9 +641,32 @@ pub fn change_update_checks_setting(app: AppHandle, enabled: bool) -> Result<(),
 
 #[tauri::command]
 #[specta::specta]
-pub fn update_custom_words(app: AppHandle, words: Vec<String>) -> Result<(), String> {
+pub fn update_custom_words(
+    app: AppHandle,
+    words: Vec<CustomDictionaryEntry>,
+) -> Result<(), String> {
     let mut settings = settings::get_settings(&app);
-    settings.custom_words = words;
+    settings.custom_words = words
+        .into_iter()
+        .filter_map(|entry| {
+            let output = entry.output.trim();
+            if output.is_empty() {
+                return None;
+            }
+
+            Some(CustomDictionaryEntry {
+                output: output.to_string(),
+                aliases: entry
+                    .aliases
+                    .into_iter()
+                    .map(|alias| alias.trim().to_string())
+                    .filter(|alias| !alias.is_empty())
+                    .collect(),
+                use_in_model_prompt: entry.use_in_model_prompt,
+                use_in_post_process: entry.use_in_post_process,
+            })
+        })
+        .collect();
     settings::write_settings(&app, settings);
     Ok(())
 }
