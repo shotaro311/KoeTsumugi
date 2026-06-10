@@ -37,6 +37,25 @@ ORT_LIB_LOCATION=$(brew --prefix onnxruntime)/lib ORT_PREFER_DYNAMIC_LINK=1 bun 
 - Microsoft C++ Build Tools
 - Visual Studio 2019/2022 with C++ development tools
 - Or Visual Studio Build Tools 2019/2022
+- LLVM, including `libclang.dll`, for Rust bindgen-based dependencies
+- CMake
+- Vulkan SDK. The Windows target enables `whisper-vulkan`, so `VULKAN_SDK` must point to the SDK root.
+- Microsoft Edge WebView2 Runtime
+
+Run Rust/Tauri commands from an x64 Visual Studio developer environment, or call `vcvars64.bat` first. A short target directory is recommended because the Vulkan shader build can exceed Windows path limits inside the default `src-tauri/target` tree:
+
+```powershell
+$env:LIBCLANG_PATH = "C:\Program Files\LLVM\bin"
+$env:VULKAN_SDK = "C:\VulkanSDK\1.4.350.0"
+$env:CARGO_TARGET_DIR = "C:\hm-target"
+bun run tauri build
+```
+
+If `bun run format:check` reports many unchanged files on a fresh Windows clone, keep the clone on LF line endings:
+
+```powershell
+git config core.autocrlf false
+```
 
 #### Linux
 

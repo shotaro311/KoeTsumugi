@@ -83,6 +83,20 @@ fn apply_direct_alias_replacements(text: &str, entries: &[CustomDictionaryEntry]
     replaced
 }
 
+fn max_ngram_len(entries: &[CustomDictionaryEntry]) -> usize {
+    entries
+        .iter()
+        .filter(|entry| entry.use_in_post_process)
+        .flat_map(|entry| {
+            std::iter::once(entry.output.as_str()).chain(entry.aliases.iter().map(String::as_str))
+        })
+        .map(|trigger| trigger.split_whitespace().count().max(1))
+        .max()
+        .unwrap_or(1)
+        .max(3)
+        .min(6)
+}
+
 /// Finds the best matching custom word for a candidate string
 ///
 /// Uses Levenshtein distance and Soundex phonetic matching to find
@@ -101,6 +115,9 @@ fn find_best_match<'a>(
     threshold: f64,
 ) -> Option<(&'a str, f64)> {
     if candidate.is_empty() || candidate.len() > 50 {
+        return None;
+    }
+    if !candidate.is_ascii() {
         return None;
     }
 
@@ -177,6 +194,7 @@ pub fn apply_custom_words(
 
     let direct_replaced = apply_direct_alias_replacements(text, custom_words);
     let (exact_matches, fuzzy_candidates) = build_matchers(custom_words);
+    let max_ngram_len = max_ngram_len(custom_words);
 
     let words: Vec<&str> = direct_replaced.split_whitespace().collect();
     if words.is_empty() {
@@ -189,8 +207,8 @@ pub fn apply_custom_words(
     while i < words.len() {
         let mut matched = false;
 
-        // Try n-grams from longest (3) to shortest (1) - greedy matching
-        for n in (1..=3).rev() {
+        // Try n-grams from longest to shortest - greedy matching
+        for n in (1..=max_ngram_len).rev() {
             if i + n > words.len() {
                 continue;
             }
@@ -202,7 +220,12 @@ pub fn apply_custom_words(
             }
 
             let replacement = exact_matches.get(&ngram).copied().or_else(|| {
-                find_best_match(&ngram, &fuzzy_candidates, threshold).map(|(value, _)| value)
+                (n == 1)
+                    .then(|| {
+                        find_best_match(&ngram, &fuzzy_candidates, threshold)
+                            .map(|(value, _)| value)
+                    })
+                    .flatten()
             });
 
             if let Some(replacement) = replacement {
