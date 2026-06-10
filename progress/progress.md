@@ -17,6 +17,7 @@ status: active
 - 2026-06-10: upstream `main` 最新 `7901ef7` を `shotaro/custom` にマージ済み。
 - 2026-06-10: Mac側で `format:check`、`lint`、frontend build、translation check、`cargo check`、`tauri build` が通過。
 - 2026-06-10: GitHub Release 最新は `v0.8.3`。現在のカスタムブランチは `v0.8.3-10-g3e9a1e9` 相当。
+- 2026-06-10: Windows向けに upstream のAzure Trusted Signing用 `signCommand` を削除済み。
 
 ## 進行中
 
@@ -31,6 +32,7 @@ status: active
 
 - Windows固有のビルド、GPU/DirectML、IME/貼り付け挙動はMac側では未検証。Windows実機で確認する。
 - Macの通常PATHでは `~/.local/bin/xattr` がTauri bundlerと相性不一致。Mac build時は `/usr/bin` を先に置く。
+- Windows installerは個人用forkでは未署名になる。配布時は別途署名方針を決める。
 
 ## 引き継ぎ
 
@@ -57,3 +59,4 @@ status: active
 
 - 2026-06-10: 共通進捗管理を初期化。
 - 2026-06-10: upstream最新化とMac側検証を完了。
+- 2026-06-10: Windowsローカルビルド用に署名コマンドを削除。
