@@ -42,19 +42,26 @@ fn build_matchers<'a>(
 
         let mut seen = HashSet::new();
         for trigger in std::iter::once(output).chain(entry.aliases.iter().map(String::as_str)) {
-            let normalized_trigger = normalize_lookup_key(trigger);
-            if normalized_trigger.is_empty() || !seen.insert(normalized_trigger.clone()) {
-                continue;
+            let mut variants = vec![trigger.to_string()];
+            if trigger.contains('&') {
+                variants.push(trigger.replace('&', " and "));
             }
 
-            exact_matches
-                .entry(normalized_trigger.clone())
-                .or_insert(output);
-            fuzzy_candidates.push(MatchCandidate {
-                output,
-                normalized_trigger,
-                trigger_is_ascii: trigger.is_ascii(),
-            });
+            for variant in variants {
+                let normalized_trigger = normalize_lookup_key(&variant);
+                if normalized_trigger.is_empty() || !seen.insert(normalized_trigger.clone()) {
+                    continue;
+                }
+
+                exact_matches
+                    .entry(normalized_trigger.clone())
+                    .or_insert(output);
+                fuzzy_candidates.push(MatchCandidate {
+                    output,
+                    normalized_trigger,
+                    trigger_is_ascii: variant.is_ascii(),
+                });
+            }
         }
     }
 
@@ -690,5 +697,26 @@ mod tests {
         }];
         let result = apply_custom_words(text, &custom_words, 0.5);
         assert_eq!(result, text);
+    }
+
+    #[test]
+    fn test_apply_custom_words_matches_ampersand_word() {
+        let custom_words = vec![entry("R&D", &[])];
+        assert_eq!(apply_custom_words("r&d", &custom_words, 0.18), "R&D");
+    }
+
+    #[test]
+    fn test_apply_custom_words_matches_spoken_ampersand_word() {
+        let custom_words = vec![entry("R&D", &[])];
+        assert_eq!(apply_custom_words("r and d", &custom_words, 0.18), "R&D");
+    }
+
+    #[test]
+    fn test_apply_custom_words_preserves_ampersand_word() {
+        let custom_words = vec![entry("R&D", &[])];
+        assert_eq!(
+            apply_custom_words("We invest in R&D", &custom_words, 0.18),
+            "We invest in R&D"
+        );
     }
 }

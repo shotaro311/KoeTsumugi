@@ -4,20 +4,20 @@ This file provides guidance to AI coding assistants working with code in this re
 
 ## Handy_m Local Fork Rules
 
-These rules apply to the local customization workspace at `/Users/shotaro/code/shared/Handy_m`.
+These rules apply to the local customization workspace at `C:\Users\shotaro\code\shared\Handy_m` on Windows and `/Users/shotaro/code/shared/Handy_m` on macOS.
 
 - This repository is a local customization fork built on top of upstream `cjpais/Handy`.
 - Keep `main` as the upstream tracking branch. Do not implement custom Handy_m behavior directly on `main`.
 - Implement custom work on `shotaro/custom` or short-lived feature branches created from it.
-- The current remote setup keeps `origin` pointed at upstream Handy. If a personal remote is added later, rename the current upstream remote to `upstream` and use `origin` for the personal fork.
+- `upstream` points to the official `cjpais/Handy` repository. `origin` points to the personal `shotaro311/Handy` fork.
 - Keep commits small and focused, especially for dictionary behavior, text input behavior, and platform-specific integrations. Smaller commits make upstream updates easier to merge.
 - Prefer additive changes, wrappers, and isolated settings over broad rewrites of shared upstream code paths.
 - When upstream Handy is updated, sync in this order:
 
 ```bash
-git checkout main
-git pull origin main
-git checkout shotaro/custom
+git switch main
+git pull --ff-only upstream main
+git switch shotaro/custom
 git merge main
 ```
 
@@ -124,7 +124,8 @@ Handy is a cross-platform desktop speech-to-text application built with Tauri 2.
 
 **Core Libraries:**
 
-- `whisper-rs` - Local Whisper inference with GPU acceleration
+- `transcribe-cpp` - Local Whisper-family inference (GGML/GGUF) with GPU acceleration
+- `transcribe-rs` - ONNX speech recognition (Parakeet, Moonshine, SenseVoice, etc.)
 - `cpal` - Cross-platform audio I/O
 - `vad-rs` - Voice Activity Detection
 - `rdev` - Global keyboard shortcuts

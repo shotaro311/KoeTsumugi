@@ -13,7 +13,7 @@ interface CustomWordsProps {
   grouped?: boolean;
 }
 
-const sanitizeText = (value: string) => value.trim().replace(/[<>"'&]/g, "");
+const sanitizeText = (value: string) => value.trim().replace(/[<>"']/g, "");
 
 const splitAliases = (value: string) =>
   value
