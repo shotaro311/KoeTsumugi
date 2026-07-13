@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { check } from "@tauri-apps/plugin-updater";
+import { relaunch } from "@tauri-apps/plugin-process";
 import { listen } from "@tauri-apps/api/event";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { ProgressBar } from "../shared";
@@ -11,8 +12,8 @@ interface UpdateCheckerProps {
   className?: string;
 }
 
-const HANDY_UPSTREAM_RELEASE_URL =
-  "https://github.com/cjpais/Handy/releases/latest";
+const HANDY_M_RELEASE_URL =
+  "https://github.com/shotaro311/Handy/releases/latest";
 
 const UpdateChecker: React.FC<UpdateCheckerProps> = ({ className = "" }) => {
   const { t } = useTranslation();
@@ -33,6 +34,7 @@ const UpdateChecker: React.FC<UpdateCheckerProps> = ({ className = "" }) => {
   const isManualCheckRef = useRef(false);
   const downloadedBytesRef = useRef(0);
   const contentLengthRef = useRef(0);
+  const pendingUpdateRef = useRef<Awaited<ReturnType<typeof check>>>(null);
 
   useEffect(() => {
     // Wait for settings to load before doing anything
@@ -42,6 +44,7 @@ const UpdateChecker: React.FC<UpdateCheckerProps> = ({ className = "" }) => {
       if (upToDateTimeoutRef.current) {
         clearTimeout(upToDateTimeoutRef.current);
       }
+      pendingUpdateRef.current = null;
       setIsChecking(false);
       setUpdateAvailable(false);
       setShowUpToDate(false);
@@ -70,11 +73,13 @@ const UpdateChecker: React.FC<UpdateCheckerProps> = ({ className = "" }) => {
     try {
       setIsChecking(true);
       const update = await check();
+      pendingUpdateRef.current = update;
 
       if (update) {
         setUpdateAvailable(true);
         setShowUpToDate(false);
       } else {
+        pendingUpdateRef.current = null;
         setUpdateAvailable(false);
 
         if (isManualCheckRef.current) {
@@ -113,9 +118,46 @@ const UpdateChecker: React.FC<UpdateCheckerProps> = ({ className = "" }) => {
     try {
       setIsInstalling(true);
       setDownloadProgress(0);
-      await openUrl(HANDY_UPSTREAM_RELEASE_URL);
+      downloadedBytesRef.current = 0;
+      contentLengthRef.current = 0;
+
+      const update = pendingUpdateRef.current ?? (await check());
+      if (!update) {
+        setUpdateAvailable(false);
+        setShowUpToDate(true);
+        return;
+      }
+
+      await update.downloadAndInstall((event) => {
+        switch (event.event) {
+          case "Started":
+            contentLengthRef.current = event.data.contentLength ?? 0;
+            break;
+          case "Progress": {
+            downloadedBytesRef.current += event.data.chunkLength;
+            const contentLength = contentLengthRef.current;
+            if (contentLength > 0) {
+              setDownloadProgress(
+                Math.min(
+                  99,
+                  Math.round(
+                    (downloadedBytesRef.current / contentLength) * 100,
+                  ),
+                ),
+              );
+            }
+            break;
+          }
+          case "Finished":
+            setDownloadProgress(100);
+            break;
+        }
+      });
+
+      pendingUpdateRef.current = null;
+      await relaunch();
     } catch (error) {
-      console.error("Failed to open update page:", error);
+      console.error("Failed to install update:", error);
     } finally {
       setIsInstalling(false);
       setDownloadProgress(0);
@@ -177,7 +219,7 @@ const UpdateChecker: React.FC<UpdateCheckerProps> = ({ className = "" }) => {
               <button
                 className="px-3 py-1.5 text-sm rounded bg-logo-primary text-white hover:bg-logo-primary/80 transition-colors"
                 onClick={() => {
-                  openUrl(HANDY_UPSTREAM_RELEASE_URL);
+                  openUrl(HANDY_M_RELEASE_URL);
                   setShowPortableUpdateDialog(false);
                 }}
               >

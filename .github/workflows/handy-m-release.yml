@@ -1,0 +1,96 @@
+name: "Handy_m Release"
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: handy-m-release
+  cancel-in-progress: false
+
+jobs:
+  create-release:
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    outputs:
+      release-id: ${{ steps.create-release.outputs.result }}
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - name: Require shotaro/custom
+        shell: bash
+        run: |
+          if [ "$GITHUB_REF_NAME" != "shotaro/custom" ]; then
+            echo "Handy_m releases must run from shotaro/custom, not $GITHUB_REF_NAME" >&2
+            exit 1
+          fi
+
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Validate versions
+        id: version
+        shell: bash
+        run: |
+          TAURI_VERSION=$(grep -o '"version": "[^"]*"' src-tauri/tauri.conf.json | head -1 | cut -d'"' -f4)
+          PACKAGE_VERSION=$(grep -o '"version": "[^"]*"' package.json | head -1 | cut -d'"' -f4)
+          CARGO_VERSION=$(grep -o '^version = "[^"]*"' src-tauri/Cargo.toml | head -1 | cut -d'"' -f2)
+
+          if [ "$TAURI_VERSION" != "$PACKAGE_VERSION" ] || [ "$TAURI_VERSION" != "$CARGO_VERSION" ]; then
+            echo "Version mismatch: tauri=$TAURI_VERSION package=$PACKAGE_VERSION cargo=$CARGO_VERSION" >&2
+            exit 1
+          fi
+
+          echo "version=$TAURI_VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Create draft Handy_m release
+        id: create-release
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const version = '${{ steps.version.outputs.version }}';
+            const { data } = await github.rest.repos.createRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              tag_name: `handy-m-v${version}`,
+              target_commitish: context.sha,
+              name: `Handy_m v${version}`,
+              body: `Handy_m ${version} — independent update channel for the customized fork.`,
+              draft: true,
+              prerelease: false,
+              generate_release_notes: true
+            });
+            return data.id;
+
+  build-windows:
+    permissions:
+      contents: write
+    needs: create-release
+    uses: ./.github/workflows/build.yml
+    with:
+      platform: windows-latest
+      target: x86_64-pc-windows-msvc
+      build-args: "--config src-tauri/tauri.updater.conf.json"
+      sign-binaries: false
+      asset-prefix: handy-m
+      release-id: ${{ needs.create-release.outputs.release-id }}
+      release-tag-prefix: handy-m-v
+      upload-artifacts: false
+      no-cache: true
+    secrets: inherit
+
+  publish-release:
+    permissions:
+      contents: write
+    needs: [create-release, build-windows]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish completed Handy_m release
+        uses: actions/github-script@v9
+        with:
+          script: |
+            await github.rest.repos.updateRelease({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: Number('${{ needs.create-release.outputs.release-id }}'),
+              draft: false
+            });

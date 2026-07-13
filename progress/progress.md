@@ -14,6 +14,8 @@ status: active
 
 ## 最新の検証済み状態
 
+- 2026-07-13: Handy_m専用の更新経路を実装。独立version `1.0.0`、専用GitHub Releases endpoint、専用updater署名鍵、アプリ内download/install/relaunch、Windows x64公開workflowを整備。
+- 2026-07-13: 署名付きrelease buildに成功し、MSI/NSISと両方のTauri updater `.sig`を生成。`handy.exe` 1.0.0の起動・応答、Vulkan 3デバイスとCPU backend初期化を確認。
 - 2026-07-13: official upstream `v0.9.2` (`ea10f74`) を `shotaro/custom` にマージし、Handy_m独自の構造化カスタム辞書とブランド設定を維持。
 - 2026-07-13: Windowsで `format:check`、`lint`、frontend build、21言語translation check、`cargo check`、Rust unit test 121件、`tauri build` が通過。
 - 2026-07-13: `Handy_m 0.9.2` の実行ファイル、MSI、NSIS installerを生成。実行ファイルの起動、マイク初期化、Vulkan 3デバイスとCPUバックエンド登録まで確認。
@@ -28,17 +30,20 @@ status: active
 
 ## 進行中
 
-- Windows実機: `v0.9.2` installerの手動インストール後、実利用のショートカット、音声認識、貼り付け、IME入力を確認する。
+- 初回Handy_m `1.0.0` releaseのGitHub Secret登録、push、公開は外部書き込みの承認待ち。
+- Windows実機: `1.0.0` installerの手動インストール後、実利用のショートカット、音声認識、貼り付け、IME入力を確認する。
 
 ## 次アクション
 
-- `C:\hm-target\release\bundle\nsis\Handy_m_0.9.2_x64-setup.exe` から未署名installerを手動実行し、Windows SmartScreen表示を許可して動作確認する。
+- ユーザー承認後、専用秘密鍵とパスワードをGitHub Actions Secretsへ登録し、`shotaro/custom`をpushして初回 `handy-m-v1.0.0` releaseを公開する。
+- `C:\hm-target\release\bundle\nsis\Handy_m_1.0.0_x64-setup.exe` を手動実行し、Windows SmartScreen表示を許可して動作確認する。
 - 実利用アプリ上でショートカット録音、貼り付け方法、IME中の貼り付け結果を確認する。
 - 新しいtranscribe.cppモデルをダウンロードし、実音声でGPU認識品質と速度を確認する。
 
 ## Blocker / Risk
 
-- Windows installerは個人用forkでは未署名。SmartScreen警告が出る可能性がある。
+- 独自updaterのコードと署名成果物は検証済みだが、GitHub Release未公開のため配信経路のend-to-end確認は未完了。
+- Tauri updater署名は付与済みだが、Windows Authenticodeコード署名は未導入。初回installerでSmartScreen警告が出る可能性がある。
 - 自動検証ではショートカット録音、モデルを使った実音声認識、実アプリへの貼り付け、IME変換中の貼り付けまでは未確認。アプリ起動、マイク、GPU/CPUバックエンド初期化は確認済み。
 - 日本語ロケールのWindowsでtranscribe-cpp 0.1.3をビルドする際は、`TRANSCRIBE_CMAKE_ARGS`でMSVCへUTF-8フラグを渡す必要がある。詳細はBUILD.md。
 - Macの通常PATHでは `~/.local/bin/xattr` がTauri bundlerと相性不一致。Mac build時は `/usr/bin` を先に置く。
@@ -68,6 +73,7 @@ status: active
 
 ## 最近の更新
 
+- 2026-07-13: 本家とは別のHandy_m専用updater、署名鍵、release workflowを実装し、署名付きWindows成果物を検証。
 - 2026-07-13: upstream v0.9.2を取り込み、構造化カスタム辞書を新音声認識基盤へ統合。
 - 2026-07-13: Windowsで全自動検証、release bundle生成、起動とGPU/CPUバックエンド初期化を確認。
 - 2026-07-13: `main`追従設定、AGENTS.md、Windows UTF-8ビルド手順を整備。

@@ -24,6 +24,17 @@ git merge main
 - If merge conflicts appear, resolve them on `shotaro/custom`. Do not rewrite upstream history.
 - Before large refactors, leave a short note in the commit message or related docs explaining why the change is needed and which upstream area it touches.
 
+## Handy_m Release and Updater Rules
+
+- Handy_m has an independent version and update channel. Do not reuse upstream Handy release tags, updater endpoints, or signing keys.
+- The canonical updater endpoint is `shotaro311/Handy` GitHub Releases. Release tags use `handy-m-v<version>`.
+- Keep the versions in `package.json`, `src-tauri/Cargo.toml`, `src-tauri/Cargo.lock`, and `src-tauri/tauri.conf.json` synchronized. Handy_m starts at `1.0.0` and normally increments the patch version for each user-facing release.
+- Build updater artifacts with `src-tauri/tauri.updater.conf.json`; normal local builds keep updater artifact generation disabled.
+- The updater private key lives outside the repository at `%USERPROFILE%\.tauri\handy-m.key`, and its password is stored as a user-scoped DPAPI credential at `%USERPROFILE%\.tauri\handy-m.key.password.clixml`. Never print, commit, copy into progress logs, or replace either one after a release has shipped. Back them up securely because losing either one prevents updates to installed copies.
+- GitHub Actions uses the repository secrets `TAURI_SIGNING_PRIVATE_KEY` and `TAURI_SIGNING_PRIVATE_KEY_PASSWORD`.
+- Before a release, add user-facing notes under `src/content/release-notes/<version>.md`, run the standard verification commands, and confirm the Windows updater bundle and `.sig` are generated.
+- Publishing requires an explicit user confirmation for that release. After approval, push `shotaro/custom` and run `.github/workflows/handy-m-release.yml` on that branch. The workflow publishes only after the signed Windows build succeeds.
+
 ## Development Commands
 
 **Prerequisites:**
