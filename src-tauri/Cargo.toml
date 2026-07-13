@@ -1,6 +1,6 @@
 [package]
 name = "handy"
-version = "1.0.0"
+version = "1.0.1"
 description = "Handy"
 authors = ["cjpais"]
 edition = "2021"
@@ -81,7 +81,7 @@ specta = "=2.0.0-rc.22"
 specta-typescript = "0.0.9"
 tauri-specta = { version = "=2.0.0-rc.21", features = ["derive", "typescript"] }
 tauri-plugin-dialog = "2.6"
-hf-hub = { git = "https://github.com/cjpais/hf-hub", branch = "cancellable-downloads", features = [
+hf-hub = { path = "vendor/hf-hub", features = [
   "tokio",
 ] }
 

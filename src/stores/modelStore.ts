@@ -160,6 +160,10 @@ export const useModelStore = create<ModelsStore>()(
     },
 
     downloadModel: async (modelId: string) => {
+      if (get().downloadingModels[modelId]) {
+        return true;
+      }
+
       try {
         set({ error: null });
         set(

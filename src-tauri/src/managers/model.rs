@@ -5,7 +5,7 @@ use crate::settings::{get_settings, write_settings};
 use anyhow::Result;
 use flate2::read::GzDecoder;
 use futures_util::StreamExt;
-use hf_hub::api::tokio::{ApiBuilder, CancellationToken, Progress};
+use hf_hub::api::tokio::{ApiBuilder, ApiError, CancellationToken, Progress};
 use hf_hub::{Cache, Repo, RepoType};
 use log::{debug, info, warn};
 use serde::{Deserialize, Serialize};
@@ -81,6 +81,19 @@ pub struct ModelInfo {
 }
 
 const CHINESE_LANGUAGE_CODE: &str = "zh";
+const HF_DOWNLOAD_MAX_FILES: usize = 4;
+const HF_DOWNLOAD_MAX_ATTEMPTS: usize = 4;
+
+fn should_retry_hf_download(error: &ApiError) -> bool {
+    matches!(
+        error,
+        ApiError::RequestError(_) | ApiError::TooManyRetries(_)
+    )
+}
+
+fn hf_retry_delay(failed_attempt: usize) -> Duration {
+    Duration::from_secs(1 << failed_attempt.saturating_sub(1).min(2))
+}
 
 fn recognition_language(language: &str) -> &str {
     match language {
@@ -1760,6 +1773,13 @@ impl ModelManager {
         {
             let mut models = self.available_models.lock().unwrap();
             if let Some(model) = models.get_mut(&model_id) {
+                if model.is_downloading {
+                    info!(
+                        "HF model download already running; coalescing: {}",
+                        model_id
+                    );
+                    return Ok(());
+                }
                 model.is_downloading = true;
             }
         }
@@ -1784,34 +1804,54 @@ impl ModelManager {
             model_id, repo_id, revision, filename
         );
 
-        // Download chunks in parallel (default is 1 = sequential). Throughput
-        // scales near-linearly with this count because each connection is capped
-        // (~8 MB/s observed per stream), so we stack several to approach the
-        // link's real bandwidth. 8 stays light on CPU/RAM (~80 MB peak buffers)
-        // even on older machines and is browser-like in connection count.
+        // Keep enough parallelism for good throughput without making one model
+        // dominate the user's connection when several downloads overlap.
         let api = ApiBuilder::from_env()
             .with_progress(false)
-            .with_max_files(8)
+            .with_max_files(HF_DOWNLOAD_MAX_FILES)
             .build()
             .map_err(|e| anyhow::anyhow!("Failed to init Hugging Face API: {}", e))?;
         let repo = api.repo(Repo::with_revision(repo_id, RepoType::Model, revision));
-        let progress = HfDownloadProgress::new(self.app_handle.clone(), model_id.clone());
-        match repo
-            .download_with_progress_cancellable(&filename, progress, cancel_token)
-            .await
-        {
-            Ok(_) => {}
-            Err(hf_hub::api::tokio::ApiError::Cancelled) => {
-                // User cancelled. hf-hub leaves the partially downloaded
-                // `.sync.part` in the shared cache, so a later attempt resumes
-                // instead of restarting. The guard resets is_downloading and
-                // drops the token; `cancel_download` already emitted
-                // `model-download-cancelled`.
-                info!("HF download cancelled for: {}", model_id);
-                return Ok(());
-            }
-            Err(e) => {
-                return Err(anyhow::anyhow!("Hugging Face download failed: {}", e));
+        for attempt in 1..=HF_DOWNLOAD_MAX_ATTEMPTS {
+            let progress = HfDownloadProgress::new(self.app_handle.clone(), model_id.clone());
+            match repo
+                .download_with_progress_cancellable(&filename, progress, cancel_token.clone())
+                .await
+            {
+                Ok(_) => break,
+                Err(ApiError::Cancelled) => {
+                    // hf-hub leaves the `.sync.part` file in place, so a later
+                    // attempt resumes instead of restarting.
+                    info!("HF download cancelled for: {}", model_id);
+                    return Ok(());
+                }
+                Err(error)
+                    if attempt < HF_DOWNLOAD_MAX_ATTEMPTS && should_retry_hf_download(&error) =>
+                {
+                    let delay = hf_retry_delay(attempt);
+                    warn!(
+                        "HF download attempt {}/{} failed for {}: {:?}; retrying in {:?}",
+                        attempt, HF_DOWNLOAD_MAX_ATTEMPTS, model_id, error, delay
+                    );
+                    tokio::select! {
+                        _ = cancel_token.cancelled() => {
+                            info!("HF download cancelled during retry backoff for: {}", model_id);
+                            return Ok(());
+                        }
+                        _ = tokio::time::sleep(delay) => {}
+                    }
+                }
+                Err(error) => {
+                    warn!(
+                        "HF download failed permanently for {} after {} attempt(s): {:?}",
+                        model_id, attempt, error
+                    );
+                    return Err(anyhow::anyhow!(
+                        "Hugging Face download failed after {} attempt(s): {}",
+                        attempt,
+                        error
+                    ));
+                }
             }
         }
 
@@ -2358,6 +2398,24 @@ mod tests {
     use super::*;
     use std::io::Write;
     use tempfile::TempDir;
+
+    #[test]
+    fn hf_download_retries_transient_failures_only() {
+        let exhausted = ApiError::TooManyRetries(Box::new(ApiError::Cancelled));
+        assert!(should_retry_hf_download(&exhausted));
+        assert!(!should_retry_hf_download(&ApiError::Cancelled));
+        assert!(!should_retry_hf_download(&ApiError::IoError(
+            std::io::Error::other("disk failure")
+        )));
+    }
+
+    #[test]
+    fn hf_download_retry_delay_is_bounded() {
+        assert_eq!(hf_retry_delay(1), Duration::from_secs(1));
+        assert_eq!(hf_retry_delay(2), Duration::from_secs(2));
+        assert_eq!(hf_retry_delay(3), Duration::from_secs(4));
+        assert_eq!(hf_retry_delay(8), Duration::from_secs(4));
+    }
 
     #[test]
     fn test_effective_language_accepts_chinese_script_intent_for_zh_capability() {

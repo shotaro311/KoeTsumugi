@@ -14,6 +14,8 @@ status: active
 
 ## 最新の検証済み状態
 
+- 2026-07-13: Handy_m 1.0.1としてWindowsのHugging Faceモデル取得を安定化。reqwest既定経路でWinSock 10054が再現し、WindowsのみIPv4 + HTTP/1.1へ固定すると連続通信試験とWhisper Medium 831,538,144 bytesの実ダウンロードが成功。
+- 2026-07-13: 一時的なHugging Face通信失敗を最大4回再試行し、並列数を4へ抑制、同一モデルの重複要求を集約。frontend、21言語、`cargo check`、Rust unit test 123件、署名付きMSI/NSIS build、1.0.1起動・応答を検証。
 - 2026-07-13: GitHub Actions Secrets登録と`shotaro/custom`のpushを完了し、[`handy-m-v1.0.0`](https://github.com/shotaro311/Handy/releases/tag/handy-m-v1.0.0)を公開。release workflow `29218527825` は約30分で成功。
 - 2026-07-13: 公開`latest.json`はHTTP 200、version 1.0.0、Windows x64 NSIS/MSI targetと署名を保持。NSIS downloadは`application/octet-stream`で20,881,530 bytes、公開鍵によるminisign検証に成功。
 - 2026-07-13: Handy_m専用の更新経路を実装。独立version `1.0.0`、専用GitHub Releases endpoint、専用updater署名鍵、アプリ内download/install/relaunch、Windows x64公開workflowを整備。
@@ -32,17 +34,18 @@ status: active
 
 ## 進行中
 
-- Windows実機: `1.0.0` installerの手動インストール後、実利用のショートカット、音声認識、貼り付け、IME入力を確認する。
+- Handy_m 1.0.1のpush・公開は、外部公開に対するユーザー承認待ち。
+- Windows実機: インストール済み1.0.0で、実利用のショートカット、音声認識、貼り付け、IME入力を確認する。
 
 ## 次アクション
 
-- `C:\hm-target\release\bundle\nsis\Handy_m_1.0.0_x64-setup.exe` を手動実行し、Windows SmartScreen表示を許可して動作確認する。
-- 次回変更を`1.0.1`として公開した際、インストール済み1.0.0から通知、download、install、relaunchを実機確認する。
+- 承認後にHandy_m 1.0.1をpush・公開し、インストール済み1.0.0から通知、download、install、relaunchを実機確認する。
 - 実利用アプリ上でショートカット録音、貼り付け方法、IME中の貼り付け結果を確認する。
-- 新しいtranscribe.cppモデルをダウンロードし、実音声でGPU認識品質と速度を確認する。
+- ダウンロード済みWhisper Mediumを使い、実音声でGPU認識品質と速度を確認する。
 
 ## Blocker / Risk
 
+- 1.0.1の署名付き成果物はローカル生成済みだが未公開。公開後にのみ、1.0.0からのupdater end-to-end検証が可能。
 - 公開metadata、binary transport、署名検証までは確認済み。実際の旧versionからのinstall/relaunchは、次回1.0.1公開時に確認する。
 - Tauri updater署名は付与済みだが、Windows Authenticodeコード署名は未導入。初回installerでSmartScreen警告が出る可能性がある。
 - 自動検証ではショートカット録音、モデルを使った実音声認識、実アプリへの貼り付け、IME変換中の貼り付けまでは未確認。アプリ起動、マイク、GPU/CPUバックエンド初期化は確認済み。
@@ -74,6 +77,7 @@ status: active
 
 ## 最近の更新
 
+- 2026-07-13: WindowsのHugging Face通信をIPv4 + HTTP/1.1へ固定し、再試行・並列数制御・重複要求集約を追加。Whisper Mediumの実ダウンロードと1.0.1署名buildを検証。
 - 2026-07-13: Handy_m 1.0.0をGitHub Releasesへ公開し、`latest.json`、binary download、公開署名を検証。
 - 2026-07-13: 本家とは別のHandy_m専用updater、署名鍵、release workflowを実装し、署名付きWindows成果物を検証。
 - 2026-07-13: upstream v0.9.2を取り込み、構造化カスタム辞書を新音声認識基盤へ統合。
