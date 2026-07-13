@@ -7,6 +7,7 @@ Handy.
 
 - GitHub repository: `shotaro311/Handy`
 - Branch: `shotaro/custom`
+- GitHub default branch: `shotaro/custom` (required for manual workflow dispatch)
 - Release tag: `handy-m-v<version>`
 - Updater metadata: `https://github.com/shotaro311/Handy/releases/latest/download/latest.json`
 - Signing private key: `%USERPROFILE%\.tauri\handy-m.key` (outside the repository)
@@ -46,7 +47,9 @@ Do not paste either value into logs, issues, release notes, or chat messages.
    ```
 
 7. Confirm that the published release contains `latest.json`, the NSIS
-   installer, and its `.sig` signature.
+   installer, and its `.sig` signature. Confirm that the `windows-x86_64-nsis`
+   URL returns the installer when requested with
+   `Accept: application/octet-stream`.
 
 The workflow creates a draft release first and publishes it only after the
 Windows x64 build and package audit succeed.
