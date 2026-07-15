@@ -535,20 +535,25 @@ impl ShortcutAction for TranscribeAction {
 
         let mut recording_error: Option<String> = None;
         if is_always_on {
-            // Always-on mode: Play audio feedback immediately, then apply mute after sound finishes
-            debug!("Always-on mode: Playing audio feedback immediately");
-            let rm_clone = Arc::clone(&rm);
-            let app_clone = app.clone();
-            // The blocking helper exits immediately if audio feedback is disabled,
-            // so we can always reuse this thread to ensure mute happens right after playback.
-            std::thread::spawn(move || {
-                play_feedback_sound_blocking(&app_clone, SoundType::Start);
-                rm_clone.apply_mute();
-            });
-
-            if let Err(e) = rm.try_start_recording(&binding_id, vad_policy) {
-                debug!("Recording failed: {}", e);
-                recording_error = Some(e);
+            // Usually this only sends the capture command. After an OS default-device
+            // switch it first rebuilds the stream, so play feedback only once capture
+            // is ready and the user's first word cannot land in the reconnect gap.
+            match rm.try_start_recording(&binding_id, vad_policy) {
+                Ok(()) => {
+                    debug!("Always-on mode: Playing audio feedback after capture is ready");
+                    let rm_clone = Arc::clone(&rm);
+                    let app_clone = app.clone();
+                    // The blocking helper exits immediately if audio feedback is disabled,
+                    // so we can always reuse this thread to ensure mute happens right after playback.
+                    std::thread::spawn(move || {
+                        play_feedback_sound_blocking(&app_clone, SoundType::Start);
+                        rm_clone.apply_mute();
+                    });
+                }
+                Err(e) => {
+                    debug!("Recording failed: {}", e);
+                    recording_error = Some(e);
+                }
             }
         } else {
             // On-demand mode: Start recording first, then play audio feedback, then apply mute

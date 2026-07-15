@@ -84,6 +84,10 @@ pub struct AudioRecorder {
     /// cleared whenever an open fails so a stale rate/format self-heals on the
     /// caller's retry.
     config_cache: Arc<Mutex<Option<(String, cpal::SupportedStreamConfig)>>>,
+    /// Cleared by cpal's asynchronous stream-error callback. The manager checks
+    /// this before each recording and rebuilds the stream when a device was
+    /// disconnected or invalidated.
+    stream_healthy: Arc<AtomicBool>,
 }
 
 impl AudioRecorder {
@@ -96,6 +100,7 @@ impl AudioRecorder {
             level_cb: None,
             audio_cb: None,
             config_cache: Arc::new(Mutex::new(None)),
+            stream_healthy: Arc::new(AtomicBool::new(false)),
         })
     }
 
@@ -160,6 +165,8 @@ impl AudioRecorder {
         // Move the optional real-time audio frame callback into the worker thread
         let audio_cb = self.audio_cb.clone();
         let config_cache = Arc::clone(&self.config_cache);
+        let stream_healthy = Arc::clone(&self.stream_healthy);
+        stream_healthy.store(true, Ordering::Release);
 
         let worker = std::thread::spawn(move || {
             let stop_flag = Arc::new(AtomicBool::new(false));
@@ -200,6 +207,7 @@ impl AudioRecorder {
                         sample_tx,
                         channels,
                         stop_flag_for_stream,
+                        Arc::clone(&stream_healthy),
                     )
                     .map_err(|e| format!("Failed to build input stream: {e}"))?,
                     cpal::SampleFormat::I8 => AudioRecorder::build_stream::<i8>(
@@ -208,6 +216,7 @@ impl AudioRecorder {
                         sample_tx,
                         channels,
                         stop_flag_for_stream,
+                        Arc::clone(&stream_healthy),
                     )
                     .map_err(|e| format!("Failed to build input stream: {e}"))?,
                     cpal::SampleFormat::I16 => AudioRecorder::build_stream::<i16>(
@@ -216,6 +225,7 @@ impl AudioRecorder {
                         sample_tx,
                         channels,
                         stop_flag_for_stream,
+                        Arc::clone(&stream_healthy),
                     )
                     .map_err(|e| format!("Failed to build input stream: {e}"))?,
                     cpal::SampleFormat::I32 => AudioRecorder::build_stream::<i32>(
@@ -224,6 +234,7 @@ impl AudioRecorder {
                         sample_tx,
                         channels,
                         stop_flag_for_stream,
+                        Arc::clone(&stream_healthy),
                     )
                     .map_err(|e| format!("Failed to build input stream: {e}"))?,
                     cpal::SampleFormat::F32 => AudioRecorder::build_stream::<f32>(
@@ -232,6 +243,7 @@ impl AudioRecorder {
                         sample_tx,
                         channels,
                         stop_flag_for_stream,
+                        Arc::clone(&stream_healthy),
                     )
                     .map_err(|e| format!("Failed to build input stream: {e}"))?,
                     sample_format => {
@@ -281,6 +293,7 @@ impl AudioRecorder {
                     drop(stream);
                 }
                 Err(error_message) => {
+                    stream_healthy.store(false, Ordering::Release);
                     // A failed open may mean the cached config went stale
                     // (device re-plugged, rate/format changed in the OS).
                     // Drop it so the next attempt re-queries the device.
@@ -323,6 +336,10 @@ impl AudioRecorder {
         Ok(())
     }
 
+    pub fn is_stream_healthy(&self) -> bool {
+        self.stream_healthy.load(Ordering::Acquire)
+    }
+
     pub fn stop(&self) -> Result<Vec<f32>, Box<dyn std::error::Error>> {
         let (resp_tx, resp_rx) = mpsc::channel();
         if let Some(tx) = &self.cmd_tx {
@@ -338,6 +355,7 @@ impl AudioRecorder {
         if let Some(h) = self.worker_handle.take() {
             let _ = h.join();
         }
+        self.stream_healthy.store(false, Ordering::Release);
         self.device = None;
         Ok(())
     }
@@ -348,6 +366,7 @@ impl AudioRecorder {
         sample_tx: mpsc::Sender<AudioChunk>,
         channels: usize,
         stop_flag: Arc<AtomicBool>,
+        stream_healthy: Arc<AtomicBool>,
     ) -> Result<cpal::Stream, cpal::BuildStreamError>
     where
         T: Sample + SizedSample + Send + 'static,
@@ -395,7 +414,7 @@ impl AudioRecorder {
         device.build_input_stream(
             &config.clone().into(),
             stream_cb,
-            |err| log::error!("Stream error: {}", err),
+            move |err| mark_stream_unhealthy(&stream_healthy, err),
             None,
         )
     }
@@ -456,6 +475,11 @@ impl AudioRecorder {
     }
 }
 
+fn mark_stream_unhealthy(stream_healthy: &AtomicBool, error: cpal::StreamError) {
+    stream_healthy.store(false, Ordering::Release);
+    log::error!("Stream error: {error}");
+}
+
 pub fn is_microphone_access_denied(error_message: &str) -> bool {
     let normalized = error_message.to_lowercase();
     normalized.contains("access is denied")
@@ -472,7 +496,10 @@ pub fn is_no_input_device_error(error_message: &str) -> bool {
 
 #[cfg(test)]
 mod tests {
-    use super::{is_microphone_access_denied, is_no_input_device_error};
+    use super::{
+        is_microphone_access_denied, is_no_input_device_error, mark_stream_unhealthy, AudioRecorder,
+    };
+    use std::sync::atomic::{AtomicBool, Ordering};
 
     #[test]
     fn detects_access_is_denied() {
@@ -510,6 +537,49 @@ mod tests {
     fn does_not_match_other_errors_for_no_device() {
         assert!(!is_no_input_device_error("permission denied"));
         assert!(!is_no_input_device_error("device not found"));
+    }
+
+    #[test]
+    fn recorder_starts_without_a_healthy_stream() {
+        let recorder = AudioRecorder::new().unwrap();
+        assert!(!recorder.is_stream_healthy());
+    }
+
+    #[test]
+    fn stream_error_marks_recorder_unhealthy() {
+        let stream_healthy = AtomicBool::new(true);
+        mark_stream_unhealthy(&stream_healthy, cpal::StreamError::DeviceNotAvailable);
+        assert!(!stream_healthy.load(Ordering::Acquire));
+    }
+
+    #[test]
+    fn shutdown_does_not_wait_for_an_audio_chunk() {
+        let (sample_tx, sample_rx) = std::sync::mpsc::channel();
+        let (cmd_tx, cmd_rx) = std::sync::mpsc::channel();
+        let (done_tx, done_rx) = std::sync::mpsc::channel();
+        let stop_flag = std::sync::Arc::new(AtomicBool::new(false));
+
+        let worker = std::thread::spawn(move || {
+            super::run_consumer(
+                16_000,
+                None,
+                sample_rx,
+                cmd_rx,
+                None,
+                None,
+                stop_flag,
+                std::time::Instant::now(),
+            );
+            let _ = done_tx.send(());
+        });
+
+        cmd_tx.send(super::Cmd::Shutdown).unwrap();
+        assert!(done_rx
+            .recv_timeout(std::time::Duration::from_secs(1))
+            .is_ok());
+
+        drop(sample_tx);
+        worker.join().unwrap();
     }
 }
 
@@ -597,13 +667,20 @@ fn run_consumer(
         }
     }
 
-    // Runs until the stream closes and `recv` returns `Err`.
-    while let Ok(chunk) = sample_rx.recv() {
+    // Poll commands even when a disconnected or invalidated device has stopped
+    // producing samples. A blocking recv() here made close() wait forever for
+    // one more audio callback before it could observe Cmd::Shutdown.
+    loop {
+        let mut pending = match sample_rx.recv_timeout(Duration::from_millis(50)) {
+            Ok(chunk) => Some(chunk),
+            Err(mpsc::RecvTimeoutError::Timeout) => None,
+            Err(mpsc::RecvTimeoutError::Disconnected) => break,
+        };
+
         // Handle pending commands BEFORE the in-flight chunk so a Start
         // captures it. Commands used to be polled after processing, which
         // silently dropped one buffer period of audio (~10ms built-in, up to
         // ~100ms on Bluetooth) at every recording start.
-        let mut pending = Some(chunk);
         while let Ok(cmd) = cmd_rx.try_recv() {
             match cmd {
                 Cmd::Start(policy, sent_at) => {

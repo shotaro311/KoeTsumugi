@@ -1,6 +1,6 @@
 ---
 project_slug: handy-m
-updated: 2026-07-13
+updated: 2026-07-15
 updated_by: codex
 status: active
 ---
@@ -14,6 +14,13 @@ status: active
 
 ## 最新の検証済み状態
 
+- 2026-07-15: WindowsでOSの既定マイクを切り替えた後、Handy_mが古い常時オン入力ストリームを保持する問題を修正。録音開始時にWASAPIエンドポイントIDとCPALストリーム健全性を確認し、変更・切断時だけ自動再生成する。音声コールバック停止中も50ms周期で終了指示を処理する。Rust test 132件、Clippy、frontend lint/build、21言語、release build、インストール先hash一致、起動・マイク初期化・最初の音声チャンクを確認。
+- 2026-07-14: WindowsのAlt+Space音声入力で、ブラウザがAlt単独操作としてメニューフォーカスへ移る問題を修正。割り当てを変えず、Alt+Space検出時だけAlt単独扱いを抑止する。Chrome実入力欄でフォーカス維持と`HANDY_FIXED_PASTE_OK`の貼り付け、抑止ログ、ローカル本番buildのインストールを確認。
+- 2026-07-14: ユーザーが確定した候補29件をインストール済みHandy_mのカスタム辞書へ反映。既存`ChatGPT`を保持して合計30件、output重複なし、候補内容の完全一致、辞書以外の設定保持、アプリ再起動後の設定維持を確認。
+- 2026-07-14: ローカル辞書候補画面で各候補の別名・読みを編集可能にした。変更はブラウザへ保存され、検索、コピー結果、登録用JSONへ反映。重複・空白・正しい表記と同一の読みは保存時に除去する。
+- 2026-07-14: 辞書候補29件をワンクリックで除外指定できるローカルHTMLを`docs/custom-dictionary-review.html`へ追加。選択の自動保存、検索、表示絞り込み、除外結果のコピー、登録用JSON保存を実装し、構文・整形・候補データを検証。
+- 2026-07-14: 最近3日分の利用記録と現在の辞書を基に、誤認識しやすい固有名詞29件を`docs/custom-dictionary-candidates.md`へ整理。`[x]`を除外指定とし、既存の`ChatGPT`登録との重複や一般語を巻き込む危険なaliasを避けた。
+- 2026-07-13: [`Handy_m v1.0.1`](https://github.com/shotaro311/Handy/releases/tag/handy-m-v1.0.1)を公開。release workflow `29222247004`は全job成功し、公開NSISのSHA-256とupdater署名を独立検証。インストール済み1.0.0で「アップデートあり」の表示まで確認。
 - 2026-07-13: Handy_m 1.0.1としてWindowsのHugging Faceモデル取得を安定化。reqwest既定経路でWinSock 10054が再現し、WindowsのみIPv4 + HTTP/1.1へ固定すると連続通信試験とWhisper Medium 831,538,144 bytesの実ダウンロードが成功。
 - 2026-07-13: 一時的なHugging Face通信失敗を最大4回再試行し、並列数を4へ抑制、同一モデルの重複要求を集約。frontend、21言語、`cargo check`、Rust unit test 123件、署名付きMSI/NSIS build、1.0.1起動・応答を検証。
 - 2026-07-13: GitHub Actions Secrets登録と`shotaro/custom`のpushを完了し、[`handy-m-v1.0.0`](https://github.com/shotaro311/Handy/releases/tag/handy-m-v1.0.0)を公開。release workflow `29218527825` は約30分で成功。
@@ -34,21 +41,24 @@ status: active
 
 ## 進行中
 
-- Handy_m 1.0.1のpush・公開は、外部公開に対するユーザー承認待ち。
-- Windows実機: インストール済み1.0.0で、実利用のショートカット、音声認識、貼り付け、IME入力を確認する。
+- Windows実機: OSの既定マイクを別エンドポイントへ切り替え、設定画面で再選択せず次の録音が自動復旧することを確認する。自動判定・再生成の単体テストと現在のマイクでの起動は確認済み。
+- インストール済み1.0.0から1.0.1へのdownload、install、relaunchは未実施。
+- Windows実機: 実音声を使った文字起こしとIME変換中の貼り付けを確認する。Alt+Space後のChrome入力欄フォーカス維持とCtrl+V貼り付け経路は確認済み。
 
 ## 次アクション
 
-- 承認後にHandy_m 1.0.1をpush・公開し、インストール済み1.0.0から通知、download、install、relaunchを実機確認する。
-- 実利用アプリ上でショートカット録音、貼り付け方法、IME中の貼り付け結果を確認する。
+- Windowsのサウンド設定または実機接続で既定マイクを切り替え、次回録音のログに`Reopening microphone stream: TargetChanged`が出て音声入力できることを確認する。
+- 実際の音声認識履歴を見ながら、今回登録したカスタム辞書のaliasを追加・削除する。
+- インストール済み1.0.0から1.0.1へdownload、install、relaunchを実機確認する。
+- 実利用アプリ上で、実音声の文字起こしとIME変換中の貼り付け結果を確認する。
 - ダウンロード済みWhisper Mediumを使い、実音声でGPU認識品質と速度を確認する。
 
 ## Blocker / Risk
 
-- 1.0.1の署名付き成果物はローカル生成済みだが未公開。公開後にのみ、1.0.0からのupdater end-to-end検証が可能。
-- 公開metadata、binary transport、署名検証までは確認済み。実際の旧versionからのinstall/relaunchは、次回1.0.1公開時に確認する。
+- 既定マイク変更・CPALエラー・音声チャンク停止時の自動回復ロジック、release build、インストール、現在のDJI Mic Miniでの初期化までは検証済み。OSの既定マイクを実際に変更する操作はユーザー環境を勝手に変えないため未実施。
+- 1.0.1の公開metadata、binary transport、署名、1.0.0での更新検出までは確認済み。実際の旧versionからのinstall/relaunchとCohere Transcribeの再ダウンロードは未確認。
 - Tauri updater署名は付与済みだが、Windows Authenticodeコード署名は未導入。初回installerでSmartScreen警告が出る可能性がある。
-- 自動検証ではショートカット録音、モデルを使った実音声認識、実アプリへの貼り付け、IME変換中の貼り付けまでは未確認。アプリ起動、マイク、GPU/CPUバックエンド初期化は確認済み。
+- Alt+Spaceの検出、Alt単独扱いの抑止、Chrome入力欄のフォーカス維持、Ctrl+V貼り付けは自動検証済み。モデルを使った実音声認識とIME変換中の貼り付けは未確認。
 - 日本語ロケールのWindowsでtranscribe-cpp 0.1.3をビルドする際は、`TRANSCRIBE_CMAKE_ARGS`でMSVCへUTF-8フラグを渡す必要がある。詳細はBUILD.md。
 - Macの通常PATHでは `~/.local/bin/xattr` がTauri bundlerと相性不一致。Mac build時は `/usr/bin` を先に置く。
 - WindowsではRust/Tauri build時にLLVM、CMake、Vulkan SDK、Visual Studio Build Tools、短い `CARGO_TARGET_DIR` が必要。
@@ -64,6 +74,8 @@ status: active
 
 ## 詳細ログ
 
+- [2026-07-15](2026-07/2026-07-15_handy-m.md)
+- [2026-07-14](2026-07/2026-07-14_handy-m.md)
 - [2026-07-13](2026-07/2026-07-13_handy-m.md)
 - [2026-06-10](2026-06/2026-06-10_handy-m.md)
 
@@ -77,6 +89,13 @@ status: active
 
 ## 最近の更新
 
+- 2026-07-15: OSの既定マイク変更と入力ストリーム切断を録音開始時に自動検出・回復し、最終release buildをインストールしてマイク初期化まで確認。
+- 2026-07-14: Alt+Spaceを維持したままWindowsブラウザのフォーカス逸脱を防ぎ、ローカル本番buildをインストールしてChrome入力欄への貼り付けを検証。
+- 2026-07-14: 選択済み29件をカスタム辞書へ反映し、既存`ChatGPT`を含む30件を再起動後まで検証。
+- 2026-07-14: 辞書候補画面で読みを編集・初期値へ復元でき、編集結果をコピーとJSONへ含めるようにした。
+- 2026-07-14: 辞書候補をカードクリックで除外でき、選択結果をコピー・JSON保存できるローカル画面を追加。
+- 2026-07-14: 最近の利用語からカスタム辞書候補29件を作成し、除外チェック後にそのまま登録できる形式へ整理。
+- 2026-07-13: Handy_m 1.0.1を公開し、公開assetの署名検証とインストール済み1.0.0での更新検出を確認。
 - 2026-07-13: WindowsのHugging Face通信をIPv4 + HTTP/1.1へ固定し、再試行・並列数制御・重複要求集約を追加。Whisper Mediumの実ダウンロードと1.0.1署名buildを検証。
 - 2026-07-13: Handy_m 1.0.0をGitHub Releasesへ公開し、`latest.json`、binary download、公開署名を検証。
 - 2026-07-13: 本家とは別のHandy_m専用updater、署名鍵、release workflowを実装し、署名付きWindows成果物を検証。

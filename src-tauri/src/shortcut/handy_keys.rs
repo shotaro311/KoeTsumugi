@@ -28,6 +28,8 @@
 //! via Tauri's event system.
 
 use handy_keys::{Hotkey, HotkeyId, HotkeyManager, HotkeyState, KeyboardListener};
+#[cfg(target_os = "windows")]
+use handy_keys::{Key, Modifiers};
 use log::{debug, error, info};
 use serde::Serialize;
 use specta::Type;
@@ -57,6 +59,14 @@ fn ensure_accessibility_permission() -> Result<(), String> {
 #[cfg(not(target_os = "macos"))]
 fn ensure_accessibility_permission() -> Result<(), String> {
     Ok(())
+}
+
+#[cfg(target_os = "windows")]
+fn is_alt_space(hotkey: Hotkey) -> bool {
+    hotkey.key == Some(Key::Space)
+        && (hotkey.modifiers == Modifiers::OPT_LEFT
+            || hotkey.modifiers == Modifiers::OPT_RIGHT
+            || hotkey.modifiers == Modifiers::OPT)
 }
 
 /// Commands that can be sent to the hotkey manager thread
@@ -151,6 +161,13 @@ impl HandyKeysState {
                         binding_id, hotkey_string, event.state
                     );
                     let is_pressed = event.state == HotkeyState::Pressed;
+                    #[cfg(target_os = "windows")]
+                    if is_pressed && manager.get_hotkey(event.id).is_some_and(is_alt_space) {
+                        match crate::input::neutralize_alt_menu_activation() {
+                            Ok(()) => debug!("Neutralized Windows Alt menu activation"),
+                            Err(error) => log::warn!("{}", error),
+                        }
+                    }
                     handle_shortcut_event(&app, binding_id, hotkey_string, is_pressed);
                 }
             }
@@ -377,6 +394,27 @@ impl HandyKeysState {
 
         debug!("Stopped handy-keys recording mode");
         Ok(())
+    }
+}
+
+#[cfg(all(test, target_os = "windows"))]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn identifies_only_alt_space_hotkeys() {
+        let alt_left_space = Hotkey::new(Modifiers::OPT_LEFT, Key::Space).unwrap();
+        let alt_space = Hotkey::new(Modifiers::OPT, Key::Space).unwrap();
+        let ctrl_space = Hotkey::new(Modifiers::CTRL, Key::Space).unwrap();
+        let alt_shift_space =
+            Hotkey::new(Modifiers::OPT_LEFT | Modifiers::SHIFT_LEFT, Key::Space).unwrap();
+        let alt_enter = Hotkey::new(Modifiers::OPT_LEFT, Key::Return).unwrap();
+
+        assert!(is_alt_space(alt_left_space));
+        assert!(is_alt_space(alt_space));
+        assert!(!is_alt_space(ctrl_space));
+        assert!(!is_alt_space(alt_shift_space));
+        assert!(!is_alt_space(alt_enter));
     }
 }
 

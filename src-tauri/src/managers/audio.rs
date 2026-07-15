@@ -1,5 +1,5 @@
 use crate::audio_toolkit::{
-    list_input_devices,
+    default_input_device_fingerprint, list_input_devices,
     vad::{
         SmoothedVad, VAD_OFFLINE_HANGOVER_FRAMES, VAD_ONSET_FRAMES, VAD_PREFILL_FRAMES,
         VAD_STREAMING_HANGOVER_FRAMES,
@@ -19,6 +19,32 @@ use tauri::Manager;
 
 const STREAM_IDLE_TIMEOUT: Duration = Duration::from_secs(30);
 const VAD_THRESHOLD: f32 = 0.3;
+
+#[derive(Clone, Debug, PartialEq, Eq)]
+enum MicrophoneTarget {
+    SystemDefault(Option<String>),
+    Named(String),
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+enum StreamRestartReason {
+    StreamError,
+    TargetChanged,
+}
+
+fn stream_restart_reason(
+    stream_healthy: bool,
+    opened_target: Option<&MicrophoneTarget>,
+    current_target: &MicrophoneTarget,
+) -> Option<StreamRestartReason> {
+    if !stream_healthy {
+        Some(StreamRestartReason::StreamError)
+    } else if opened_target != Some(current_target) {
+        Some(StreamRestartReason::TargetChanged)
+    } else {
+        None
+    }
+}
 
 fn set_mute(mute: bool) {
     // Expected behavior:
@@ -193,6 +219,10 @@ pub struct AudioRecordingManager {
     /// so the retry re-enumerates. The system-default case is never cached —
     /// the recorder resolves the current default itself, cheaply.
     cached_device: Arc<Mutex<Option<(String, cpal::Device)>>>,
+    /// Target used by the currently open stream. For the system-default case
+    /// this includes a stable Windows endpoint ID, allowing a default-device
+    /// switch to be detected without polling or full device enumeration.
+    opened_target: Arc<Mutex<Option<MicrophoneTarget>>>,
 }
 
 impl AudioRecordingManager {
@@ -222,6 +252,7 @@ impl AudioRecordingManager {
             cancel_generation: Arc::new(AtomicU64::new(0)),
             stream_router,
             cached_device: Arc::new(Mutex::new(None)),
+            opened_target: Arc::new(Mutex::new(None)),
         };
 
         // Always-on?  Open immediately.
@@ -257,10 +288,17 @@ impl AudioRecordingManager {
         *self.cached_device.lock().unwrap() = None;
     }
 
-    fn get_effective_microphone_device(&self, settings: &AppSettings) -> Option<cpal::Device> {
-        let device_name = match self.desired_device_name(settings) {
-            Some(name) => name,
-            None => {
+    fn current_microphone_target(&self, settings: &AppSettings) -> MicrophoneTarget {
+        match self.desired_device_name(settings) {
+            Some(name) => MicrophoneTarget::Named(name),
+            None => MicrophoneTarget::SystemDefault(default_input_device_fingerprint()),
+        }
+    }
+
+    fn get_effective_microphone_device(&self, target: &MicrophoneTarget) -> Option<cpal::Device> {
+        let device_name = match target {
+            MicrophoneTarget::Named(name) => name,
+            MicrophoneTarget::SystemDefault(_) => {
                 debug!("device resolve: no mic configured -> system default");
                 return None;
             }
@@ -269,7 +307,7 @@ impl AudioRecordingManager {
         // Cache hit: skip the full enumeration. A stale device (unplugged)
         // fails at open, where the caller invalidates and retries fresh.
         if let Some((cached_name, device)) = self.cached_device.lock().unwrap().as_ref() {
-            if *cached_name == device_name {
+            if cached_name == device_name {
                 debug!("device resolve: cache hit for '{}'", device_name);
                 return Some(device.clone());
             }
@@ -280,7 +318,7 @@ impl AudioRecordingManager {
         let device = match list_input_devices() {
             Ok(devices) => devices
                 .into_iter()
-                .find(|d| d.name == device_name)
+                .find(|d| d.name == *device_name)
                 .map(|d| d.device),
             Err(e) => {
                 debug!("Failed to list devices, using default: {}", e);
@@ -293,9 +331,36 @@ impl AudioRecordingManager {
             device.is_some()
         );
         if let Some(d) = &device {
-            *self.cached_device.lock().unwrap() = Some((device_name, d.clone()));
+            *self.cached_device.lock().unwrap() = Some((device_name.clone(), d.clone()));
         }
         device
+    }
+
+    fn ensure_microphone_stream_current(&self) -> Result<(), anyhow::Error> {
+        if !*self.is_open.lock().unwrap() {
+            return self.start_microphone_stream();
+        }
+
+        let settings = get_settings(&self.app_handle);
+        let current_target = self.current_microphone_target(&settings);
+        let opened_target = self.opened_target.lock().unwrap().clone();
+        let stream_healthy = self
+            .recorder
+            .lock()
+            .unwrap()
+            .as_ref()
+            .is_some_and(AudioRecorder::is_stream_healthy);
+
+        if let Some(reason) =
+            stream_restart_reason(stream_healthy, opened_target.as_ref(), &current_target)
+        {
+            info!("Reopening microphone stream: {reason:?}");
+            self.invalidate_device_cache();
+            self.stop_microphone_stream();
+            self.start_microphone_stream()?;
+        }
+
+        Ok(())
     }
 
     fn schedule_lazy_close(&self) {
@@ -386,7 +451,8 @@ impl AudioRecordingManager {
         // "No input device found" error this used to check for.
         let settings = get_settings(&self.app_handle);
         let resolve_started = Instant::now();
-        let selected_device = self.get_effective_microphone_device(&settings);
+        let mut target = self.current_microphone_target(&settings);
+        let selected_device = self.get_effective_microphone_device(&target);
         let resolve_elapsed = resolve_started.elapsed();
 
         // Ensure VAD is loaded if it wasn't for whatever reason
@@ -403,7 +469,8 @@ impl AudioRecordingManager {
                 // retry once before surfacing the error.
                 warn!("Recorder open failed ({first_err}); re-resolving device and retrying once");
                 self.invalidate_device_cache();
-                let fresh_device = self.get_effective_microphone_device(&settings);
+                target = self.current_microphone_target(&settings);
+                let fresh_device = self.get_effective_microphone_device(&target);
                 rec.open(fresh_device)
                     .map_err(|e| anyhow::anyhow!("Failed to open recorder: {}", e))?;
             }
@@ -415,6 +482,7 @@ impl AudioRecordingManager {
             open_started.elapsed()
         );
 
+        *self.opened_target.lock().unwrap() = Some(target);
         *open_flag = true;
         // This timing covers through cpal's stream.play() returning — i.e. the
         // point cpal surfaces as "stream running." It does NOT guarantee the
@@ -449,6 +517,7 @@ impl AudioRecordingManager {
             let _ = rec.close();
         }
 
+        *self.opened_target.lock().unwrap() = None;
         *open_flag = false;
         debug!("Microphone stream stopped");
     }
@@ -486,15 +555,14 @@ impl AudioRecordingManager {
         let mut state = self.state.lock().unwrap();
 
         if let RecordingState::Idle = *state {
-            // Ensure microphone is open in on-demand mode
+            // Cancel any pending lazy close before checking or rebuilding the stream.
             if matches!(*self.mode.lock().unwrap(), MicrophoneMode::OnDemand) {
-                // Cancel any pending lazy close
                 self.close_generation.fetch_add(1, Ordering::SeqCst);
-                if let Err(e) = self.start_microphone_stream() {
-                    let msg = format!("{e}");
-                    error!("Failed to open microphone stream: {msg}");
-                    return Err(msg);
-                }
+            }
+            if let Err(e) = self.ensure_microphone_stream_current() {
+                let msg = format!("{e}");
+                error!("Failed to open microphone stream: {msg}");
+                return Err(msg);
             }
 
             if let Some(rec) = self.recorder.lock().unwrap().as_ref() {
@@ -648,5 +716,44 @@ impl AudioRecordingManager {
             }
             RecordingState::Idle => {}
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::{stream_restart_reason, MicrophoneTarget, StreamRestartReason};
+
+    #[test]
+    fn healthy_stream_keeps_the_same_default_endpoint() {
+        let target = MicrophoneTarget::SystemDefault(Some("endpoint-a".to_string()));
+        assert_eq!(stream_restart_reason(true, Some(&target), &target), None);
+    }
+
+    #[test]
+    fn default_endpoint_change_restarts_the_stream() {
+        let opened = MicrophoneTarget::SystemDefault(Some("endpoint-a".to_string()));
+        let current = MicrophoneTarget::SystemDefault(Some("endpoint-b".to_string()));
+        assert_eq!(
+            stream_restart_reason(true, Some(&opened), &current),
+            Some(StreamRestartReason::TargetChanged)
+        );
+    }
+
+    #[test]
+    fn stream_error_restarts_even_when_target_is_unchanged() {
+        let target = MicrophoneTarget::Named("USB microphone".to_string());
+        assert_eq!(
+            stream_restart_reason(false, Some(&target), &target),
+            Some(StreamRestartReason::StreamError)
+        );
+    }
+
+    #[test]
+    fn missing_open_target_restarts_the_stream() {
+        let target = MicrophoneTarget::SystemDefault(None);
+        assert_eq!(
+            stream_restart_reason(true, None, &target),
+            Some(StreamRestartReason::TargetChanged)
+        );
     }
 }

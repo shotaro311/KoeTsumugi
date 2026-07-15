@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Handy_mのカスタム辞書へ登録する候補をワンクリックで選ぶローカルツール"
+    />
+    <title>Handy_m 辞書候補セレクター</title>
+    <link rel="stylesheet" href="custom-dictionary-review.css" />
+  </head>
+  <body>
+    <main class="page-shell">
+      <header class="hero">
+        <div class="brand-mark" aria-hidden="true">H</div>
+        <div class="hero-copy">
+          <p class="eyebrow">Handy_m custom dictionary</p>
+          <h1>登録しない単語を選ぶ</h1>
+          <p class="lead">
+            カードをクリックして除外を切り替えられます。「読みを編集」から別名や読み方も変更できます。
+          </p>
+        </div>
+      </header>
+
+      <section class="summary" aria-label="選択状況">
+        <div class="metric metric-keep">
+          <span class="metric-label">登録する</span>
+          <strong id="keep-count">29</strong>
+          <span>件</span>
+        </div>
+        <div class="metric metric-exclude">
+          <span class="metric-label">除外する</span>
+          <strong id="exclude-count">0</strong>
+          <span>件</span>
+        </div>
+        <p class="save-status" id="save-status" role="status">
+          除外状態と編集した読みは、このブラウザに自動保存されます
+        </p>
+      </section>
+
+      <section class="controls" aria-label="候補の絞り込み">
+        <label class="search-field">
+          <span class="visually-hidden">候補を検索</span>
+          <span aria-hidden="true">⌕</span>
+          <input
+            id="search-input"
+            type="search"
+            placeholder="名前・読みで検索"
+            autocomplete="off"
+          />
+        </label>
+        <div class="filter-group" role="group" aria-label="表示する候補">
+          <button
+            class="filter-button is-active"
+            type="button"
+            data-filter="all"
+          >
+            すべて
+          </button>
+          <button class="filter-button" type="button" data-filter="keep">
+            登録する
+          </button>
+          <button class="filter-button" type="button" data-filter="exclude">
+            除外する
+          </button>
+        </div>
+      </section>
+
+      <div class="existing-note">
+        <span aria-hidden="true">✓</span>
+        <p><strong>ChatGPT</strong> はすでに登録済みです。</p>
+      </div>
+
+      <section id="candidate-sections" aria-live="polite"></section>
+
+      <p id="empty-state" class="empty-state" hidden>
+        条件に一致する候補はありません。
+      </p>
+    </main>
+
+    <footer class="action-bar">
+      <div class="action-inner">
+        <button id="reset-button" class="button button-quiet" type="button">
+          除外をリセット
+        </button>
+        <div class="primary-actions">
+          <button
+            id="download-button"
+            class="button button-secondary"
+            type="button"
+          >
+            登録用JSONを保存
+          </button>
+          <button id="copy-button" class="button button-primary" type="button">
+            選択結果をコピー
+          </button>
+        </div>
+      </div>
+    </footer>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script src="custom-dictionary-review.js"></script>
+  </body>
+</html>
