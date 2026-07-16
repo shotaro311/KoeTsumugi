@@ -1,6 +1,6 @@
 ---
 project_slug: handy-m
-updated: 2026-07-15
+updated: 2026-07-16
 updated_by: codex
 status: active
 ---
@@ -14,6 +14,7 @@ status: active
 
 ## 最新の検証済み状態
 
+- 2026-07-16: VADオンのCohere長文で文章が省かれる問題を修正。Cohereだけ30秒以下へ低エネルギー境界で非重複分割し、truncation時は20秒以下へ再試行する。57.6秒・120.8秒・300.9秒の番号付き日本語TTSで全4/9/23区間、順序、重複なし、末尾文を確認。旧single-shotは1/2/5分相当で3/4/4区間までだった。Rust test 142件、Clippy、frontend lint/build、21言語、release build、インストール先hash一致、起動・マイク初期化を確認。環境変数でCohereだけ旧動作へ戻せる。
 - 2026-07-15: WindowsでOSの既定マイクを切り替えた後、Handy_mが古い常時オン入力ストリームを保持する問題を修正。録音開始時にWASAPIエンドポイントIDとCPALストリーム健全性を確認し、変更・切断時だけ自動再生成する。音声コールバック停止中も50ms周期で終了指示を処理する。Rust test 132件、Clippy、frontend lint/build、21言語、release build、インストール先hash一致、起動・マイク初期化・最初の音声チャンクを確認。
 - 2026-07-14: WindowsのAlt+Space音声入力で、ブラウザがAlt単独操作としてメニューフォーカスへ移る問題を修正。割り当てを変えず、Alt+Space検出時だけAlt単独扱いを抑止する。Chrome実入力欄でフォーカス維持と`HANDY_FIXED_PASTE_OK`の貼り付け、抑止ログ、ローカル本番buildのインストールを確認。
 - 2026-07-14: ユーザーが確定した候補29件をインストール済みHandy_mのカスタム辞書へ反映。既存`ChatGPT`を保持して合計30件、output重複なし、候補内容の完全一致、辞書以外の設定保持、アプリ再起動後の設定維持を確認。
@@ -41,12 +42,14 @@ status: active
 
 ## 進行中
 
+- Windows実機: VADオンのCohereで5分程度の自然発話をホットキーから録音し、履歴保存と実利用アプリへの貼り付けまで確認する。保存済み音声と番号付きTTSのheadless検証、インストール済みbinaryの起動は確認済み。
 - Windows実機: OSの既定マイクを別エンドポイントへ切り替え、設定画面で再選択せず次の録音が自動復旧することを確認する。自動判定・再生成の単体テストと現在のマイクでの起動は確認済み。
 - インストール済み1.0.0から1.0.1へのdownload、install、relaunchは未実施。
 - Windows実機: 実音声を使った文字起こしとIME変換中の貼り付けを確認する。Alt+Space後のChrome入力欄フォーカス維持とCtrl+V貼り付け経路は確認済み。
 
 ## 次アクション
 
+- VADオンのCohereで実際の長文を録音し、文章欠落、境界重複、停止後待ち時間、最終貼り付けを確認する。問題があれば `HANDY_DISABLE_COHERE_LONG_FORM_CHUNKING=1` を設定して再起動し、旧single-shotへ戻す。
 - Windowsのサウンド設定または実機接続で既定マイクを切り替え、次回録音のログに`Reopening microphone stream: TargetChanged`が出て音声入力できることを確認する。
 - 実際の音声認識履歴を見ながら、今回登録したカスタム辞書のaliasを追加・削除する。
 - インストール済み1.0.0から1.0.1へdownload、install、relaunchを実機確認する。
@@ -55,6 +58,7 @@ status: active
 
 ## Blocker / Risk
 
+- Cohereの正常終了扱いの早期EOSはAPIから直接検知できないため、30秒以下への事前分割で回避する。VAD後音声に静かな境界がない場合は境界語の精度が変わる可能性がある。安全弁とバックアップ実行ファイルで即時復旧可能。
 - 既定マイク変更・CPALエラー・音声チャンク停止時の自動回復ロジック、release build、インストール、現在のDJI Mic Miniでの初期化までは検証済み。OSの既定マイクを実際に変更する操作はユーザー環境を勝手に変えないため未実施。
 - 1.0.1の公開metadata、binary transport、署名、1.0.0での更新検出までは確認済み。実際の旧versionからのinstall/relaunchとCohere Transcribeの再ダウンロードは未確認。
 - Tauri updater署名は付与済みだが、Windows Authenticodeコード署名は未導入。初回installerでSmartScreen警告が出る可能性がある。
@@ -74,6 +78,7 @@ status: active
 
 ## 詳細ログ
 
+- [2026-07-16](2026-07/2026-07-16_handy-m.md)
 - [2026-07-15](2026-07/2026-07-15_handy-m.md)
 - [2026-07-14](2026-07/2026-07-14_handy-m.md)
 - [2026-07-13](2026-07/2026-07-13_handy-m.md)
@@ -89,6 +94,7 @@ status: active
 
 ## 最近の更新
 
+- 2026-07-16: Cohere長文を30秒以下へ低エネルギー分割し、truncation再試行と環境変数の安全弁を追加。1/2/5分相当の番号付き日本語TTSとインストール済みrelease binaryで欠落・重複・順序を検証。
 - 2026-07-15: OSの既定マイク変更と入力ストリーム切断を録音開始時に自動検出・回復し、最終release buildをインストールしてマイク初期化まで確認。
 - 2026-07-14: Alt+Spaceを維持したままWindowsブラウザのフォーカス逸脱を防ぎ、ローカル本番buildをインストールしてChrome入力欄への貼り付けを検証。
 - 2026-07-14: 選択済み29件をカスタム辞書へ反映し、既存`ChatGPT`を含む30件を再起動後まで検証。
