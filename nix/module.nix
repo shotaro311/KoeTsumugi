@@ -7,7 +7,7 @@
 #
 # Usage in your flake:
 #
-#   inputs.koetsumugi.url = "github:shotaro311/Handy";
+#   inputs.koetsumugi.url = "github:shotaro311/KoeTsumugi";
 #
 #   nixosConfigurations.myhost = nixpkgs.lib.nixosSystem {
 #     modules = [

@@ -54,22 +54,22 @@ model for commercial work.
 ## Install and update compatibility
 
 Future approved Windows releases will be available from the
-[derivative release page](https://github.com/shotaro311/Handy/releases/latest).
+[derivative release page](https://github.com/shotaro311/KoeTsumugi/releases/latest).
 Do not use the upstream Handy download page to install KoeTsumugi.
 
 Version 1.0.3 is the compatibility stage of the rename from `Handy_m`:
 
 - the application and executable are renamed to `KoeTsumugi` and
   `koetsumugi.exe`;
-- the existing identifier `com.shotaro.handym`, updater public key, and
-  `shotaro311/Handy` update endpoint are intentionally retained;
+- the existing identifier `com.shotaro.handym` and updater public key are
+  intentionally retained;
 - existing settings, history, recordings, and downloaded models continue to
   use the same application-data directory;
 - the Windows installer migrates the existing install location, executable,
   Start Menu/Desktop shortcuts, uninstall registration, and enabled startup
   entry; and
-- legacy internal paths and the repository URL may therefore continue to
-  contain `Handy_m` or `Handy` during this compatibility stage.
+- legacy internal paths and release tags may therefore continue to contain
+  `Handy_m` or `handy-m` during this compatibility stage.
 
 A later release may move to a new identifier and repository only after a tested
 data migration and rollback path exists.

@@ -174,7 +174,7 @@
 
             meta = {
               description = "An unofficial Handy derivative focused on Windows and Japanese dictation";
-              homepage = "https://github.com/shotaro311/Handy";
+              homepage = "https://github.com/shotaro311/KoeTsumugi";
               license = lib.licenses.mit;
               mainProgram = "koetsumugi";
               platforms = supportedSystems;

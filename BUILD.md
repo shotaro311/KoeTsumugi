@@ -113,8 +113,8 @@ git config core.autocrlf false
 ### 1. Clone the Repository
 
 ```bash
-git clone git@github.com:shotaro311/Handy.git
-cd Handy
+git clone git@github.com:shotaro311/KoeTsumugi.git
+cd KoeTsumugi
 git switch shotaro/custom
 ```
 

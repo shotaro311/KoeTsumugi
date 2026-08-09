@@ -9,7 +9,7 @@ These rules apply to the local customization workspace at `C:\Users\shotaro\code
 - This repository is a local customization fork built on top of upstream `cjpais/Handy`.
 - Keep `main` as the upstream tracking branch. Do not implement custom Handy_m behavior directly on `main`.
 - Implement custom work on `shotaro/custom` or short-lived feature branches created from it.
-- `upstream` points to the official `cjpais/Handy` repository. `origin` points to the personal `shotaro311/Handy` fork.
+- `upstream` points to the official `cjpais/Handy` repository. `origin` points to the personal `shotaro311/KoeTsumugi` derivative repository.
 - Keep commits small and focused, especially for dictionary behavior, text input behavior, and platform-specific integrations. Smaller commits make upstream updates easier to merge.
 - Prefer additive changes, wrappers, and isolated settings over broad rewrites of shared upstream code paths.
 - When upstream Handy is updated, sync in this order:
@@ -27,7 +27,7 @@ git merge main
 ## Handy_m Release and Updater Rules
 
 - Handy_m has an independent version and update channel. Do not reuse upstream Handy release tags, updater endpoints, or signing keys.
-- The canonical updater endpoint is `shotaro311/Handy` GitHub Releases. Release tags use `handy-m-v<version>`.
+- The canonical updater endpoint is `shotaro311/KoeTsumugi` GitHub Releases. Release tags use `handy-m-v<version>` for update compatibility.
 - Keep the versions in `package.json`, `src-tauri/Cargo.toml`, `src-tauri/Cargo.lock`, and `src-tauri/tauri.conf.json` synchronized. Handy_m starts at `1.0.0` and normally increments the patch version for each user-facing release.
 - Build updater artifacts with `src-tauri/tauri.updater.conf.json`; normal local builds keep updater artifact generation disabled.
 - The updater private key lives outside the repository at `%USERPROFILE%\.tauri\handy-m.key`, and its password is stored as a user-scoped DPAPI credential at `%USERPROFILE%\.tauri\handy-m.key.password.clixml`. Never print, commit, copy into progress logs, or replace either one after a release has shipped. Back them up securely because losing either one prevents updates to installed copies.

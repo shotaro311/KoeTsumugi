@@ -12,8 +12,8 @@ interface UpdateCheckerProps {
   className?: string;
 }
 
-const HANDY_M_RELEASE_URL =
-  "https://github.com/shotaro311/Handy/releases/latest";
+const KOETSUMUGI_RELEASE_URL =
+  "https://github.com/shotaro311/KoeTsumugi/releases/latest";
 
 const UpdateChecker: React.FC<UpdateCheckerProps> = ({ className = "" }) => {
   const { t } = useTranslation();
@@ -219,7 +219,7 @@ const UpdateChecker: React.FC<UpdateCheckerProps> = ({ className = "" }) => {
               <button
                 className="px-3 py-1.5 text-sm rounded bg-logo-primary text-white hover:bg-logo-primary/80 transition-colors"
                 onClick={() => {
-                  openUrl(HANDY_M_RELEASE_URL);
+                  openUrl(KOETSUMUGI_RELEASE_URL);
                   setShowPortableUpdateDialog(false);
                 }}
               >

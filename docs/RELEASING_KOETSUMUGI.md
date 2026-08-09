@@ -1,16 +1,16 @@
 # KoeTsumugi Release and Updater
 
 KoeTsumugi uses a release and update channel that is independent from upstream
-Handy. The legacy repository URL, tag prefix, app identifier, and key filenames
-are retained during the staged migration from Handy_m.
+Handy. The legacy tag prefix, app identifier, and key filenames are retained
+during the staged migration from Handy_m.
 
 ## Stable identifiers
 
-- GitHub repository: `shotaro311/Handy`
+- GitHub repository: `shotaro311/KoeTsumugi`
 - Branch: `shotaro/custom`
 - GitHub default branch: `shotaro/custom` (required for manual workflow dispatch)
 - Release tag: `handy-m-v<version>`
-- Updater metadata: `https://github.com/shotaro311/Handy/releases/latest/download/latest.json`
+- Updater metadata: `https://github.com/shotaro311/KoeTsumugi/releases/latest/download/latest.json`
 - Signing private key: `%USERPROFILE%\.tauri\handy-m.key` (outside the repository)
 - Signing password: `%USERPROFILE%\.tauri\handy-m.key.password.clixml` (user-scoped DPAPI credential)
 - Signing public key: embedded in `src-tauri/tauri.conf.json`
@@ -22,7 +22,7 @@ Windows user account that created it.
 
 ## One-time GitHub setup
 
-Create the following Actions secret in `shotaro311/Handy`:
+Create the following Actions secret in `shotaro311/KoeTsumugi`:
 
 - `TAURI_SIGNING_PRIVATE_KEY`: the complete contents of
   `%USERPROFILE%\.tauri\handy-m.key`
@@ -44,7 +44,7 @@ Do not paste either value into logs, issues, release notes, or chat messages.
 6. Push `shotaro/custom`, then run:
 
    ```powershell
-   gh workflow run handy-m-release.yml --repo shotaro311/Handy --ref shotaro/custom
+   gh workflow run handy-m-release.yml --repo shotaro311/KoeTsumugi --ref shotaro/custom
    ```
 
 7. Confirm that the published release contains `latest.json`, the NSIS

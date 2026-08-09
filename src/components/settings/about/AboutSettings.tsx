@@ -64,7 +64,9 @@ export const AboutSettings: React.FC = () => {
             <Button
               variant="primary"
               size="md"
-              onClick={() => openUrl("https://github.com/shotaro311/Handy")}
+              onClick={() =>
+                openUrl("https://github.com/shotaro311/KoeTsumugi")
+              }
             >
               {t("settings.about.sourceCode.derivativeButton")}
             </Button>
@@ -80,7 +82,7 @@ export const AboutSettings: React.FC = () => {
               size="md"
               onClick={() =>
                 openUrl(
-                  "https://github.com/shotaro311/Handy/blob/shotaro/custom/LICENSE",
+                  "https://github.com/shotaro311/KoeTsumugi/blob/shotaro/custom/LICENSE",
                 )
               }
             >
@@ -91,7 +93,7 @@ export const AboutSettings: React.FC = () => {
               size="md"
               onClick={() =>
                 openUrl(
-                  "https://github.com/shotaro311/Handy/blob/shotaro/custom/THIRD_PARTY_NOTICES.md",
+                  "https://github.com/shotaro311/KoeTsumugi/blob/shotaro/custom/THIRD_PARTY_NOTICES.md",
                 )
               }
             >

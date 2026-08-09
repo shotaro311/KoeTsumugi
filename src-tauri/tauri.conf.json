@@ -80,7 +80,7 @@
     "updater": {
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDJFNkJGREIxQTYzQzg5MzAKUldRd2lUeW1zZjFyTGdCWlBGVm8xTERDRGRsbTZjNDBYcGNlZHBYU1dYUU5WNGFuVUZxSEdROUMK",
       "endpoints": [
-        "https://github.com/shotaro311/Handy/releases/latest/download/latest.json"
+        "https://github.com/shotaro311/KoeTsumugi/releases/latest/download/latest.json"
       ],
       "windows": {
         "installMode": "passive"

@@ -1,7 +1,7 @@
 # Brand and attribution review
 
 Reviewed 2026-08-08 against the local `shotaro/custom` branch, the public
-`shotaro311/Handy` repository, and the current upstream `cjpais/Handy`
+`shotaro311/KoeTsumugi` repository, and the current upstream `cjpais/Handy`
 repository. This is an engineering and publication-risk review, not legal
 advice or a trademark clearance opinion.
 
