@@ -1,7 +1,7 @@
 {
-  "name": "handy-app",
+  "name": "koetsumugi-app",
   "private": true,
-  "version": "1.0.2",
+  "version": "1.0.3",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -17,6 +17,7 @@
     "test:playwright": "playwright test",
     "test:playwright:ui": "playwright test --ui",
     "check:translations": "bun scripts/check-translations.ts",
+    "licenses:inventory": "bun scripts/generate-license-inventory.mjs && prettier --write docs/generated/THIRD_PARTY_LICENSE_INVENTORY.md && bun scripts/sync-release-legal.mjs",
     "postinstall": "bun scripts/check-nix-deps.ts"
   },
   "dependencies": {

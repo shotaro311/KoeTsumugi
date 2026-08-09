@@ -1,6 +1,6 @@
 # Build Instructions
 
-This guide covers how to set up the development environment and build Handy from source across different platforms.
+This guide covers how to set up the development environment and build KoeTsumugi from source across different platforms.
 
 ## Prerequisites
 
@@ -61,7 +61,7 @@ ORT_LIB_LOCATION=$(brew --prefix onnxruntime)/lib ORT_PREFER_DYNAMIC_LINK=1 bun 
 > [Windows build fails with path-limit errors](#windows-build-fails-with-path-limit-errors-msb3491--ftk1011--msb6003)
 > in Troubleshooting.
 
-For the Handy_m Windows customization fork, the following explicit environment
+For the KoeTsumugi Windows customization fork, the following explicit environment
 variables remain useful when diagnosing local toolchain discovery issues:
 
 ```powershell
@@ -113,8 +113,9 @@ git config core.autocrlf false
 ### 1. Clone the Repository
 
 ```bash
-git clone git@github.com:cjpais/Handy.git
+git clone git@github.com:shotaro311/Handy.git
 cd Handy
+git switch shotaro/custom
 ```
 
 ### 2. Install Dependencies
@@ -139,25 +140,25 @@ This compiles a release binary and generates platform-specific bundles (deb, rpm
 
 ## Linux Install (from source)
 
-The raw binary (`src-tauri/target/release/handy`) cannot run standalone — it needs Tauri resource files (tray icons, sounds, VAD model) to be co-located at the expected path.
+The raw binary (`src-tauri/target/release/koetsumugi`) cannot run standalone — it needs Tauri resource files (tray icons, sounds, VAD model) to be co-located at the expected path.
 
 **Install from the deb bundle** (works on any Linux distro):
 
 ```bash
 cd /tmp
-ar x /path/to/Handy/src-tauri/target/release/bundle/deb/Handy_*_amd64.deb data.tar.gz
+ar x /path/to/KoeTsumugi/src-tauri/target/release/bundle/deb/KoeTsumugi_*_amd64.deb data.tar.gz
 tar xzf data.tar.gz
-sudo cp usr/bin/handy /usr/bin/
+sudo cp usr/bin/koetsumugi /usr/bin/
 sudo cp -a usr/lib/. /usr/lib/
 sudo cp -r usr/share/icons/hicolor/* /usr/share/icons/hicolor/
-sudo cp usr/share/applications/Handy.desktop /usr/share/applications/
+sudo cp usr/share/applications/KoeTsumugi.desktop /usr/share/applications/
 sudo ldconfig
 ```
 
 After subsequent rebuilds, copy the binary and any refreshed runtime libraries:
 
 ```bash
-sudo cp src-tauri/target/release/handy /usr/bin/
+sudo cp src-tauri/target/release/koetsumugi /usr/bin/
 sudo cp -a src-tauri/transcribe-libs/. /usr/lib/
 sudo ldconfig
 ```
@@ -173,7 +174,7 @@ Resources only need re-copying if they change upstream (new icons, sounds, model
 The error from Tauri:
 
 ```
-Bundling Handy_*_amd64.AppImage
+Bundling KoeTsumugi_*_amd64.AppImage
 failed to bundle project `failed to run linuxdeploy`
 ```
 
@@ -182,7 +183,7 @@ Tauri swallows the real linuxdeploy error. To see it, run linuxdeploy manually:
 ```bash
 cd src-tauri/target/release/bundle/appimage
 ~/.cache/tauri/linuxdeploy-x86_64.AppImage --appimage-extract-and-run \
-  --appdir Handy.AppDir --plugin gtk --output appimage
+  --appdir KoeTsumugi.AppDir --plugin gtk --output appimage
 ```
 
 **Workaround:** The binary, deb, and rpm bundles all build fine — only the AppImage step fails. To skip it:
@@ -237,7 +238,7 @@ around either case with a short Cargo target directory:
 $env:CARGO_TARGET_DIR = "C:\h"
 
 # Or persist it for all future terminals (note: redirects ALL your
-# Rust projects' build output, not just Handy):
+# Rust projects' build output, not just KoeTsumugi):
 [Environment]::SetEnvironmentVariable('CARGO_TARGET_DIR', 'C:\h', 'User')
 ```
 
@@ -248,11 +249,11 @@ and `bun run tauri build` work normally.
 
 ### Windows `tauri build` fails at bundling with `program not found`
 
-If the build compiles all the way to `Built application at: ...\handy.exe` and
+If the build compiles all the way to `Built application at: ...\koetsumugi.exe` and
 then fails with:
 
 ```
-Signing C:\...\handy.exe with a custom signing command
+Signing C:\...\koetsumugi.exe with a custom signing command
 failed to bundle project `program not found`
 ```
 

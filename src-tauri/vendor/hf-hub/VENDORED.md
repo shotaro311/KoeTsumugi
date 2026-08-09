@@ -5,7 +5,7 @@
 - Upstream branch: `cancellable-downloads`
 - License: Apache-2.0; see `LICENSE`
 
-Handy_m vendors this exact revision because it provides the cancellable,
+KoeTsumugi vendors this exact revision because it provides the cancellable,
 resumable Tokio download API used by the app.
 
 The local change forces both reqwest clients to HTTP/1.1 over IPv4 on Windows.

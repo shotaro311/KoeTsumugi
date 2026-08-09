@@ -100,7 +100,7 @@
     },
     "permissions": {
       "title": "נדרשות הרשאות",
-      "description": "Handy צריך כמה הרשאות כדי לעבוד כמו שצריך.",
+      "description": "KoeTsumugi צריך כמה הרשאות כדי לעבוד כמו שצריך.",
       "microphone": {
         "title": "גישה למיקרופון",
         "description": "נדרש כדי לשמוע את הקול שלך לצורך תמלול."
@@ -160,7 +160,7 @@
     "general": {
       "title": "כללי",
       "shortcut": {
-        "title": "קיצורי מקשים של Handy",
+        "title": "קיצורי מקשים של KoeTsumugi",
         "description": "הגדר קיצורי מקשים כדי להפעיל הקלטה ותמלול דיבור",
         "loading": "טוען קיצורי מקשים...",
         "none": "לא הוגדרו קיצורי מקשים",
@@ -213,7 +213,7 @@
       "searchPlaceholder": "חיפוש מודלים לפי שם…",
       "rescan": {
         "label": "סריקה מחדש",
-        "tooltip": "סריקה מחדש לאיתור מודלים שנוספו לתיקיית המודלים או למטמון של Hugging Face מחוץ ל-Handy"
+        "tooltip": "סריקה מחדש לאיתור מודלים שנוספו לתיקיית המודלים או למטמון של Hugging Face מחוץ ל-KoeTsumugi"
       }
     },
     "sound": {
@@ -274,11 +274,11 @@
       },
       "autostart": {
         "label": "הפעל עם עליית המערכת",
-        "description": "הפעל את Handy אוטומטית כשאתה מתחבר למחשב."
+        "description": "הפעל את KoeTsumugi אוטומטית כשאתה מתחבר למחשב."
       },
       "showTrayIcon": {
         "label": "הצג אייקון במגש",
-        "description": "הצג את האייקון של Handy במגש המערכת."
+        "description": "הצג את האייקון של KoeTsumugi במגש המערכת."
       },
       "overlay": {
         "style": {
@@ -363,7 +363,7 @@
         "outputPlaceholder": "ChatGPT",
         "aliasesLabel": "Aliases / readings",
         "aliasesPlaceholder": "chat gpt, チャットgpt, ちゃっとじーぴーてぃー",
-        "aliasesHint": "Separate aliases with commas or new lines. If a match is found, Handy replaces it with the preferred output.",
+        "aliasesHint": "Separate aliases with commas or new lines. If a match is found, KoeTsumugi replaces it with the preferred output.",
         "add": "הוסף",
         "save": "Save entry",
         "cancelEdit": "Cancel",
@@ -477,7 +477,7 @@
       },
       "updateChecks": {
         "label": "בדוק עדכונים",
-        "description": "בדוק אוטומטית אם קיימות גרסאות חדשות של Handy"
+        "description": "בדוק אוטומטית אם קיימות גרסאות חדשות של KoeTsumugi"
       },
       "soundTheme": {
         "label": "ערכת צלילים",
@@ -556,20 +556,23 @@
       "title": "אודות",
       "version": {
         "title": "גרסה",
-        "description": "הגרסה הנוכחית של Handy"
+        "description": "הגרסה הנוכחית של KoeTsumugi"
       },
       "appDataDirectory": {
         "title": "תיקיית נתוני אפליקציה",
-        "description": "המיקום שבו Handy שומר את הנתונים שלו"
+        "description": "המיקום שבו KoeTsumugi שומר את הנתונים שלו"
       },
       "sourceCode": {
-        "title": "קוד מקור",
-        "description": "צפה בקוד המקור ותרום",
-        "button": "צפה ב-GitHub"
+        "title": "Source code and licenses",
+        "description": "The derivative source, upstream attribution, MIT license, and third-party notices are available below. The legacy repository URL is temporarily retained for update compatibility.",
+        "derivativeButton": "Derivative source",
+        "upstreamButton": "Upstream Handy",
+        "licenseButton": "MIT license",
+        "noticesButton": "Licenses and notices"
       },
       "supportDevelopment": {
         "title": "תמיכה בפיתוח",
-        "description": "עזור לנו להמשיך לבנות את Handy",
+        "description": "עזור לנו להמשיך לבנות את KoeTsumugi",
         "button": "תרומה"
       },
       "acknowledgments": {
@@ -577,12 +580,16 @@
         "ggml": {
           "title": "ggml",
           "description": "הסקה מהירה לביצועים גבוהים עבור מודל זיהוי הדיבור Whisper של OpenAI",
-          "details": "Handy משתמש ב-ggml לתמלול מהיר ומקומי. תודה לעבודה המדהימה של Georgi Gerganov וכל התורמים."
+          "details": "KoeTsumugi משתמש ב-ggml לתמלול מהיר ומקומי. תודה לעבודה המדהימה של Georgi Gerganov וכל התורמים."
         }
       },
       "whatsNewUpdates": {
         "label": "הצג מה חדש",
-        "description": "הצג הערות גרסה לאחר עדכוני Handy"
+        "description": "הצג הערות גרסה לאחר עדכוני KoeTsumugi"
+      },
+      "derivativeStatus": {
+        "title": "Unofficial derivative",
+        "description": "KoeTsumugi is an independent derivative of the MIT-licensed Handy source code. It is not affiliated with, endorsed by, or supported by the Handy project or its maintainers."
       }
     }
   },
@@ -609,7 +616,7 @@
     "noOptionsFound": "לא נמצאו אפשרויות"
   },
   "accessibility": {
-    "permissionsDescription": "Handy צריך הרשאות נגישות כדי להקליד את הטקסט המתומלל.",
+    "permissionsDescription": "KoeTsumugi צריך הרשאות נגישות כדי להקליד את הטקסט המתומלל.",
     "openSettings": "פתח את הגדרות המערכת"
   },
   "errors": {
@@ -632,11 +639,11 @@
   },
   "appLanguage": {
     "title": "שפת האפליקציה",
-    "description": "שנה את שפת הממשק של Handy"
+    "description": "שנה את שפת הממשק של KoeTsumugi"
   },
   "theme": {
     "title": "ערכת נושא של האפליקציה",
-    "description": "בחר אם Handy יעקוב אחר ערכת הנושא של המערכת או יישאר בהיר או כהה",
+    "description": "בחר אם KoeTsumugi יעקוב אחר ערכת הנושא של המערכת או יישאר בהיר או כהה",
     "options": {
       "system": "מערכת",
       "light": "בהיר",
@@ -648,6 +655,6 @@
     "processing": "מעבד..."
   },
   "whatsNew": {
-    "title": "חדש ב-Handy v{{version}}"
+    "title": "חדש ב-KoeTsumugi v{{version}}"
   }
 }

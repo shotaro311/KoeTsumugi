@@ -100,7 +100,7 @@
     },
     "permissions": {
       "title": "Vyžadována oprávnění",
-      "description": "Handy potřebuje několik oprávnění pro správné fungování.",
+      "description": "KoeTsumugi potřebuje několik oprávnění pro správné fungování.",
       "microphone": {
         "title": "Přístup k mikrofonu",
         "description": "Potřebný pro zachycení vašeho hlasu k přepisu."
@@ -172,13 +172,13 @@
       "searchPlaceholder": "Hledat modely podle názvu…",
       "rescan": {
         "label": "Znovu prohledat",
-        "tooltip": "Znovu prohledat modely přidané do složky modelů nebo mezipaměti Hugging Face mimo Handy"
+        "tooltip": "Znovu prohledat modely přidané do složky modelů nebo mezipaměti Hugging Face mimo KoeTsumugi"
       }
     },
     "general": {
       "title": "Obecné",
       "shortcut": {
-        "title": "Zkratky Handy",
+        "title": "Zkratky KoeTsumugi",
         "description": "Nastavte klávesové zkratky pro spuštění nahrávání řeči na text",
         "loading": "Načítám zkratky...",
         "none": "Žádné zkratky nejsou nastavené",
@@ -274,11 +274,11 @@
       },
       "autostart": {
         "label": "Spouštět při startu",
-        "description": "Automaticky spustit Handy po přihlášení do počítače."
+        "description": "Automaticky spustit KoeTsumugi po přihlášení do počítače."
       },
       "showTrayIcon": {
         "label": "Zobrazit ikonu v systémové liště",
-        "description": "Zobrazit ikonu Handy v systémové liště."
+        "description": "Zobrazit ikonu KoeTsumugi v systémové liště."
       },
       "overlay": {
         "style": {
@@ -363,7 +363,7 @@
         "outputPlaceholder": "ChatGPT",
         "aliasesLabel": "Aliases / readings",
         "aliasesPlaceholder": "chat gpt, チャットgpt, ちゃっとじーぴーてぃー",
-        "aliasesHint": "Separate aliases with commas or new lines. If a match is found, Handy replaces it with the preferred output.",
+        "aliasesHint": "Separate aliases with commas or new lines. If a match is found, KoeTsumugi replaces it with the preferred output.",
         "add": "Přidat",
         "save": "Save entry",
         "cancelEdit": "Cancel",
@@ -477,7 +477,7 @@
       },
       "updateChecks": {
         "label": "Kontrolovat aktualizace",
-        "description": "Automaticky kontrolovat nové verze Handy"
+        "description": "Automaticky kontrolovat nové verze KoeTsumugi"
       },
       "soundTheme": {
         "label": "Zvukový motiv",
@@ -556,20 +556,23 @@
       "title": "O aplikaci",
       "version": {
         "title": "Verze",
-        "description": "Aktuální verze Handy"
+        "description": "Aktuální verze KoeTsumugi"
       },
       "appDataDirectory": {
         "title": "Adresář dat aplikace",
-        "description": "Umístění, kde Handy ukládá data"
+        "description": "Umístění, kde KoeTsumugi ukládá data"
       },
       "sourceCode": {
-        "title": "Zdrojový kód",
-        "description": "Zobrazit zdrojový kód a přispět",
-        "button": "Zobrazit na GitHubu"
+        "title": "Source code and licenses",
+        "description": "The derivative source, upstream attribution, MIT license, and third-party notices are available below. The legacy repository URL is temporarily retained for update compatibility.",
+        "derivativeButton": "Derivative source",
+        "upstreamButton": "Upstream Handy",
+        "licenseButton": "MIT license",
+        "noticesButton": "Licenses and notices"
       },
       "supportDevelopment": {
         "title": "Podpořte vývoj",
-        "description": "Pomozte nám pokračovat ve vývoji Handy",
+        "description": "Pomozte nám pokračovat ve vývoji KoeTsumugi",
         "button": "Přispět"
       },
       "acknowledgments": {
@@ -577,12 +580,16 @@
         "ggml": {
           "title": "ggml",
           "description": "Vysoce výkonné inferenční zpracování modelu automatického rozpoznávání řeči Whisper od OpenAI",
-          "details": "Handy používá ggml pro rychlé lokální zpracování řeči na text. Díky skvělé práci Georgiho Gerganova a přispěvatelů."
+          "details": "KoeTsumugi používá ggml pro rychlé lokální zpracování řeči na text. Díky skvělé práci Georgiho Gerganova a přispěvatelů."
         }
       },
       "whatsNewUpdates": {
         "label": "Zobrazovat novinky",
-        "description": "Zobrazovat poznámky k vydání po aktualizacích Handy"
+        "description": "Zobrazovat poznámky k vydání po aktualizacích KoeTsumugi"
+      },
+      "derivativeStatus": {
+        "title": "Unofficial derivative",
+        "description": "KoeTsumugi is an independent derivative of the MIT-licensed Handy source code. It is not affiliated with, endorsed by, or supported by the Handy project or its maintainers."
       }
     }
   },
@@ -609,7 +616,7 @@
     "noOptionsFound": "Nenalezeny žádné možnosti"
   },
   "accessibility": {
-    "permissionsDescription": "Handy potřebuje oprávnění usnadnění přístupu, aby mohlo psát přepsaný text.",
+    "permissionsDescription": "KoeTsumugi potřebuje oprávnění usnadnění přístupu, aby mohlo psát přepsaný text.",
     "openSettings": "Otevřít Nastavení systému"
   },
   "errors": {
@@ -632,11 +639,11 @@
   },
   "appLanguage": {
     "title": "Jazyk aplikace",
-    "description": "Změňte jazyk rozhraní Handy"
+    "description": "Změňte jazyk rozhraní KoeTsumugi"
   },
   "theme": {
     "title": "Motiv aplikace",
-    "description": "Zvolte, zda má Handy sledovat motiv systému, nebo zůstat světlý či tmavý",
+    "description": "Zvolte, zda má KoeTsumugi sledovat motiv systému, nebo zůstat světlý či tmavý",
     "options": {
       "system": "Systém",
       "light": "Světlý",
@@ -648,6 +655,6 @@
     "processing": "Zpracovávám..."
   },
   "whatsNew": {
-    "title": "Novinky v Handy v{{version}}"
+    "title": "Novinky v KoeTsumugi v{{version}}"
   }
 }

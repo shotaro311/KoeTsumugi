@@ -100,7 +100,7 @@
     },
     "permissions": {
       "title": "Permessi Richiesti",
-      "description": "Handy ha bisogno di alcuni permessi per funzionare correttamente.",
+      "description": "KoeTsumugi ha bisogno di alcuni permessi per funzionare correttamente.",
       "microphone": {
         "title": "Accesso al Microfono",
         "description": "Necessario per sentire la tua voce per la trascrizione."
@@ -172,13 +172,13 @@
       "searchPlaceholder": "Cerca modelli per nome…",
       "rescan": {
         "label": "Riscansiona",
-        "tooltip": "Riscansiona per trovare modelli aggiunti alla cartella dei modelli o alla cache di Hugging Face al di fuori di Handy"
+        "tooltip": "Riscansiona per trovare modelli aggiunti alla cartella dei modelli o alla cache di Hugging Face al di fuori di KoeTsumugi"
       }
     },
     "general": {
       "title": "Generale",
       "shortcut": {
-        "title": "Scorciatoie di Handy",
+        "title": "Scorciatoie di KoeTsumugi",
         "description": "Configura le scorciatoie per attivare la trascrizione vocale",
         "loading": "Caricamento delle scorciatoie...",
         "none": "Nessuna scorciatoia configurata",
@@ -274,11 +274,11 @@
       },
       "autostart": {
         "label": "Avvia all'Accensione",
-        "description": "Avvia Handy automaticamente quando accedi al computer."
+        "description": "Avvia KoeTsumugi automaticamente quando accedi al computer."
       },
       "showTrayIcon": {
         "label": "Mostra icona nella barra di sistema",
-        "description": "Mostra l'icona di Handy nella barra di sistema."
+        "description": "Mostra l'icona di KoeTsumugi nella barra di sistema."
       },
       "overlay": {
         "style": {
@@ -363,7 +363,7 @@
         "outputPlaceholder": "ChatGPT",
         "aliasesLabel": "Aliases / readings",
         "aliasesPlaceholder": "chat gpt, チャットgpt, ちゃっとじーぴーてぃー",
-        "aliasesHint": "Separate aliases with commas or new lines. If a match is found, Handy replaces it with the preferred output.",
+        "aliasesHint": "Separate aliases with commas or new lines. If a match is found, KoeTsumugi replaces it with the preferred output.",
         "add": "Aggiungi",
         "save": "Save entry",
         "cancelEdit": "Cancel",
@@ -477,7 +477,7 @@
       },
       "updateChecks": {
         "label": "Controlla aggiornamenti",
-        "description": "Controlla automaticamente la disponibilità di nuove versioni di Handy"
+        "description": "Controlla automaticamente la disponibilità di nuove versioni di KoeTsumugi"
       },
       "soundTheme": {
         "label": "Tema Sonoro",
@@ -556,20 +556,23 @@
       "title": "Informazioni",
       "version": {
         "title": "Versione",
-        "description": "Versione attuale di Handy"
+        "description": "Versione attuale di KoeTsumugi"
       },
       "appDataDirectory": {
         "title": "Cartella Dati App",
-        "description": "Cartella in cui Handy salva i dati"
+        "description": "Cartella in cui KoeTsumugi salva i dati"
       },
       "sourceCode": {
-        "title": "Codice Sorgente",
-        "description": "Vedi e contribuisci al codice sorgente",
-        "button": "Vedi su GitHub"
+        "title": "Source code and licenses",
+        "description": "The derivative source, upstream attribution, MIT license, and third-party notices are available below. The legacy repository URL is temporarily retained for update compatibility.",
+        "derivativeButton": "Derivative source",
+        "upstreamButton": "Upstream Handy",
+        "licenseButton": "MIT license",
+        "noticesButton": "Licenses and notices"
       },
       "supportDevelopment": {
         "title": "Supporta lo Sviluppo",
-        "description": "Aiutaci a sviluppare Handy",
+        "description": "Aiutaci a sviluppare KoeTsumugi",
         "button": "Dona"
       },
       "acknowledgments": {
@@ -577,12 +580,16 @@
         "ggml": {
           "title": "ggml",
           "description": "Inferenza ad alte prestazioni del modello di riconoscimento vocale automatico Whisper di OpenAI",
-          "details": "Handy usa ggml per il riconoscimento vocale veloce in locale. Grazie a Georgi Gerganov e collaboratori per il fantastico lavoro."
+          "details": "KoeTsumugi usa ggml per il riconoscimento vocale veloce in locale. Grazie a Georgi Gerganov e collaboratori per il fantastico lavoro."
         }
       },
       "whatsNewUpdates": {
         "label": "Mostra novità",
-        "description": "Mostra le note di rilascio dopo gli aggiornamenti di Handy"
+        "description": "Mostra le note di rilascio dopo gli aggiornamenti di KoeTsumugi"
+      },
+      "derivativeStatus": {
+        "title": "Unofficial derivative",
+        "description": "KoeTsumugi is an independent derivative of the MIT-licensed Handy source code. It is not affiliated with, endorsed by, or supported by the Handy project or its maintainers."
       }
     }
   },
@@ -609,7 +616,7 @@
     "noOptionsFound": "Nessuna opzione trovata"
   },
   "accessibility": {
-    "permissionsDescription": "Handy ha bisogno dei permessi di accessibilità per digitare il testo trascritto.",
+    "permissionsDescription": "KoeTsumugi ha bisogno dei permessi di accessibilità per digitare il testo trascritto.",
     "openSettings": "Apri Impostazioni di Sistema"
   },
   "errors": {
@@ -632,11 +639,11 @@
   },
   "appLanguage": {
     "title": "Lingua Applicazione",
-    "description": "Cambia la lingua dell'interfaccia di Handy"
+    "description": "Cambia la lingua dell'interfaccia di KoeTsumugi"
   },
   "theme": {
     "title": "Tema dell'applicazione",
-    "description": "Scegli se Handy segue il tema di sistema o resta chiaro o scuro",
+    "description": "Scegli se KoeTsumugi segue il tema di sistema o resta chiaro o scuro",
     "options": {
       "system": "Sistema",
       "light": "Chiaro",
@@ -648,6 +655,6 @@
     "processing": "Elaborazione..."
   },
   "whatsNew": {
-    "title": "Novità in Handy v{{version}}"
+    "title": "Novità in KoeTsumugi v{{version}}"
   }
 }

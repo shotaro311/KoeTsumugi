@@ -100,7 +100,7 @@
     },
     "permissions": {
       "title": "अनुमतिहरू आवश्यक छन्",
-      "description": "Handy लाई राम्रोसँग काम गर्न केही अनुमतिहरू चाहिन्छ।",
+      "description": "KoeTsumugi लाई राम्रोसँग काम गर्न केही अनुमतिहरू चाहिन्छ।",
       "microphone": {
         "title": "माइक्रोफोन पहुँच",
         "description": "ट्रान्सक्रिप्सनका लागि तपाईंको आवाज सुन्न आवश्यक छ।"
@@ -160,7 +160,7 @@
     "general": {
       "title": "सामान्य",
       "shortcut": {
-        "title": "Handy सर्टकटहरू",
+        "title": "KoeTsumugi सर्टकटहरू",
         "description": "स्पिच-टु-टेक्स्ट रेकर्डिङ सुरु गर्न किबोर्ड सर्टकटहरू सेट अप गर्नुहोस्",
         "loading": "सर्टकटहरू लोड गरिँदैछन्...",
         "none": "कुनै सर्टकट सेट गरिएको छैन",
@@ -212,7 +212,7 @@
       },
       "rescan": {
         "label": "फेरि स्क्यान गर्नुहोस्",
-        "tooltip": "Handy बाहिरबाट मोडेल फोल्डर वा Hugging Face क्यासमा थपिएका मोडेलहरू फेरि स्क्यान गर्नुहोस्"
+        "tooltip": "KoeTsumugi बाहिरबाट मोडेल फोल्डर वा Hugging Face क्यासमा थपिएका मोडेलहरू फेरि स्क्यान गर्नुहोस्"
       },
       "noModelsMatch": "यो फिल्टरसँग कुनै मोडेल मिल्दैन।"
     },
@@ -274,11 +274,11 @@
       },
       "autostart": {
         "label": "स्टार्टअपमा सुरु गर्नुहोस्",
-        "description": "कम्प्युटरमा लगइन गर्दा Handy स्वतः सुरु गर्नुहोस्।"
+        "description": "कम्प्युटरमा लगइन गर्दा KoeTsumugi स्वतः सुरु गर्नुहोस्।"
       },
       "showTrayIcon": {
         "label": "ट्रे आइकन देखाउनुहोस्",
-        "description": "सिस्टम ट्रेमा Handy आइकन देखाउनुहोस्।"
+        "description": "सिस्टम ट्रेमा KoeTsumugi आइकन देखाउनुहोस्।"
       },
       "overlay": {
         "style": {
@@ -363,7 +363,7 @@
         "outputPlaceholder": "ChatGPT",
         "aliasesLabel": "Aliases / readings",
         "aliasesPlaceholder": "chat gpt, チャットgpt, ちゃっとじーぴーてぃー",
-        "aliasesHint": "Separate aliases with commas or new lines. If a match is found, Handy replaces it with the preferred output.",
+        "aliasesHint": "Separate aliases with commas or new lines. If a match is found, KoeTsumugi replaces it with the preferred output.",
         "placeholder": "शब्द थप्नुहोस्",
         "add": "थप्नुहोस्",
         "save": "Save entry",
@@ -477,7 +477,7 @@
       },
       "updateChecks": {
         "label": "अपडेटहरू जाँच गर्नुहोस्",
-        "description": "Handy को नयाँ संस्करण स्वतः जाँच गर्नुहोस्"
+        "description": "KoeTsumugi को नयाँ संस्करण स्वतः जाँच गर्नुहोस्"
       },
       "whatsNewPreview": {
         "title": "नयाँ के छ पूर्वावलोकन",
@@ -556,24 +556,27 @@
       "title": "बारेमा",
       "version": {
         "title": "संस्करण",
-        "description": "Handy को हालको संस्करण"
+        "description": "KoeTsumugi को हालको संस्करण"
       },
       "whatsNewUpdates": {
         "label": "नयाँ के छ देखाउनुहोस्",
-        "description": "Handy अपडेट भएपछि रिलिज नोटहरू देखाउनुहोस्"
+        "description": "KoeTsumugi अपडेट भएपछि रिलिज नोटहरू देखाउनुहोस्"
       },
       "appDataDirectory": {
         "title": "एप डेटा डाइरेक्टरी",
-        "description": "Handy ले आफ्नो डेटा भण्डारण गर्ने स्थान"
+        "description": "KoeTsumugi ले आफ्नो डेटा भण्डारण गर्ने स्थान"
       },
       "sourceCode": {
-        "title": "स्रोत कोड",
-        "description": "स्रोत कोड हेर्नुहोस् र योगदान गर्नुहोस्",
-        "button": "GitHub मा हेर्नुहोस्"
+        "title": "Source code and licenses",
+        "description": "The derivative source, upstream attribution, MIT license, and third-party notices are available below. The legacy repository URL is temporarily retained for update compatibility.",
+        "derivativeButton": "Derivative source",
+        "upstreamButton": "Upstream Handy",
+        "licenseButton": "MIT license",
+        "noticesButton": "Licenses and notices"
       },
       "supportDevelopment": {
         "title": "विकासलाई सहयोग गर्नुहोस्",
-        "description": "Handy निर्माण जारी राख्न हामीलाई सहयोग गर्नुहोस्",
+        "description": "KoeTsumugi निर्माण जारी राख्न हामीलाई सहयोग गर्नुहोस्",
         "button": "दान गर्नुहोस्"
       },
       "acknowledgments": {
@@ -581,8 +584,12 @@
         "ggml": {
           "title": "ggml",
           "description": "अन-डिभाइस मेसिन लर्निङ अनुमानका लागि उच्च-प्रदर्शन टेन्सर लाइब्रेरी",
-          "details": "Handy को स्थानीय स्पिच-टु-टेक्स्ट transcribe.cpp र ggml मा आधारित छ। Georgi Gerganov र योगदानकर्ताहरूको उत्कृष्ट कामका लागि धन्यवाद।"
+          "details": "KoeTsumugi को स्थानीय स्पिच-टु-टेक्स्ट transcribe.cpp र ggml मा आधारित छ। Georgi Gerganov र योगदानकर्ताहरूको उत्कृष्ट कामका लागि धन्यवाद।"
         }
+      },
+      "derivativeStatus": {
+        "title": "Unofficial derivative",
+        "description": "KoeTsumugi is an independent derivative of the MIT-licensed Handy source code. It is not affiliated with, endorsed by, or supported by the Handy project or its maintainers."
       }
     }
   },
@@ -600,7 +607,7 @@
     "portableUpdateButton": "GitHub Releases खोल्नुहोस्"
   },
   "whatsNew": {
-    "title": "Handy v{{version}} मा नयाँ"
+    "title": "KoeTsumugi v{{version}} मा नयाँ"
   },
   "common": {
     "loading": "लोड गरिँदैछ...",
@@ -612,7 +619,7 @@
     "noOptionsFound": "कुनै विकल्प भेटिएन"
   },
   "accessibility": {
-    "permissionsDescription": "ट्रान्सक्राइब गरिएको टेक्स्ट टाइप गर्न Handy लाई एक्सेसिबिलिटी अनुमति चाहिन्छ।",
+    "permissionsDescription": "ट्रान्सक्राइब गरिएको टेक्स्ट टाइप गर्न KoeTsumugi लाई एक्सेसिबिलिटी अनुमति चाहिन्छ।",
     "openSettings": "सिस्टम सेटिङहरू खोल्नुहोस्"
   },
   "errors": {
@@ -635,11 +642,11 @@
   },
   "appLanguage": {
     "title": "एपको भाषा",
-    "description": "Handy इन्टरफेसको भाषा परिवर्तन गर्नुहोस्"
+    "description": "KoeTsumugi इन्टरफेसको भाषा परिवर्तन गर्नुहोस्"
   },
   "theme": {
     "title": "अनुप्रयोगको थिम",
-    "description": "Handy ले तपाईंको सिस्टम थिम अनुसरण गर्ने वा उज्यालो वा अँध्यारो रहने छान्नुहोस्",
+    "description": "KoeTsumugi ले तपाईंको सिस्टम थिम अनुसरण गर्ने वा उज्यालो वा अँध्यारो रहने छान्नुहोस्",
     "options": {
       "system": "सिस्टम",
       "light": "उज्यालो",

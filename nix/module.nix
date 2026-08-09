@@ -1,4 +1,4 @@
-# NixOS module for Handy speech-to-text
+# NixOS module for KoeTsumugi speech-to-text
 #
 # Handles system-level configuration that the package wrapper cannot:
 #   - udev rule for /dev/uinput (rdev grab() needs it for virtual input)
@@ -7,12 +7,12 @@
 #
 # Usage in your flake:
 #
-#   inputs.handy.url = "github:cjpais/Handy";
+#   inputs.koetsumugi.url = "github:shotaro311/Handy";
 #
 #   nixosConfigurations.myhost = nixpkgs.lib.nixosSystem {
 #     modules = [
-#       handy.nixosModules.default
-#       { programs.handy.enable = true; }
+#       koetsumugi.nixosModules.default
+#       { programs.koetsumugi.enable = true; }
 #     ];
 #   };
 {
@@ -22,16 +22,16 @@
   ...
 }:
 let
-  cfg = config.programs.handy;
+  cfg = config.programs.koetsumugi;
 in
 {
-  options.programs.handy = {
-    enable = lib.mkEnableOption "Handy offline speech-to-text";
+  options.programs.koetsumugi = {
+    enable = lib.mkEnableOption "KoeTsumugi speech-to-text";
 
     package = lib.mkOption {
       type = lib.types.package;
-      defaultText = lib.literalExpression "handy.packages.\${system}.handy";
-      description = "The Handy package to use.";
+      defaultText = lib.literalExpression "koetsumugi.packages.\${system}.koetsumugi";
+      description = "The KoeTsumugi package to use.";
     };
   };
 

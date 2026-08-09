@@ -1,4 +1,4 @@
-name: "Handy_m Release"
+name: "KoeTsumugi Release"
 
 on:
   workflow_dispatch:
@@ -20,7 +20,7 @@ jobs:
         shell: bash
         run: |
           if [ "$GITHUB_REF_NAME" != "shotaro/custom" ]; then
-            echo "Handy_m releases must run from shotaro/custom, not $GITHUB_REF_NAME" >&2
+            echo "KoeTsumugi releases must run from shotaro/custom, not $GITHUB_REF_NAME" >&2
             exit 1
           fi
 
@@ -42,7 +42,7 @@ jobs:
 
           echo "version=$TAURI_VERSION" >> "$GITHUB_OUTPUT"
 
-      - name: Create draft Handy_m release
+      - name: Create draft KoeTsumugi release
         id: create-release
         uses: actions/github-script@v9
         with:
@@ -53,8 +53,8 @@ jobs:
               repo: context.repo.repo,
               tag_name: `handy-m-v${version}`,
               target_commitish: context.sha,
-              name: `Handy_m v${version}`,
-              body: `Handy_m ${version} — independent update channel for the customized fork.`,
+              name: `KoeTsumugi v${version}`,
+              body: `KoeTsumugi ${version} — an unofficial Handy derivative with an independent update channel.`,
               draft: true,
               prerelease: false,
               generate_release_notes: true
@@ -69,7 +69,7 @@ jobs:
     with:
       platform: windows-latest
       target: x86_64-pc-windows-msvc
-      build-args: "--config src-tauri/tauri.updater.conf.json"
+      build-args: "--config src-tauri/tauri.updater.conf.json --bundles nsis"
       sign-binaries: false
       asset-prefix: handy-m
       release-id: ${{ needs.create-release.outputs.release-id }}
@@ -84,7 +84,7 @@ jobs:
     needs: [create-release, build-windows]
     runs-on: ubuntu-latest
     steps:
-      - name: Publish completed Handy_m release
+      - name: Publish completed KoeTsumugi release
         uses: actions/github-script@v9
         with:
           script: |

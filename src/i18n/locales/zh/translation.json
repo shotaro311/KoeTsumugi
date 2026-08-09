@@ -100,7 +100,7 @@
     },
     "permissions": {
       "title": "需要权限",
-      "description": "Handy 需要一些权限才能正常工作。",
+      "description": "KoeTsumugi 需要一些权限才能正常工作。",
       "microphone": {
         "title": "麦克风访问",
         "description": "需要听取您的语音进行转录。"
@@ -172,13 +172,13 @@
       "searchPlaceholder": "按名称搜索模型…",
       "rescan": {
         "label": "重新扫描",
-        "tooltip": "重新扫描在 Handy 之外添加到模型文件夹或 Hugging Face 缓存中的模型"
+        "tooltip": "重新扫描在 KoeTsumugi 之外添加到模型文件夹或 Hugging Face 缓存中的模型"
       }
     },
     "general": {
       "title": "通用",
       "shortcut": {
-        "title": "Handy 快捷键",
+        "title": "KoeTsumugi 快捷键",
         "description": "配置启动语音转文字录制的键盘快捷键",
         "loading": "加载快捷键中...",
         "none": "未配置快捷键",
@@ -274,11 +274,11 @@
       },
       "autostart": {
         "label": "开机启动",
-        "description": "登录计算机时自动启动 Handy。"
+        "description": "登录计算机时自动启动 KoeTsumugi。"
       },
       "showTrayIcon": {
         "label": "显示托盘图标",
-        "description": "在系统托盘中显示 Handy 图标。"
+        "description": "在系统托盘中显示 KoeTsumugi 图标。"
       },
       "overlay": {
         "style": {
@@ -363,7 +363,7 @@
         "outputPlaceholder": "ChatGPT",
         "aliasesLabel": "Aliases / readings",
         "aliasesPlaceholder": "chat gpt, チャットgpt, ちゃっとじーぴーてぃー",
-        "aliasesHint": "Separate aliases with commas or new lines. If a match is found, Handy replaces it with the preferred output.",
+        "aliasesHint": "Separate aliases with commas or new lines. If a match is found, KoeTsumugi replaces it with the preferred output.",
         "add": "添加",
         "save": "Save entry",
         "cancelEdit": "Cancel",
@@ -477,7 +477,7 @@
       },
       "updateChecks": {
         "label": "检查更新",
-        "description": "自动检查 Handy 的新版本"
+        "description": "自动检查 KoeTsumugi 的新版本"
       },
       "soundTheme": {
         "label": "声音主题",
@@ -556,20 +556,23 @@
       "title": "关于",
       "version": {
         "title": "版本",
-        "description": "Handy 的当前版本"
+        "description": "KoeTsumugi 的当前版本"
       },
       "appDataDirectory": {
         "title": "应用数据目录",
-        "description": "Handy 存储数据的位置"
+        "description": "KoeTsumugi 存储数据的位置"
       },
       "sourceCode": {
-        "title": "源代码",
-        "description": "查看源代码并贡献",
-        "button": "在 GitHub 上查看"
+        "title": "Source code and licenses",
+        "description": "The derivative source, upstream attribution, MIT license, and third-party notices are available below. The legacy repository URL is temporarily retained for update compatibility.",
+        "derivativeButton": "Derivative source",
+        "upstreamButton": "Upstream Handy",
+        "licenseButton": "MIT license",
+        "noticesButton": "Licenses and notices"
       },
       "supportDevelopment": {
         "title": "支持开发",
-        "description": "帮助我们继续开发 Handy",
+        "description": "帮助我们继续开发 KoeTsumugi",
         "button": "捐赠"
       },
       "acknowledgments": {
@@ -577,12 +580,16 @@
         "ggml": {
           "title": "ggml",
           "description": "OpenAI Whisper 自动语音识别模型的高性能推理",
-          "details": "Handy 使用 ggml 进行快速的本地语音转文字处理。感谢 Georgi Gerganov 和贡献者们的出色工作。"
+          "details": "KoeTsumugi 使用 ggml 进行快速的本地语音转文字处理。感谢 Georgi Gerganov 和贡献者们的出色工作。"
         }
       },
       "whatsNewUpdates": {
         "label": "显示新功能",
-        "description": "Handy 更新后显示发行说明"
+        "description": "KoeTsumugi 更新后显示发行说明"
+      },
+      "derivativeStatus": {
+        "title": "Unofficial derivative",
+        "description": "KoeTsumugi is an independent derivative of the MIT-licensed Handy source code. It is not affiliated with, endorsed by, or supported by the Handy project or its maintainers."
       }
     }
   },
@@ -609,7 +616,7 @@
     "noOptionsFound": "未找到选项"
   },
   "accessibility": {
-    "permissionsDescription": "Handy 需要辅助功能权限才能输入转录的文字。",
+    "permissionsDescription": "KoeTsumugi 需要辅助功能权限才能输入转录的文字。",
     "openSettings": "打开系统设置"
   },
   "errors": {
@@ -632,11 +639,11 @@
   },
   "appLanguage": {
     "title": "应用语言",
-    "description": "更改 Handy 界面的语言"
+    "description": "更改 KoeTsumugi 界面的语言"
   },
   "theme": {
     "title": "应用主题",
-    "description": "选择 Handy 跟随系统主题，还是保持浅色或深色",
+    "description": "选择 KoeTsumugi 跟随系统主题，还是保持浅色或深色",
     "options": {
       "system": "跟随系统",
       "light": "浅色",
@@ -648,6 +655,6 @@
     "processing": "处理中..."
   },
   "whatsNew": {
-    "title": "Handy v{{version}} 新功能"
+    "title": "KoeTsumugi v{{version}} 新功能"
   }
 }

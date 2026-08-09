@@ -2,8 +2,8 @@
 set -euo pipefail
 
 MODE="${1:-run}"
-APP_NAME="Handy_m"
-APP_PROCESS_NAME="handy"
+APP_NAME="KoeTsumugi"
+APP_PROCESS_NAME="koetsumugi"
 BUNDLE_ID="com.shotaro.handym"
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"

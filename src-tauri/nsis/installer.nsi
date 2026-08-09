@@ -1,4 +1,4 @@
-; Custom NSIS template for Handy with portable mode support.
+; Custom NSIS template for KoeTsumugi with portable mode and Handy_m migration support.
 ; Based on tauri-apps/tauri@tauri-v2.9.1 crates/tauri-bundler/src/bundle/windows/nsis/installer.nsi
 ; Portable changes are marked with "; --- PORTABLE MODE ---" comments.
 ;
@@ -65,6 +65,11 @@ ${StrLoc}
 !define UNINSTKEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCTNAME}"
 !define MANUKEY "Software\${MANUFACTURER}"
 !define MANUPRODUCTKEY "${MANUKEY}\${PRODUCTNAME}"
+!define LEGACYPRODUCTNAME "Handy_m"
+!define LEGACYUNINSTKEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${LEGACYPRODUCTNAME}"
+; Handy_m 1.0.x stored its install location under this exact per-user key.
+; Keep this literal during the staged rename even if current package metadata changes.
+!define LEGACYMANUPRODUCTKEY "Software\shotaro\${LEGACYPRODUCTNAME}"
 !define UNINSTALLERSIGNCOMMAND "{{uninstaller_sign_cmd}}"
 !define ESTIMATEDSIZE "{{estimated_size}}"
 !define STARTMENUFOLDER "{{start_menu_folder}}"
@@ -74,6 +79,7 @@ Var UpdateMode
 Var NoShortcutMode
 Var WixMode
 Var OldMainBinaryName
+Var LegacyMigration
 
 ; --- PORTABLE MODE ---
 Var PortableMode
@@ -217,7 +223,7 @@ Function PageLeaveInstallType
   ${NSD_GetState} $InstallTypeRadioPortable $0
   ${If} $0 = ${BST_CHECKED}
     StrCpy $PortableMode 1
-    ; --- PORTABLE MODE --- Switch default directory to Desktop\Handy for portable
+    ; --- PORTABLE MODE --- Switch default directory to Desktop\KoeTsumugi for portable
     ${If} $INSTDIR == "${PLACEHOLDER_INSTALL_DIR}"
     ${OrIf} $INSTDIR == "$LOCALAPPDATA\${PRODUCTNAME}"
       StrCpy $INSTDIR "$DESKTOP\${PRODUCTNAME}"
@@ -559,6 +565,9 @@ Function .onInit
 
   !insertmacro SetContext
 
+  StrCpy $LegacyMigration 0
+  Call DetectLegacyInstall
+
   ${If} $INSTDIR == "${PLACEHOLDER_INSTALL_DIR}"
     ; Set default install location
     !if "${INSTALLMODE}" == "perMachine"
@@ -587,8 +596,8 @@ Function .onInit
 
 
   ; --- PORTABLE MODE --- Auto-detect portable mode during updates.
-  ; Preserve portable installs that use either the current magic-string marker
-  ; or the legacy empty marker created by older Handy releases. Require Data/
+  ; Preserve portable installs that use the current or legacy magic-string marker,
+  ; or the legacy empty marker created by older releases. Require Data/
   ; for the legacy empty-marker case so stale scoop side-effect files do not
   ; accidentally opt an updater run into portable mode.
   ${If} $PortableMode <> 1
@@ -597,7 +606,9 @@ Function .onInit
     FileOpen $1 "$INSTDIR\portable" r
     FileRead $1 $2
     FileClose $1
-    ${If} $2 == "Handy Portable Mode"
+    ${If} $2 == "KoeTsumugi Portable Mode"
+      StrCpy $PortableMode 1
+    ${OrIf} $2 == "Handy Portable Mode"
       StrCpy $PortableMode 1
     ${OrIf} $2 == ""
     ${AndIf} ${FileExists} "$INSTDIR\Data"
@@ -730,6 +741,9 @@ Section Install
   !endif
 
   !insertmacro CheckIfAppIsRunning "${MAINBINARYNAME}.exe" "${PRODUCTNAME}"
+  ${If} $LegacyMigration = 1
+    !insertmacro CheckIfAppIsRunning "handy.exe" "${LEGACYPRODUCTNAME}"
+  ${EndIf}
 
   ; Copy main executable
   File "${MAINBINARYSRCPATH}"
@@ -768,7 +782,7 @@ Section Install
   ; --- PORTABLE MODE --- Create portable marker and Data directory
   ${If} $PortableMode = 1
     FileOpen $0 "$INSTDIR\portable" w
-    FileWrite $0 "Handy Portable Mode"
+    FileWrite $0 "KoeTsumugi Portable Mode"
     FileClose $0
     CreateDirectory "$INSTDIR\Data"
     DetailPrint "Portable mode: created marker file and Data directory."
@@ -790,6 +804,13 @@ Section Install
 
     ; Remove old main binary if it doesn't match new main binary name
     ReadRegStr $OldMainBinaryName SHCTX "${UNINSTKEY}" "MainBinaryName"
+    ${If} $OldMainBinaryName == ""
+    ${AndIf} $LegacyMigration = 1
+      ReadRegStr $OldMainBinaryName SHCTX "${LEGACYUNINSTKEY}" "MainBinaryName"
+      ${If} $OldMainBinaryName == ""
+        StrCpy $OldMainBinaryName "handy.exe"
+      ${EndIf}
+    ${EndIf}
     ${If} $OldMainBinaryName != ""
     ${AndIf} $OldMainBinaryName != "${MAINBINARYNAME}.exe"
       Delete "$INSTDIR\$OldMainBinaryName"
@@ -807,6 +828,13 @@ Section Install
     WriteRegStr SHCTX "${UNINSTKEY}" "UninstallString" "$\"$INSTDIR\uninstall.exe$\""
     WriteRegDWORD SHCTX "${UNINSTKEY}" "NoModify" "1"
     WriteRegDWORD SHCTX "${UNINSTKEY}" "NoRepair" "1"
+
+    ${If} $LegacyMigration = 1
+      Call MigrateLegacyShortcuts
+      Call MigrateLegacyAutostart
+      DeleteRegKey SHCTX "${LEGACYUNINSTKEY}"
+      DeleteRegKey SHCTX "${LEGACYMANUPRODUCTKEY}"
+    ${EndIf}
 
     ${GetSize} "$INSTDIR" "/M=uninstall.exe /S=0K /G=0" $0 $1 $2
     IntOp $0 $0 + ${ESTIMATEDSIZE}
@@ -965,6 +993,8 @@ Section Uninstall
   ; We do this when not updating (to preserve the registry value on updates)
   ${If} $UpdateMode <> 1
     DeleteRegValue HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "${PRODUCTNAME}"
+    DeleteRegValue HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "${LEGACYPRODUCTNAME}"
+    DeleteRegValue HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "Handy"
   ${EndIf}
 
   ; Delete app data if the checkbox is selected
@@ -998,8 +1028,61 @@ SectionEnd
 
 Function RestorePreviousInstallLocation
   ReadRegStr $4 SHCTX "${MANUPRODUCTKEY}" ""
+  ${If} $4 == ""
+    ReadRegStr $4 SHCTX "${LEGACYMANUPRODUCTKEY}" ""
+    ${If} $4 != ""
+      StrCpy $LegacyMigration 1
+    ${EndIf}
+  ${EndIf}
   StrCmp $4 "" +2 0
     StrCpy $INSTDIR $4
+FunctionEnd
+
+Function DetectLegacyInstall
+  ReadRegStr $4 SHCTX "${MANUPRODUCTKEY}" ""
+  ${If} $4 != ""
+    Return
+  ${EndIf}
+
+  ReadRegStr $4 SHCTX "${LEGACYMANUPRODUCTKEY}" ""
+  ${If} $4 != ""
+    StrCpy $LegacyMigration 1
+    StrCpy $INSTDIR $4
+  ${EndIf}
+FunctionEnd
+
+Function MigrateLegacyShortcuts
+  ${If} ${FileExists} "$SMPROGRAMS\${LEGACYPRODUCTNAME}.lnk"
+    CreateShortcut "$SMPROGRAMS\${PRODUCTNAME}.lnk" "$INSTDIR\${MAINBINARYNAME}.exe"
+    !insertmacro SetLnkAppUserModelId "$SMPROGRAMS\${PRODUCTNAME}.lnk"
+    Delete "$SMPROGRAMS\${LEGACYPRODUCTNAME}.lnk"
+  ${EndIf}
+
+  ${If} ${FileExists} "$SMPROGRAMS\${LEGACYPRODUCTNAME}\${LEGACYPRODUCTNAME}.lnk"
+    CreateShortcut "$SMPROGRAMS\${PRODUCTNAME}.lnk" "$INSTDIR\${MAINBINARYNAME}.exe"
+    !insertmacro SetLnkAppUserModelId "$SMPROGRAMS\${PRODUCTNAME}.lnk"
+    Delete "$SMPROGRAMS\${LEGACYPRODUCTNAME}\${LEGACYPRODUCTNAME}.lnk"
+    RMDir "$SMPROGRAMS\${LEGACYPRODUCTNAME}"
+  ${EndIf}
+
+  ${If} ${FileExists} "$DESKTOP\${LEGACYPRODUCTNAME}.lnk"
+    CreateShortcut "$DESKTOP\${PRODUCTNAME}.lnk" "$INSTDIR\${MAINBINARYNAME}.exe"
+    !insertmacro SetLnkAppUserModelId "$DESKTOP\${PRODUCTNAME}.lnk"
+    Delete "$DESKTOP\${LEGACYPRODUCTNAME}.lnk"
+  ${EndIf}
+FunctionEnd
+
+Function MigrateLegacyAutostart
+  ReadRegStr $4 HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "${LEGACYPRODUCTNAME}"
+  ${If} $4 == ""
+    ReadRegStr $4 HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "Handy"
+  ${EndIf}
+
+  ${If} $4 != ""
+    WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "${PRODUCTNAME}" '$"$INSTDIR\${MAINBINARYNAME}.exe$"'
+    DeleteRegValue HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "${LEGACYPRODUCTNAME}"
+    DeleteRegValue HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "Handy"
+  ${EndIf}
 FunctionEnd
 
 Function Skip

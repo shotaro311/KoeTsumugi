@@ -61,8 +61,8 @@ const CANDIDATES = [
     group: "AI・開発ツール",
   },
   {
-    output: "Handy_m",
-    aliases: ["ハンディエム", "ハンディーエム", "Handy m"],
+    output: "KoeTsumugi",
+    aliases: ["こえつむぎ", "コエツムギ", "Koe Tsumugi"],
     group: "アプリ・プロジェクト",
   },
   {
@@ -504,7 +504,7 @@ function selectionSummary() {
     ).map((candidate) => [candidate.output, currentAliases(candidate)]),
   );
   return [
-    "Handy_mカスタム辞書 選択結果",
+    "KoeTsumugiカスタム辞書 選択結果",
     `除外: ${excluded.length === 0 ? "なし" : excluded.join("、")}`,
     `読み変更: ${Object.keys(aliasOverrides).length === 0 ? "なし" : JSON.stringify(aliasOverrides)}`,
   ].join("\n");

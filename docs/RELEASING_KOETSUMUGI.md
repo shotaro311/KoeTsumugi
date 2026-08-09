@@ -1,7 +1,8 @@
-# Handy_m Release and Updater
+# KoeTsumugi Release and Updater
 
-Handy_m uses a release and update channel that is independent from upstream
-Handy.
+KoeTsumugi uses a release and update channel that is independent from upstream
+Handy. The legacy repository URL, tag prefix, app identifier, and key filenames
+are retained during the staged migration from Handy_m.
 
 ## Stable identifiers
 
@@ -32,7 +33,7 @@ Do not paste either value into logs, issues, release notes, or chat messages.
 
 ## Release checklist
 
-1. Increment the Handy_m version in `package.json`, `src-tauri/Cargo.toml`, and
+1. Increment the KoeTsumugi version in `package.json`, `src-tauri/Cargo.toml`, and
    `src-tauri/tauri.conf.json`. Run Cargo once to synchronize
    `src-tauri/Cargo.lock`.
 2. Add `src/content/release-notes/<version>.md` with user-facing changes.
@@ -57,19 +58,16 @@ Windows x64 build and package audit succeed.
 ## Local signed updater build
 
 ```powershell
-$securePassword = Import-Clixml "$HOME\.tauri\handy-m.key.password.clixml"
-$passwordPointer = [Runtime.InteropServices.Marshal]::SecureStringToBSTR($securePassword)
-try {
-    $env:TAURI_SIGNING_PRIVATE_KEY_PASSWORD = [Runtime.InteropServices.Marshal]::PtrToStringBSTR($passwordPointer)
-} finally {
-    [Runtime.InteropServices.Marshal]::ZeroFreeBSTR($passwordPointer)
-}
-$env:TAURI_SIGNING_PRIVATE_KEY = "$HOME\.tauri\handy-m.key"
+$keyPath = Join-Path $env:USERPROFILE ".tauri\handy-m.key"
+$credentialPath = Join-Path $env:USERPROFILE ".tauri\handy-m.key.password.clixml"
+$credential = Import-Clixml -LiteralPath $credentialPath
+$env:TAURI_SIGNING_PRIVATE_KEY_PASSWORD = $credential.GetNetworkCredential().Password
+$env:TAURI_SIGNING_PRIVATE_KEY = Get-Content -Raw -LiteralPath $keyPath
 $env:LIBCLANG_PATH = "C:\Program Files\LLVM\bin"
 $env:VULKAN_SDK = "C:\VulkanSDK\1.4.350.0"
 $env:CARGO_TARGET_DIR = "C:\hm-target"
 $env:TRANSCRIBE_CMAKE_ARGS = "-DCMAKE_CXX_FLAGS=/utf-8 -DCMAKE_CXX_FLAGS_RELEASE=/utf-8"
-bun tauri build --config src-tauri/tauri.updater.conf.json
+bun tauri build --config src-tauri/tauri.updater.conf.json --bundles nsis
 ```
 
 Normal local builds do not use the updater config and therefore do not require

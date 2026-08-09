@@ -1,6 +1,6 @@
 ---
 name: Bug Report
-about: Create a report to help us improve Handy
+about: Create a report to help improve the unofficial KoeTsumugi derivative
 title: "[BUG] "
 labels: ["bug"]
 assignees: ""
@@ -8,7 +8,10 @@ assignees: ""
 
 ## Before You Submit
 
-**Please search [existing issues](https://github.com/cjpais/Handy/issues) to avoid duplicates.** Your bug may already be reported! Right now it's just me maintaining this project so many issues can be overwhelming! Help me out by checking first.
+**Please search [existing derivative issues](https://github.com/shotaro311/Handy/issues) to avoid duplicates.**
+
+KoeTsumugi is an unofficial derivative. Do not report KoeTsumugi-only behavior to
+the upstream Handy maintainers.
 
 ## Bug Description
 

@@ -719,7 +719,7 @@ pub fn run(cli_args: CliArgs) {
         builder = builder.plugin(tauri_nspanel::init());
     }
 
-    // Single-instance forwards CLI args to an already-running Handy and exits.
+    // Single-instance forwards CLI args to an already-running KoeTsumugi and exits.
     // That would make the headless path
     // (--transcribe-file/--list-devices/--list-models) a silent no-op whenever the
     // app is already open, so skip it in headless mode and run a standalone
@@ -802,7 +802,7 @@ pub fn run(cli_args: CliArgs) {
             // for portable mode (redirects WebView2 cache to portable Data dir)
             let mut win_builder =
                 tauri::WebviewWindowBuilder::new(app, "main", tauri::WebviewUrl::App("/".into()))
-                    .title("Handy")
+                    .title("KoeTsumugi")
                     .inner_size(680.0, 570.0)
                     .min_inner_size(680.0, 570.0)
                     .resizable(true)
@@ -816,6 +816,15 @@ pub fn run(cli_args: CliArgs) {
             win_builder.build()?;
 
             let mut settings = get_settings(app.handle());
+
+            // Re-register an enabled startup entry with the current executable path.
+            // This preserves the persisted preference across the Handy_m -> KoeTsumugi
+            // executable rename; the installer removes the legacy Run value.
+            if settings.autostart_enabled {
+                if let Err(error) = app.autolaunch().enable() {
+                    log::warn!("Failed to refresh the KoeTsumugi autostart entry: {error}");
+                }
+            }
 
             // Apply the persisted appearance theme to the Windows title bar before
             // the window is shown, so it matches the in-app palette without a flash

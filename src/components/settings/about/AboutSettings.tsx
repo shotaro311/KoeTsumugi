@@ -22,20 +22,12 @@ export const AboutSettings: React.FC = () => {
         setVersion(appVersion);
       } catch (error) {
         console.error("Failed to get app version:", error);
-        setVersion("0.1.2");
+        setVersion("1.0.3");
       }
     };
 
     fetchVersion();
   }, []);
-
-  const handleDonateClick = async () => {
-    try {
-      await openUrl("https://handy.computer/donate");
-    } catch (error) {
-      console.error("Failed to open donate link:", error);
-    }
-  };
 
   return (
     <div className="max-w-3xl w-full mx-auto space-y-6">
@@ -54,27 +46,58 @@ export const AboutSettings: React.FC = () => {
         <ShowWhatsNewOnUpdate descriptionMode="tooltip" grouped={true} />
 
         <SettingContainer
-          title={t("settings.about.supportDevelopment.title")}
-          description={t("settings.about.supportDevelopment.description")}
+          title={t("settings.about.derivativeStatus.title")}
+          description={t("settings.about.derivativeStatus.description")}
           grouped={true}
+          layout="stacked"
         >
-          <Button variant="primary" size="md" onClick={handleDonateClick}>
-            {t("settings.about.supportDevelopment.button")}
-          </Button>
+          {null}
         </SettingContainer>
 
         <SettingContainer
           title={t("settings.about.sourceCode.title")}
           description={t("settings.about.sourceCode.description")}
           grouped={true}
+          layout="stacked"
         >
-          <Button
-            variant="secondary"
-            size="md"
-            onClick={() => openUrl("https://github.com/cjpais/Handy")}
-          >
-            {t("settings.about.sourceCode.button")}
-          </Button>
+          <div className="flex flex-wrap gap-2">
+            <Button
+              variant="primary"
+              size="md"
+              onClick={() => openUrl("https://github.com/shotaro311/Handy")}
+            >
+              {t("settings.about.sourceCode.derivativeButton")}
+            </Button>
+            <Button
+              variant="secondary"
+              size="md"
+              onClick={() => openUrl("https://github.com/cjpais/Handy")}
+            >
+              {t("settings.about.sourceCode.upstreamButton")}
+            </Button>
+            <Button
+              variant="secondary"
+              size="md"
+              onClick={() =>
+                openUrl(
+                  "https://github.com/shotaro311/Handy/blob/shotaro/custom/LICENSE",
+                )
+              }
+            >
+              {t("settings.about.sourceCode.licenseButton")}
+            </Button>
+            <Button
+              variant="secondary"
+              size="md"
+              onClick={() =>
+                openUrl(
+                  "https://github.com/shotaro311/Handy/blob/shotaro/custom/THIRD_PARTY_NOTICES.md",
+                )
+              }
+            >
+              {t("settings.about.sourceCode.noticesButton")}
+            </Button>
+          </div>
         </SettingContainer>
 
         <AppDataDirectory descriptionMode="tooltip" grouped={true} />

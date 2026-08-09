@@ -6,9 +6,9 @@ fn main() {
 
     // Linux ships transcribe-cpp as a shared libtranscribe + loadable ggml
     // backend modules (the `dynamic-backends` posture in Cargo.toml). Bake an
-    // $ORIGIN-relative rpath into the `handy` binary so it finds libtranscribe
-    // next to it in the package — AppImage `usr/bin/handy` -> `usr/lib`, and
-    // deb/rpm `/usr/bin/handy` -> `/usr/lib`. transcribe's
+    // $ORIGIN-relative rpath into the `koetsumugi` binary so it finds libtranscribe
+    // next to it in the package — AppImage `usr/bin/koetsumugi` -> `usr/lib`, and
+    // deb/rpm `/usr/bin/koetsumugi` -> `/usr/lib`. transcribe's
     // init_backends_default() then loads the ggml modules co-located there.
     // (Windows resolves DLLs from the exe directory, so it needs no rpath;
     // macOS links transcribe-cpp statically via the `metal` feature.)
@@ -24,7 +24,7 @@ fn main() {
 
     // When ORT is dynamically linked (Windows CI sets ORT_LIB_LOCATION +
     // ORT_PREFER_DYNAMIC_LINK to a baseline ONNX Runtime), ship its onnxruntime.dll
-    // next to Handy.exe so the app loads our baseline build instead of statically
+    // next to koetsumugi.exe so the app loads our baseline build instead of statically
     // embedding pyke's /arch:AVX2 one (which crashes at startup on pre-Haswell CPUs).
     stage_onnxruntime_dll();
 
@@ -36,13 +36,13 @@ fn main() {
 
 /// Stage the MSVC runtime DLLs into `transcribe-libs/` for app-local deployment.
 ///
-/// Handy's native stack links the VC++ runtime dynamically (/MD). Shipping the
-/// DLLs beside `handy.exe` covers machines with no redistributable installed and
+/// The native stack links the VC++ runtime dynamically (/MD). Shipping the
+/// DLLs beside `koetsumugi.exe` covers machines with no redistributable installed and
 /// machines whose system redist is older than the CI toolset (issue #1527).
 ///
 /// Driven by `HANDY_VC_REDIST_DIRS`, set by CI to the redist dirs from the same
 /// Visual Studio install that compiled the native code. Copies only the runtime
-/// DLL families Handy imports and no-ops when the env var is unset.
+/// DLL families KoeTsumugi imports and no-ops when the env var is unset.
 fn stage_vc_runtime_dlls() {
     use std::path::PathBuf;
 
@@ -88,7 +88,7 @@ fn stage_vc_runtime_dlls() {
         if !copied.iter().any(|n| n == required) {
             panic!(
                 "HANDY_VC_REDIST_DIRS is set but {required} was not found in it; \
-                 the app-local VC++ runtime would be incomplete and Handy would \
+                 the app-local VC++ runtime would be incomplete and KoeTsumugi would \
                  crash on machines without a current redist (issue #1527)"
             );
         }
@@ -101,7 +101,7 @@ fn stage_vc_runtime_dlls() {
 
 /// Copy the dynamically-linked ONNX Runtime `onnxruntime.dll` into the
 /// `transcribe-libs/` staging dir so `tauri.windows.conf.json` bundles it beside
-/// `Handy.exe` (Windows resolves DLLs from the executable's directory).
+/// `koetsumugi.exe` (Windows resolves DLLs from the executable's directory).
 ///
 /// No-op unless `ORT_PREFER_DYNAMIC_LINK` + `ORT_LIB_LOCATION` are set for a Windows
 /// target — i.e. the CI dynamic-link path. A plain static build (no env) skips this
@@ -156,7 +156,7 @@ fn stage_onnxruntime_dll() {
 /// this is a no-op there. `RUNTIME_DIR` (core libs) and `MODULE_DIR` (dlopen'd
 /// ggml modules) may be the same dir — the `BTreeSet` below dedups them.
 ///
-/// Where the staged dir lands: Windows bundles it beside `handy.exe` (DLLs resolve
+/// Where the staged dir lands: Windows bundles it beside `koetsumugi.exe` (DLLs resolve
 /// from the exe dir); Linux maps it into `/usr/lib`, on the binary's
 /// `$ORIGIN/../lib` rpath.
 fn stage_transcribe_runtime_libs() {
