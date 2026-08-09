@@ -11,7 +11,7 @@ concurrency:
 
 jobs:
   create-release:
-    if: github.event_name == 'workflow_dispatch' || github.event.head_commit.message == 'chore(release): retry KoeTsumugi 1.0.3'
+    if: ${{ github.event_name == 'workflow_dispatch' || github.event.head_commit.message == 'chore(release): retry KoeTsumugi 1.0.3' }}
     permissions:
       contents: write
     runs-on: ubuntu-latest
