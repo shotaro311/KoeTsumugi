@@ -776,7 +776,10 @@ jobs:
             }
           }
 
-          # Both installer types must contain every staged DLL and launch.
+          # Both installer types must contain every staged DLL and start the
+          # packaged executable. Do not enumerate compute devices here:
+          # GitHub-hosted Windows runners have no stable audio/GPU device
+          # inventory, so --list-devices can fail despite a valid installer.
           function Assert-PackageContents {
             param([string]$Root, [string]$Label)
 
@@ -790,9 +793,9 @@ jobs:
               }
             }
 
-            & $koetsumugi.FullName --list-devices | Out-Host
+            & $koetsumugi.FullName --help | Out-Host
             if ($LASTEXITCODE -ne 0) {
-              throw "$Label koetsumugi.exe --list-devices failed"
+              throw "$Label koetsumugi.exe --help failed"
             }
           }
 
