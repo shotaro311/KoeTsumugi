@@ -816,7 +816,14 @@ jobs:
           # Administrative install extracts the MSI payload without elevation.
           $msiPackages = Get-ChildItem (Join-Path $bundleBase "msi") -Filter "*.msi" -ErrorAction SilentlyContinue
           if (-not $msiPackages) {
-            throw "No MSI packages found under $bundleBase for runtime DLL audit"
+            # KoeTsumugi's updater release intentionally builds NSIS only: MSI
+            # cannot migrate the existing Handy_m installation.  Do not turn
+            # that intentional omission into a false release failure.
+            if ("${{ inputs.build-args }}" -match "(?:^|\\s)--bundles\\s+nsis(?:\\s|$)") {
+              Write-Host "No MSI package to audit: this is an NSIS-only build."
+            } else {
+              throw "No MSI packages found under $bundleBase for runtime DLL audit"
+            }
           }
 
           foreach ($pkg in $msiPackages) {
