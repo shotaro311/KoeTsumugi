@@ -822,7 +822,7 @@ jobs:
             # KoeTsumugi's updater release intentionally builds NSIS only: MSI
             # cannot migrate the existing Handy_m installation.  Do not turn
             # that intentional omission into a false release failure.
-            if ("${{ inputs.build-args }}" -match "(?:^|\\s)--bundles\\s+nsis(?:\\s|$)") {
+            if ("${{ inputs.build-args }}" -match "--bundles\s+nsis") {
               Write-Host "No MSI package to audit: this is an NSIS-only build."
             } else {
               throw "No MSI packages found under $bundleBase for runtime DLL audit"
