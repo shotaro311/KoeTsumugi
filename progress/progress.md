@@ -48,7 +48,6 @@ status: active
 ## 進行中
 
 - KoeTsumugi 1.0.4のsource、Windows NSIS、updater metadataは公開済み。full uninstall/rollback、Windows Authenticode、正式な商標クリアランスは未完了。MSIとmacOSは公開対象外。
-- `shotaro/custom`へ統合済みのローカル作業ブランチ5本は削除候補。`codex/koetsumugi-repo-migration`を使用中のcleanな一時worktreeを含むため、ユーザー承認後にlocal-onlyで整理する。
 - Windows実機: VADオンのCohereで5分程度の自然発話をホットキーから録音し、履歴保存と実利用アプリへの貼り付けまで確認する。保存済み音声と番号付きTTSのheadless検証、インストール済みbinaryの起動は確認済み。
 - Windows実機: OSの既定マイクを別エンドポイントへ切り替え、設定画面で再選択せず次の録音が自動復旧することを確認する。自動判定・再生成の単体テストと現在のマイクでの起動は確認済み。
 - インストール済み1.0.1から1.0.2へのdownload、install、relaunchは未実施。公開metadata、binary transport、署名検証までは確認済み。
@@ -112,6 +111,7 @@ status: active
 
 ## 最近の更新
 
+- 2026-08-10: ユーザー承認後、`shotaro/custom`へ統合済みのローカル作業ブランチ5本を`git branch -d`で削除し、cleanな一時worktreeも通常削除した。リモートブランチには変更なし。ローカルは`main`と`shotaro/custom`、本worktreeのみ。
 - 2026-08-10: KoeTsumugi 1.0.4を`shotaro/custom`へpushし、workflow `31354337886`からWindows NSISを公開。公開metadata、asset API download、SHA-256、updater署名をreadbackした。
 - 2026-08-10: 1.0.3から1.0.4へWindows NSIS実更新し、データ/登録保持、更新後起動、旧Handy_m自動起動登録の除去まで確認。Note下書きは更新済みだが未公開。
 - 2026-08-09: KoeTsumugi 1.0.3差分を新worktreeへ完全移行し、現sourceから最終署名NSISを再生成・独立検証。インストール済み状態と退避データをreadbackし、Windows NSISをupload可と最終受入。push/release/installは未実施。
