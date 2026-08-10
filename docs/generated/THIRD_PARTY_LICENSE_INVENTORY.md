@@ -1,12 +1,12 @@
 # Windows x64 third-party license inventory
 
-Generated from the locked Windows x64 Rust and Bun dependency trees at 2026-08-09T03:34:23.338Z.
+Generated from the locked Windows x64 Rust and Bun dependency trees at 2026-08-10T00:50:15.517Z.
 This inventory records declared license metadata; it does not replace the corresponding license texts or a release-specific legal review.
 
-- Rust and JavaScript packages: 542
+- Rust and JavaScript packages: 567
 - Packages requiring manual license review: 0
-- Packages with locally collected license/notice files: 486
-- Packages without a locally collected license/notice file: 56
+- Packages with locally collected license/notice files: 510
+- Packages without a locally collected license/notice file: 57
 
 | Ecosystem | Package                        | Version            | Declared license                     | Source                                                                                  |
 | --------- | ------------------------------ | ------------------ | ------------------------------------ | --------------------------------------------------------------------------------------- |
@@ -31,6 +31,8 @@ This inventory records declared license metadata; it does not replace the corres
 | Rust      | base64ct                       | 1.8.3              | Apache-2.0 OR MIT                    | [source](https://github.com/RustCrypto/formats)                                         |
 | Rust      | bincode_derive                 | 2.0.1              | MIT                                  | [source](https://github.com/bincode-org/bincode)                                        |
 | Rust      | bincode                        | 2.0.1              | MIT                                  | [source](https://github.com/bincode-org/bincode)                                        |
+| Rust      | bit-set                        | 0.8.0              | Apache-2.0 OR MIT                    | [source](https://github.com/contain-rs/bit-set)                                         |
+| Rust      | bit-vec                        | 0.8.0              | Apache-2.0 OR MIT                    | [source](https://github.com/contain-rs/bit-vec)                                         |
 | Rust      | bitflags                       | 1.3.2              | MIT/Apache-2.0                       | [source](https://github.com/bitflags/bitflags)                                          |
 | Rust      | bitflags                       | 2.11.0             | MIT OR Apache-2.0                    | [source](https://github.com/bitflags/bitflags)                                          |
 | Rust      | bitvec                         | 1.0.1              | MIT                                  | [source](https://github.com/bitvecto-rs/bitvec)                                         |
@@ -77,7 +79,9 @@ This inventory records declared license metadata; it does not replace the corres
 | Rust      | crypto-common                  | 0.1.7              | MIT OR Apache-2.0                    | [source](https://github.com/RustCrypto/traits)                                          |
 | Rust      | cssparser-macros               | 0.6.1              | MPL-2.0                              | [source](https://github.com/servo/rust-cssparser)                                       |
 | Rust      | cssparser                      | 0.29.6             | MPL-2.0                              | [source](https://github.com/servo/rust-cssparser)                                       |
-| Rust      | ctor                           | 0.2.9              | Apache-2.0 OR MIT                    | [source](https://github.com/mmastrac/rust-ctor)                                         |
+| Rust      | cssparser                      | 0.36.0             | MPL-2.0                              | [source](https://github.com/servo/rust-cssparser)                                       |
+| Rust      | ctor-proc-macro                | 0.0.7              | Apache-2.0 OR MIT                    | [source](https://github.com/mmastrac/rust-ctor)                                         |
+| Rust      | ctor                           | 0.8.0              | Apache-2.0 OR MIT                    | [source](https://github.com/mmastrac/rust-ctor)                                         |
 | Rust      | darling_core                   | 0.20.11            | MIT                                  | [source](https://github.com/TedDriggs/darling)                                          |
 | Rust      | darling_core                   | 0.21.3             | MIT                                  | [source](https://github.com/TedDriggs/darling)                                          |
 | Rust      | darling_macro                  | 0.20.11            | MIT                                  | [source](https://github.com/TedDriggs/darling)                                          |
@@ -90,15 +94,20 @@ This inventory records declared license metadata; it does not replace the corres
 | Rust      | derive_builder_core            | 0.20.2             | MIT OR Apache-2.0                    | [source](https://github.com/colin-kiegel/rust-derive-builder)                           |
 | Rust      | derive_builder_macro           | 0.20.2             | MIT OR Apache-2.0                    | [source](https://github.com/colin-kiegel/rust-derive-builder)                           |
 | Rust      | derive_builder                 | 0.20.2             | MIT OR Apache-2.0                    | [source](https://github.com/colin-kiegel/rust-derive-builder)                           |
+| Rust      | derive_more-impl               | 2.1.1              | MIT                                  | [source](https://github.com/JelteF/derive_more)                                         |
 | Rust      | derive_more                    | 0.99.20            | MIT                                  | [source](https://github.com/JelteF/derive_more)                                         |
+| Rust      | derive_more                    | 2.1.1              | MIT                                  | [source](https://github.com/JelteF/derive_more)                                         |
 | Rust      | digest                         | 0.10.7             | MIT OR Apache-2.0                    | [source](https://github.com/RustCrypto/traits)                                          |
 | Rust      | dirs-sys                       | 0.5.0              | MIT OR Apache-2.0                    | [source](https://github.com/dirs-dev/dirs-sys-rs)                                       |
 | Rust      | dirs                           | 6.0.0              | MIT OR Apache-2.0                    | [source](https://github.com/soc/dirs-rs)                                                |
 | Rust      | displaydoc                     | 0.2.5              | MIT OR Apache-2.0                    | [source](https://github.com/yaahc/displaydoc)                                           |
 | Rust      | document-features              | 0.2.12             | MIT OR Apache-2.0                    | [source](https://github.com/slint-ui/document-features)                                 |
+| Rust      | dom_query                      | 0.27.0             | MIT                                  | [source](https://github.com/niklak/dom_query)                                           |
 | Rust      | dpi                            | 0.1.2              | Apache-2.0 AND MIT                   | [source](https://github.com/rust-windowing/winit)                                       |
 | Rust      | dtoa-short                     | 0.3.5              | MPL-2.0                              | [source](https://github.com/upsuper/dtoa-short)                                         |
 | Rust      | dtoa                           | 1.0.11             | MIT OR Apache-2.0                    | [source](https://github.com/dtolnay/dtoa)                                               |
+| Rust      | dtor-proc-macro                | 0.0.6              | Apache-2.0 OR MIT                    | [source](https://github.com/mmastrac/rust-ctor)                                         |
+| Rust      | dtor                           | 0.3.0              | Apache-2.0 OR MIT                    | [source](https://github.com/mmastrac/rust-ctor)                                         |
 | Rust      | dunce                          | 1.0.5              | CC0-1.0 OR MIT-0 OR Apache-2.0       | [source](https://gitlab.com/kornelski/dunce)                                            |
 | Rust      | dyn-clone                      | 1.0.20             | MIT OR Apache-2.0                    | [source](https://github.com/dtolnay/dyn-clone)                                          |
 | Rust      | embed-resource                 | 3.0.6              | MIT                                  | [source](https://github.com/nabijaczleweli/rust-embed-resource)                         |
@@ -128,6 +137,7 @@ This inventory records declared license metadata; it does not replace the corres
 | Rust      | flate2                         | 1.1.9              | MIT OR Apache-2.0                    | [source](https://github.com/rust-lang/flate2-rs)                                        |
 | Rust      | fnv                            | 1.0.7              | Apache-2.0 / MIT                     | [source](https://github.com/servo/rust-fnv)                                             |
 | Rust      | foldhash                       | 0.1.5              | Zlib                                 | [source](https://github.com/orlp/foldhash)                                              |
+| Rust      | foldhash                       | 0.2.0              | Zlib                                 | [source](https://github.com/orlp/foldhash)                                              |
 | Rust      | form_urlencoded                | 1.2.2              | MIT OR Apache-2.0                    | [source](https://github.com/servo/rust-url)                                             |
 | Rust      | fst                            | 0.4.7              | Unlicense/MIT                        | [source](https://github.com/BurntSushi/fst)                                             |
 | Rust      | funty                          | 2.0.0              | MIT                                  | [source](https://github.com/myrrlyn/funty)                                              |
@@ -149,10 +159,10 @@ This inventory records declared license metadata; it does not replace the corres
 | Rust      | getrandom                      | 0.3.4              | MIT OR Apache-2.0                    | [source](https://github.com/rust-random/getrandom)                                      |
 | Rust      | getrandom                      | 0.4.1              | MIT OR Apache-2.0                    | [source](https://github.com/rust-random/getrandom)                                      |
 | Rust      | glob                           | 0.3.3              | MIT OR Apache-2.0                    | [source](https://github.com/rust-lang/glob)                                             |
-| Rust      | global-hotkey                  | 0.7.0              | Apache-2.0 OR MIT                    | [source](https://github.com/amrbashir/global-hotkey)                                    |
+| Rust      | global-hotkey                  | 0.8.0              | Apache-2.0 OR MIT                    | [source](https://github.com/tauri-apps/global-hotkey)                                   |
 | Rust      | h2                             | 0.4.13             | MIT                                  | [source](https://github.com/hyperium/h2)                                                |
 | Rust      | half                           | 2.7.1              | MIT OR Apache-2.0                    | [source](https://github.com/VoidStarKat/half-rs)                                        |
-| Rust      | handy-keys                     | 0.3.0              | MIT                                  | [source](https://github.com/handy-computer/handy-keys)                                  |
+| Rust      | handy-keys                     | 0.3.3              | MIT                                  | [source](https://github.com/handy-computer/handy-keys)                                  |
 | Rust      | hashbrown                      | 0.12.3             | MIT OR Apache-2.0                    | [source](https://github.com/rust-lang/hashbrown)                                        |
 | Rust      | hashbrown                      | 0.15.5             | MIT OR Apache-2.0                    | [source](https://github.com/rust-lang/hashbrown)                                        |
 | Rust      | hashbrown                      | 0.16.1             | MIT OR Apache-2.0                    | [source](https://github.com/rust-lang/hashbrown)                                        |
@@ -164,6 +174,7 @@ This inventory records declared license metadata; it does not replace the corres
 | Rust      | hmac-sha256                    | 1.1.14             | ISC                                  | [source](https://github.com/jedisct1/rust-hmac-sha256)                                  |
 | Rust      | hound                          | 3.5.1              | Apache-2.0                           | [source](https://github.com/ruuda/hound)                                                |
 | Rust      | html5ever                      | 0.29.1             | MIT OR Apache-2.0                    | [source](https://github.com/servo/html5ever)                                            |
+| Rust      | html5ever                      | 0.38.0             | MIT OR Apache-2.0                    | [source](https://github.com/servo/html5ever)                                            |
 | Rust      | http-body-util                 | 0.1.3              | MIT                                  | [source](https://github.com/hyperium/http-body)                                         |
 | Rust      | http-body                      | 1.0.1              | MIT                                  | [source](https://github.com/hyperium/http-body)                                         |
 | Rust      | http-range                     | 0.1.5              | MIT                                  | [source](https://github.com/bancek/rust-http-range.git)                                 |
@@ -213,6 +224,7 @@ This inventory records declared license metadata; it does not replace the corres
 | Rust      | lzma-rust2                     | 0.15.7             | Apache-2.0                           | [source](https://github.com/hasenbanck/lzma-rust2/)                                     |
 | Rust      | mac                            | 0.1.1              | MIT/Apache-2.0                       | [source](https://github.com/reem/rust-mac.git)                                          |
 | Rust      | markup5ever                    | 0.14.1             | MIT OR Apache-2.0                    | [source](https://github.com/servo/html5ever)                                            |
+| Rust      | markup5ever                    | 0.38.0             | MIT OR Apache-2.0                    | [source](https://github.com/servo/html5ever)                                            |
 | Rust      | match_token                    | 0.1.0              | MIT OR Apache-2.0                    | [source](https://github.com/servo/html5ever)                                            |
 | Rust      | matches                        | 0.1.10             | MIT                                  | [source](https://github.com/SimonSapin/rust-std-candidates)                             |
 | Rust      | matrixmultiply                 | 0.3.10             | MIT/Apache-2.0                       | [source](https://github.com/bluss/matrixmultiply/)                                      |
@@ -222,7 +234,7 @@ This inventory records declared license metadata; it does not replace the corres
 | Rust      | miniz_oxide                    | 0.8.9              | MIT OR Zlib OR Apache-2.0            | [source](https://github.com/Frommi/miniz_oxide/tree/master/miniz_oxide)                 |
 | Rust      | mio                            | 1.1.1              | MIT                                  | [source](https://github.com/tokio-rs/mio)                                               |
 | Rust      | moxcms                         | 0.7.11             | BSD-3-Clause OR Apache-2.0           | [source](https://github.com/awxkee/moxcms.git)                                          |
-| Rust      | muda                           | 0.17.1             | Apache-2.0 OR MIT                    | [source](https://github.com/amrbashir/muda)                                             |
+| Rust      | muda                           | 0.19.3             | Apache-2.0 OR MIT                    | [source](https://github.com/tauri-apps/muda)                                            |
 | Rust      | native-tls                     | 0.2.18             | MIT OR Apache-2.0                    | [source](https://github.com/rust-native-tls/rust-native-tls)                            |
 | Rust      | natural                        | 0.5.0              | MIT                                  | [source](https://github.com/cjqed/rs-natural)                                           |
 | Rust      | ndarray                        | 0.17.2             | MIT OR Apache-2.0                    | [source](https://github.com/rust-ndarray/ndarray)                                       |
@@ -250,21 +262,26 @@ This inventory records declared license metadata; it does not replace the corres
 | Rust      | pem-rfc7468                    | 0.7.0              | Apache-2.0 OR MIT                    | [source](https://github.com/RustCrypto/formats/tree/master/pem-rfc7468)                 |
 | Rust      | percent-encoding               | 2.3.2              | MIT OR Apache-2.0                    | [source](https://github.com/servo/rust-url/)                                            |
 | Rust      | phf_codegen                    | 0.11.3             | MIT                                  | [source](https://github.com/rust-phf/rust-phf)                                          |
+| Rust      | phf_codegen                    | 0.13.1             | MIT                                  | [source](https://github.com/rust-phf/rust-phf)                                          |
 | Rust      | phf_codegen                    | 0.8.0              | MIT                                  | [source](https://github.com/sfackler/rust-phf)                                          |
 | Rust      | phf_generator                  | 0.10.0             | MIT                                  | [source](https://github.com/sfackler/rust-phf)                                          |
 | Rust      | phf_generator                  | 0.11.3             | MIT                                  | [source](https://github.com/rust-phf/rust-phf)                                          |
+| Rust      | phf_generator                  | 0.13.1             | MIT                                  | [source](https://github.com/rust-phf/rust-phf)                                          |
 | Rust      | phf_generator                  | 0.8.0              | MIT                                  | [source](https://github.com/sfackler/rust-phf)                                          |
 | Rust      | phf_macros                     | 0.10.0             | MIT                                  | [source](https://github.com/sfackler/rust-phf)                                          |
-| Rust      | phf_macros                     | 0.11.3             | MIT                                  | [source](https://github.com/rust-phf/rust-phf)                                          |
+| Rust      | phf_macros                     | 0.13.1             | MIT                                  | [source](https://github.com/rust-phf/rust-phf)                                          |
 | Rust      | phf_shared                     | 0.10.0             | MIT                                  | [source](https://github.com/sfackler/rust-phf)                                          |
 | Rust      | phf_shared                     | 0.11.3             | MIT                                  | [source](https://github.com/rust-phf/rust-phf)                                          |
+| Rust      | phf_shared                     | 0.13.1             | MIT                                  | [source](https://github.com/rust-phf/rust-phf)                                          |
 | Rust      | phf_shared                     | 0.8.0              | MIT                                  | [source](https://github.com/sfackler/rust-phf)                                          |
 | Rust      | phf                            | 0.10.1             | MIT                                  | [source](https://github.com/sfackler/rust-phf)                                          |
 | Rust      | phf                            | 0.11.3             | MIT                                  | [source](https://github.com/rust-phf/rust-phf)                                          |
+| Rust      | phf                            | 0.13.1             | MIT                                  | [source](https://github.com/rust-phf/rust-phf)                                          |
 | Rust      | phf                            | 0.8.0              | MIT                                  | [source](https://github.com/sfackler/rust-phf)                                          |
 | Rust      | pin-project-lite               | 0.2.16             | Apache-2.0 OR MIT                    | [source](https://github.com/taiki-e/pin-project-lite)                                   |
 | Rust      | pin-utils                      | 0.1.0              | MIT OR Apache-2.0                    | [source](https://github.com/rust-lang-nursery/pin-utils)                                |
 | Rust      | pkg-config                     | 0.3.32             | MIT OR Apache-2.0                    | [source](https://github.com/rust-lang/pkg-config-rs)                                    |
+| Rust      | plist                          | 1.8.0              | MIT                                  | [source](https://github.com/ebarnard/rust-plist/)                                       |
 | Rust      | png                            | 0.17.16            | MIT OR Apache-2.0                    | [source](https://github.com/image-rs/image-png)                                         |
 | Rust      | png                            | 0.18.1             | MIT OR Apache-2.0                    | [source](https://github.com/image-rs/image-png)                                         |
 | Rust      | portable-atomic                | 1.13.1             | Apache-2.0 OR MIT                    | [source](https://github.com/taiki-e/portable-atomic)                                    |
@@ -280,6 +297,7 @@ This inventory records declared license metadata; it does not replace the corres
 | Rust      | ptr_meta                       | 0.1.4              | MIT                                  | [source](https://github.com/djkoloski/ptr_meta)                                         |
 | Rust      | pxfm                           | 0.1.27             | BSD-3-Clause OR Apache-2.0           | [source](https://github.com/awxkee/pxfm)                                                |
 | Rust      | quick-error                    | 2.0.1              | MIT/Apache-2.0                       | [source](http://github.com/tailhook/quick-error)                                        |
+| Rust      | quick-xml                      | 0.38.4             | MIT                                  | [source](https://github.com/tafia/quick-xml)                                            |
 | Rust      | quote                          | 1.0.44             | MIT OR Apache-2.0                    | [source](https://github.com/dtolnay/quote)                                              |
 | Rust      | radium                         | 0.7.0              | MIT                                  | [source](https://github.com/bitvecto-rs/radium)                                         |
 | Rust      | rand_chacha                    | 0.2.2              | MIT OR Apache-2.0                    | [source](https://github.com/rust-random/rand)                                           |
@@ -316,6 +334,7 @@ This inventory records declared license metadata; it does not replace the corres
 | Rust      | rust_decimal                   | 1.40.0             | MIT                                  | [source](https://github.com/paupino/rust-decimal)                                       |
 | Rust      | rust-stemmers                  | 1.2.0              | MIT/BSD-3-Clause                     | [source](https://github.com/CurrySoftware/rust-stemmers)                                |
 | Rust      | rustc_version                  | 0.4.1              | MIT OR Apache-2.0                    | [source](https://github.com/djc/rustc-version-rs)                                       |
+| Rust      | rustc-hash                     | 2.1.3              | Apache-2.0 OR MIT                    | [source](https://github.com/rust-lang/rustc-hash)                                       |
 | Rust      | rustfft                        | 6.4.1              | MIT OR Apache-2.0                    | [source](https://github.com/ejmahler/RustFFT)                                           |
 | Rust      | rustls-pki-types               | 1.14.0             | MIT OR Apache-2.0                    | [source](https://github.com/rustls/pki-types)                                           |
 | Rust      | rustls-platform-verifier       | 0.6.2              | MIT OR Apache-2.0                    | [source](https://github.com/rustls/rustls-platform-verifier)                            |
@@ -332,6 +351,7 @@ This inventory records declared license metadata; it does not replace the corres
 | Rust      | scopeguard                     | 1.2.0              | MIT OR Apache-2.0                    | [source](https://github.com/bluss/scopeguard)                                           |
 | Rust      | seahash                        | 4.1.0              | MIT                                  | [source](https://gitlab.redox-os.org/redox-os/seahash)                                  |
 | Rust      | selectors                      | 0.24.0             | MPL-2.0                              | [source](https://github.com/servo/servo)                                                |
+| Rust      | selectors                      | 0.36.1             | MPL-2.0                              | [source](https://github.com/servo/stylo)                                                |
 | Rust      | semver                         | 1.0.27             | MIT OR Apache-2.0                    | [source](https://github.com/dtolnay/semver)                                             |
 | Rust      | serde_core                     | 1.0.228            | MIT OR Apache-2.0                    | [source](https://github.com/serde-rs/serde)                                             |
 | Rust      | serde_derive_internals         | 0.29.1             | MIT OR Apache-2.0                    | [source](https://github.com/serde-rs/serde)                                             |
@@ -347,6 +367,7 @@ This inventory records declared license metadata; it does not replace the corres
 | Rust      | serialize-to-javascript-impl   | 0.1.2              | MIT OR Apache-2.0                    | [source](https://github.com/chippers/serialize-to-javascript)                           |
 | Rust      | serialize-to-javascript        | 0.1.2              | MIT OR Apache-2.0                    | [source](https://github.com/chippers/serialize-to-javascript)                           |
 | Rust      | servo_arc                      | 0.2.0              | MIT OR Apache-2.0                    | [source](https://github.com/servo/servo)                                                |
+| Rust      | servo_arc                      | 0.4.3              | MIT OR Apache-2.0                    | [source](https://github.com/servo/stylo)                                                |
 | Rust      | sha2                           | 0.10.9             | MIT OR Apache-2.0                    | [source](https://github.com/RustCrypto/hashes)                                          |
 | Rust      | shlex                          | 1.3.0              | MIT OR Apache-2.0                    | [source](https://github.com/comex/rust-shlex)                                           |
 | Rust      | simd-adler32                   | 0.3.8              | MIT                                  | [source](https://github.com/mcountryman/simd-adler32)                                   |
@@ -365,7 +386,9 @@ This inventory records declared license metadata; it does not replace the corres
 | Rust      | stable_deref_trait             | 1.2.1              | MIT OR Apache-2.0                    | [source](https://github.com/storyyeller/stable_deref_trait)                             |
 | Rust      | strength_reduce                | 0.2.4              | MIT OR Apache-2.0                    | [source](http://github.com/ejmahler/strength_reduce)                                    |
 | Rust      | string_cache_codegen           | 0.5.4              | MIT OR Apache-2.0                    | [source](https://github.com/servo/string-cache)                                         |
+| Rust      | string_cache_codegen           | 0.6.1              | MIT OR Apache-2.0                    | [source](https://github.com/servo/string-cache)                                         |
 | Rust      | string_cache                   | 0.8.9              | MIT OR Apache-2.0                    | [source](https://github.com/servo/string-cache)                                         |
+| Rust      | string_cache                   | 0.9.0              | MIT OR Apache-2.0                    | [source](https://github.com/servo/string-cache)                                         |
 | Rust      | strsim                         | 0.11.1             | MIT                                  | [source](https://github.com/rapidfuzz/strsim-rs)                                        |
 | Rust      | strum_macros                   | 0.24.3             | MIT                                  | [source](https://github.com/Peternator7/strum)                                          |
 | Rust      | strum                          | 0.24.1             | MIT                                  | [source](https://github.com/Peternator7/strum)                                          |
@@ -387,17 +410,17 @@ This inventory records declared license metadata; it does not replace the corres
 | Rust      | sync_wrapper                   | 1.0.2              | Apache-2.0                           | [source](https://github.com/Actyx/sync_wrapper)                                         |
 | Rust      | synstructure                   | 0.13.2             | MIT                                  | [source](https://github.com/mystor/synstructure)                                        |
 | Rust      | sys-locale                     | 0.3.2              | MIT OR Apache-2.0                    | [source](https://github.com/1Password/sys-locale)                                       |
-| Rust      | tao                            | 0.34.5             | Apache-2.0                           | [source](https://github.com/tauri-apps/tao)                                             |
+| Rust      | tao                            | 0.35.3             | Apache-2.0                           | [source](https://github.com/tauri-apps/tao)                                             |
 | Rust      | tap                            | 1.0.1              | MIT                                  | [source](https://github.com/myrrlyn/tap)                                                |
 | Rust      | tar                            | 0.4.44             | MIT OR Apache-2.0                    | [source](https://github.com/alexcrichton/tar-rs)                                        |
-| Rust      | tauri-build                    | 2.5.5              | Apache-2.0 OR MIT                    | [source](https://github.com/tauri-apps/tauri)                                           |
-| Rust      | tauri-codegen                  | 2.5.4              | Apache-2.0 OR MIT                    | [source](https://github.com/tauri-apps/tauri)                                           |
-| Rust      | tauri-macros                   | 2.5.4              | Apache-2.0 OR MIT                    | [source](https://github.com/tauri-apps/tauri)                                           |
+| Rust      | tauri-build                    | 2.6.3              | Apache-2.0 OR MIT                    | [source](https://github.com/tauri-apps/tauri)                                           |
+| Rust      | tauri-codegen                  | 2.6.3              | Apache-2.0 OR MIT                    | [source](https://github.com/tauri-apps/tauri)                                           |
+| Rust      | tauri-macros                   | 2.6.3              | Apache-2.0 OR MIT                    | [source](https://github.com/tauri-apps/tauri)                                           |
 | Rust      | tauri-plugin-autostart         | 2.5.1              | Apache-2.0 OR MIT                    | [source](https://github.com/tauri-apps/plugins-workspace)                               |
 | Rust      | tauri-plugin-clipboard-manager | 2.3.2              | Apache-2.0 OR MIT                    | [source](https://github.com/tauri-apps/plugins-workspace)                               |
 | Rust      | tauri-plugin-dialog            | 2.6.0              | Apache-2.0 OR MIT                    | [source](https://github.com/tauri-apps/plugins-workspace)                               |
 | Rust      | tauri-plugin-fs                | 2.4.5              | Apache-2.0 OR MIT                    | [source](https://github.com/tauri-apps/plugins-workspace)                               |
-| Rust      | tauri-plugin-global-shortcut   | 2.3.1              | Apache-2.0 OR MIT                    | [source](https://github.com/tauri-apps/plugins-workspace)                               |
+| Rust      | tauri-plugin-global-shortcut   | 2.3.2              | Apache-2.0 OR MIT                    | [source](https://github.com/tauri-apps/plugins-workspace)                               |
 | Rust      | tauri-plugin-log               | 2.8.0              | Apache-2.0 OR MIT                    | [source](https://github.com/tauri-apps/plugins-workspace)                               |
 | Rust      | tauri-plugin-macos-permissions | 2.3.0              | MIT                                  | [source](https://github.com/ayangweb/tauri-plugin-macos-permissions)                    |
 | Rust      | tauri-plugin-opener            | 2.5.3              | Apache-2.0 OR MIT                    | [source](https://github.com/tauri-apps/plugins-workspace)                               |
@@ -407,15 +430,16 @@ This inventory records declared license metadata; it does not replace the corres
 | Rust      | tauri-plugin-store             | 2.4.2              | Apache-2.0 OR MIT                    | [source](https://github.com/tauri-apps/plugins-workspace)                               |
 | Rust      | tauri-plugin-updater           | 2.10.0             | Apache-2.0 OR MIT                    | [source](https://github.com/tauri-apps/plugins-workspace)                               |
 | Rust      | tauri-plugin                   | 2.5.3              | Apache-2.0 OR MIT                    | [source](https://github.com/tauri-apps/tauri)                                           |
-| Rust      | tauri-runtime-wry              | 2.10.0             | Apache-2.0 OR MIT                    | [source](https://github.com/tauri-apps/tauri)                                           |
-| Rust      | tauri-runtime                  | 2.10.0             | Apache-2.0 OR MIT                    | [source](https://github.com/tauri-apps/tauri)                                           |
+| Rust      | tauri-runtime-wry              | 2.11.4             | Apache-2.0 OR MIT                    | [source](https://github.com/tauri-apps/tauri)                                           |
+| Rust      | tauri-runtime                  | 2.11.3             | Apache-2.0 OR MIT                    | [source](https://github.com/tauri-apps/tauri)                                           |
 | Rust      | tauri-specta-macros            | 2.0.0-rc.16        | MIT                                  | [source](https://github.com/oscartbeaumont/tauri-specta)                                |
 | Rust      | tauri-specta                   | 2.0.0-rc.21        | MIT                                  | [source](https://github.com/oscartbeaumont/tauri-specta)                                |
-| Rust      | tauri-utils                    | 2.8.2              | Apache-2.0 OR MIT                    | [source](https://github.com/tauri-apps/tauri)                                           |
+| Rust      | tauri-utils                    | 2.9.3              | Apache-2.0 OR MIT                    | [source](https://github.com/tauri-apps/tauri)                                           |
 | Rust      | tauri-winres                   | 0.3.5              | MIT                                  | [source](https://github.com/tauri-apps/winres)                                          |
-| Rust      | tauri                          | 2.10.2             | Apache-2.0 OR MIT                    | [source](https://github.com/tauri-apps/tauri)                                           |
+| Rust      | tauri                          | 2.11.5             | Apache-2.0 OR MIT                    | [source](https://github.com/tauri-apps/tauri)                                           |
 | Rust      | tempfile                       | 3.25.0             | MIT OR Apache-2.0                    | [source](https://github.com/Stebalien/tempfile)                                         |
 | Rust      | tendril                        | 0.4.3              | MIT/Apache-2.0                       | [source](https://github.com/servo/tendril)                                              |
+| Rust      | tendril                        | 0.5.1              | MIT OR Apache-2.0                    | [source](https://github.com/servo/html5ever)                                            |
 | Rust      | termcolor                      | 1.4.1              | Unlicense OR MIT                     | [source](https://github.com/BurntSushi/termcolor)                                       |
 | Rust      | thiserror-impl                 | 1.0.69             | MIT OR Apache-2.0                    | [source](https://github.com/dtolnay/thiserror)                                          |
 | Rust      | thiserror-impl                 | 2.0.18             | MIT OR Apache-2.0                    | [source](https://github.com/dtolnay/thiserror)                                          |
@@ -449,7 +473,7 @@ This inventory records declared license metadata; it does not replace the corres
 | Rust      | transcribe-cpp                 | 0.1.3              | MIT                                  | [source](https://github.com/handy-computer/transcribe.cpp)                              |
 | Rust      | transcribe-rs                  | 0.3.8              | MIT                                  | [source](https://github.com/cjpais/transcribe-rs)                                       |
 | Rust      | transpose                      | 0.2.3              | MIT OR Apache-2.0                    | [source](https://github.com/ejmahler/transpose)                                         |
-| Rust      | tray-icon                      | 0.21.3             | MIT OR Apache-2.0                    | [source](https://github.com/tauri-apps/tray-icon)                                       |
+| Rust      | tray-icon                      | 0.24.1             | MIT OR Apache-2.0                    | [source](https://github.com/tauri-apps/tray-icon)                                       |
 | Rust      | try-lock                       | 0.2.5              | MIT                                  | [source](https://github.com/seanmonstar/try-lock)                                       |
 | Rust      | typeid                         | 1.0.3              | MIT OR Apache-2.0                    | [source](https://github.com/dtolnay/typeid)                                             |
 | Rust      | typenum                        | 1.19.0             | MIT OR Apache-2.0                    | [source](https://github.com/paholg/typenum)                                             |
@@ -490,6 +514,7 @@ This inventory records declared license metadata; it does not replace the corres
 | Rust      | wasm-bindgen-test-shared       | 0.2.110            | MIT OR Apache-2.0                    | [source](https://github.com/rustwasm/wasm-bindgen/tree/master/crates/test-shared)       |
 | Rust      | wasm-bindgen-test              | 0.3.60             | MIT OR Apache-2.0                    | [source](https://github.com/wasm-bindgen/wasm-bindgen)                                  |
 | Rust      | wasm-bindgen                   | 0.2.110            | MIT OR Apache-2.0                    | [source](https://github.com/wasm-bindgen/wasm-bindgen)                                  |
+| Rust      | web_atoms                      | 0.2.5              | MIT OR Apache-2.0                    | [source](https://github.com/servo/html5ever)                                            |
 | Rust      | webpki-root-certs              | 1.0.6              | CDLA-Permissive-2.0                  | [source](https://github.com/rustls/webpki-roots)                                        |
 | Rust      | webpki-roots                   | 1.0.8              | CDLA-Permissive-2.0                  | [source](https://github.com/rustls/webpki-roots)                                        |
 | Rust      | webview2-com-macros            | 0.8.1              | MIT                                  | [source](https://github.com/wravery/webview2-rs)                                        |
@@ -536,7 +561,7 @@ This inventory records declared license metadata; it does not replace the corres
 | Rust      | winreg                         | 0.10.1             | MIT                                  | [source](https://github.com/gentoo90/winreg-rs)                                         |
 | Rust      | winreg                         | 0.55.0             | MIT                                  | [source](https://github.com/gentoo90/winreg-rs)                                         |
 | Rust      | writeable                      | 0.6.2              | Unicode-3.0                          | [source](https://github.com/unicode-org/icu4x)                                          |
-| Rust      | wry                            | 0.54.2             | Apache-2.0 OR MIT                    | [source](https://github.com/tauri-apps/wry)                                             |
+| Rust      | wry                            | 0.55.1             | Apache-2.0 OR MIT                    | [source](https://github.com/tauri-apps/wry)                                             |
 | Rust      | wyz                            | 0.5.1              | MIT                                  | [source](https://github.com/myrrlyn/wyz)                                                |
 | Rust      | yoke-derive                    | 0.8.1              | Unicode-3.0                          | [source](https://github.com/unicode-org/icu4x)                                          |
 | Rust      | yoke                           | 0.8.1              | Unicode-3.0                          | [source](https://github.com/unicode-org/icu4x)                                          |
@@ -604,6 +629,8 @@ This inventory records declared license metadata; it does not replace the corres
 - Rust seahash 4.1.0 (MIT)
   Authors: ticki <ticki@users.noreply.github.com>, Tom Almeida <tom@tommoa.me>
 - Rust selectors 0.24.0 (MPL-2.0)
+  Authors: The Servo Project Developers
+- Rust selectors 0.36.1 (MPL-2.0)
   Authors: The Servo Project Developers
 - Rust specta-macros 2.0.0-rc.18 (MIT)
   Authors: Oscar Beaumont <oscar@otbeaumont.me>

@@ -18,8 +18,10 @@ transcribed text is pasted into the active application.
 - The customized binary and NSIS installer are currently supported on Windows
   x64. The MSI produced by a default local build does not implement the
   Handy_m-to-KoeTsumugi migration and is not a release artifact.
-- The current source version is 1.0.3. A rebranded binary release has not been
-  published yet.
+- The latest public Windows release is
+  [KoeTsumugi v1.0.3](https://github.com/shotaro311/KoeTsumugi/releases/tag/handy-m-v1.0.3).
+  The current development source is 1.0.4 and includes the upstream Handy
+  v0.9.5 changes; it has not been published.
 - macOS and Linux source paths remain in the repository because they come from
   the upstream codebase, but this derivative does not currently offer or claim
   verified macOS/Linux releases.
@@ -32,8 +34,9 @@ transcribed text is pasted into the active application.
   aliases or readings.
 - Each dictionary entry can independently provide a model prompt and/or
   post-transcription replacement.
-- Windows microphone recovery, paste behavior, local model download handling,
-  and long-form Cohere transcription contain additional fixes for this fork.
+- Windows default-microphone recovery, Alt+Space paste behavior, and long-form
+  Cohere transcription contain additional fixes for this fork. General model
+  downloading now follows the upstream v0.9.5 retry and mirror implementation.
 - The application name, icon, wordmark, tray/state icons, About screen, and
   installer presentation use independent KoeTsumugi branding.
 
@@ -53,7 +56,7 @@ model for commercial work.
 
 ## Install and update compatibility
 
-Future approved Windows releases will be available from the
+Approved Windows releases are available from the
 [derivative release page](https://github.com/shotaro311/KoeTsumugi/releases/latest).
 Do not use the upstream Handy download page to install KoeTsumugi.
 

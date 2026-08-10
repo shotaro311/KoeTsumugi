@@ -2,7 +2,7 @@ use log::{debug, warn};
 use serde::de::{self, Visitor};
 use serde::{Deserialize, Deserializer, Serialize};
 use specta::Type;
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::fmt;
 use tauri::AppHandle;
 use tauri_plugin_store::StoreExt;
@@ -102,6 +102,90 @@ pub struct CustomDictionaryEntry {
     pub use_in_model_prompt: bool,
     #[serde(default = "default_true")]
     pub use_in_post_process: bool,
+}
+
+#[derive(Clone, Debug, PartialEq, Eq, Hash)]
+pub struct CustomDictionaryConflict {
+    pub usage: &'static str,
+    pub normalized_trigger: String,
+    pub first_output: String,
+    pub second_output: String,
+}
+
+pub fn normalize_dictionary_trigger(value: &str) -> String {
+    value
+        .chars()
+        .filter(|c| c.is_alphanumeric())
+        .flat_map(|c| c.to_lowercase())
+        .collect()
+}
+
+pub fn custom_dictionary_conflicts(
+    entries: &[CustomDictionaryEntry],
+) -> HashSet<CustomDictionaryConflict> {
+    let mut owners: HashMap<(&'static str, String), String> = HashMap::new();
+    let mut conflicts = HashSet::new();
+
+    for entry in entries {
+        let output = entry.output.trim();
+        if output.is_empty() {
+            continue;
+        }
+
+        let usages = [
+            (entry.use_in_model_prompt, "model prompt"),
+            (entry.use_in_post_process, "post-processing"),
+        ];
+        for trigger in std::iter::once(output).chain(entry.aliases.iter().map(String::as_str)) {
+            let normalized_trigger = normalize_dictionary_trigger(trigger);
+            if normalized_trigger.is_empty() {
+                continue;
+            }
+
+            for (_, usage) in usages.iter().filter(|(enabled, _)| *enabled) {
+                let key = (*usage, normalized_trigger.clone());
+                if let Some(existing) = owners.get(&key) {
+                    if existing != output {
+                        let (first_output, second_output) = if existing.as_str() <= output {
+                            (existing.clone(), output.to_string())
+                        } else {
+                            (output.to_string(), existing.clone())
+                        };
+                        conflicts.insert(CustomDictionaryConflict {
+                            usage,
+                            normalized_trigger: normalized_trigger.clone(),
+                            first_output,
+                            second_output,
+                        });
+                    }
+                } else {
+                    owners.insert(key, output.to_string());
+                }
+            }
+        }
+    }
+
+    conflicts
+}
+
+pub fn reject_new_custom_dictionary_conflicts(
+    current: &[CustomDictionaryEntry],
+    proposed: &[CustomDictionaryEntry],
+) -> Result<(), String> {
+    let existing = custom_dictionary_conflicts(current);
+    if let Some(conflict) = custom_dictionary_conflicts(proposed)
+        .into_iter()
+        .find(|conflict| !existing.contains(conflict))
+    {
+        return Err(format!(
+            "Dictionary trigger '{}' is assigned to both '{}' and '{}' for {}",
+            conflict.normalized_trigger,
+            conflict.first_output,
+            conflict.second_output,
+            conflict.usage
+        ));
+    }
+    Ok(())
 }
 
 #[derive(Deserialize)]
@@ -439,6 +523,10 @@ pub struct AppSettings {
     pub always_on_microphone: bool,
     #[serde(default)]
     pub selected_microphone: Option<String>,
+    /// Which input channel to use on the selected microphone device.
+    /// None means "average all channels" (original behavior).
+    #[serde(default)]
+    pub selected_channel: Option<u16>,
     #[serde(default)]
     pub clamshell_microphone: Option<String>,
     #[serde(default)]
@@ -505,6 +593,11 @@ pub struct AppSettings {
     pub paste_delay_ms: u64,
     #[serde(default = "default_paste_delay_after_ms")]
     pub paste_delay_after_ms: u64,
+    /// Debug-gated ("beta") receipt-sequenced paste: restore the clipboard only
+    /// after the target app actually reads the transcript, instead of after a
+    /// fixed delay. See `paste_tx`. macOS and Windows only.
+    #[serde(default)]
+    pub reliable_paste: bool,
     #[serde(default = "default_typing_tool")]
     pub typing_tool: TypingTool,
     #[serde(default)]
@@ -918,6 +1011,7 @@ pub fn get_default_settings() -> AppSettings {
         onboarding_completed: false,
         always_on_microphone: true,
         selected_microphone: None,
+        selected_channel: None,
         clamshell_microphone: None,
         selected_output_device: None,
         translate_to_english: false,
@@ -951,6 +1045,7 @@ pub fn get_default_settings() -> AppSettings {
         show_tray_icon: default_show_tray_icon(),
         paste_delay_ms: default_paste_delay_ms(),
         paste_delay_after_ms: default_paste_delay_after_ms(),
+        reliable_paste: false,
         typing_tool: default_typing_tool(),
         external_script_path: None,
         custom_filler_words: None,
@@ -1362,6 +1457,48 @@ mod tests {
         assert!(salvaged.custom_words[0].aliases.is_empty());
         assert!(salvaged.custom_words[0].use_in_model_prompt);
         assert!(salvaged.custom_words[0].use_in_post_process);
+    }
+
+    fn dictionary_entry(output: &str, aliases: &[&str]) -> CustomDictionaryEntry {
+        CustomDictionaryEntry {
+            output: output.to_string(),
+            aliases: aliases.iter().map(|alias| alias.to_string()).collect(),
+            use_in_model_prompt: true,
+            use_in_post_process: true,
+        }
+    }
+
+    #[test]
+    fn dictionary_conflicts_use_normalized_triggers() {
+        let entries = vec![
+            dictionary_entry("OpenAI", &["open ai"]),
+            dictionary_entry("OpenEye", &["open-ai"]),
+        ];
+        let conflicts = custom_dictionary_conflicts(&entries);
+        assert!(conflicts.iter().any(|conflict| {
+            conflict.normalized_trigger == "openai" && conflict.usage == "post-processing"
+        }));
+    }
+
+    #[test]
+    fn unchanged_legacy_dictionary_conflicts_can_be_repaired_incrementally() {
+        let current = vec![
+            dictionary_entry("Claude", &["クロード"]),
+            dictionary_entry("Cloud", &["クロード"]),
+        ];
+        let mut proposed = current.clone();
+        proposed.push(dictionary_entry("ChatGPT", &["チャットジーピーティー"]));
+        assert!(reject_new_custom_dictionary_conflicts(&current, &proposed).is_ok());
+    }
+
+    #[test]
+    fn new_dictionary_conflicts_are_rejected() {
+        let current = vec![dictionary_entry("OpenAI", &["オープンエーアイ"])];
+        let proposed = vec![
+            dictionary_entry("OpenAI", &["オープンエーアイ"]),
+            dictionary_entry("OpenEye", &["オープンエーアイ"]),
+        ];
+        assert!(reject_new_custom_dictionary_conflicts(&current, &proposed).is_err());
     }
 
     #[test]

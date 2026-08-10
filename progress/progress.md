@@ -1,6 +1,6 @@
 ---
 project_slug: handy-m
-updated: 2026-08-08
+updated: 2026-08-10
 updated_by: codex
 status: active
 ---
@@ -14,9 +14,11 @@ status: active
 
 ## 最新の検証済み状態
 
+- 2026-08-10: 最終1.0.4署名付きNSISは21,304,208 bytes（SHA-256 `C115F8F08D9048FC0C0F7C723CECC7761AD49F736F573E0730189B024E2DA28B`）でupdater署名検証済み。1.0.3から1.0.4へ実更新し、app data 18ファイル、設定、履歴DB、録音15件のhash一致、自動起動/shortcut、更新後起動を確認。旧`Handy_m`自動起動登録の残留も修正した。push/commit/releaseは未実施。
+- 2026-08-10: 公式Handyの最新releaseがv0.9.5（`db003f3`）であることを再確認し、KoeTsumugi 1.0.4開発版へ`--no-commit` merge。公式のdownload retry/mirror、reliable paste、入力channel、capture worker復旧などを取り込み、構造化日本語辞書、Cohere長文、Windows既定マイク変更、Alt+Space、独自ブランド/ID/updaterを維持した。辞書はUnicode境界、長い日本語alias優先、曖昧triggerのfail-safe無視、新規競合の保存拒否、後処理panic時の原文復帰を追加。frontend lint/build、23言語447 key、配布URLtest、Windows x64 license inventory 567 package、Rust test 200件、通常Clippy、formatを確認。Rust 1.96の厳格`-D warnings`は公式由来の既存警告で未通過。署名付きNSIS 21,300,357 bytes（SHA-256 `72ED620F148826178FAE95011CDA3D63E0DF5ED364CD269A6658AFB76F143854`）を生成し、埋め込み公開鍵でupdater署名を独立検証。bundle内の`koetsumugi.exe`、独自素材、法的資料4件を確認した。installer実更新、push/commit/releaseは未実施。Note下書きはKoeTsumugiの非公式性と独自辞書を明確化し、正しいlatest releaseリンクを保存・再読込確認したが未公開。
 - 2026-08-09: 停止したKoeTsumugi 1.0.3移行作業を現worktreeの`codex/koetsumugi-1.0.3-acceptance`へ再現。前worktreeの変更対象166ファイルをhash照合し、license資料4件は現時刻で再生成した。format/lint/frontend build/21言語、Windows依存542 package・本文285種、Rust test 142件、Clippy、release CLI/device列挙、NSIS内の旧Handy_m移行処理と法的資料5件を確認。最終NSIS 21,171,481 bytes（SHA-256 `FE9ABE4F5531FDD526E75789DFC2EDFD8C2F7EA75A1B294C33B4868620423B42`）のupdater署名を独立検証した。既存アプリへの再インストールは行わず、インストール済み1.0.3、旧binary/登録/shortcut除去、KoeTsumugi shortcut/autostart/uninstall、履歴・録音15件・model 2件保持をreadback。設定差分は更新後の`whats_new_last_seen_version`だけ。Windows NSISはupload可、MSI/macOSは不可と最終受入した。外部変更は未実施。
 - 2026-08-08: ユーザー承認の段階移行をKoeTsumugi 1.0.3として実装。表示名/実行ファイル/UI/About/README/NSISを独自化し、`com.shotaro.handym`、updater鍵・endpoint、設定/モデル保存先を維持。独自通知音、GigaAM語彙の固定revision/hash、Windows x64依存542 packageのinventoryとlicense本文束を整備。format/lint/build/translation、Rust test 142件/Clippy、署名付きNSISと署名検証を完了。インストール済み1.0.2から実更新し、設定/履歴/録音/モデル、shortcut/autostart/uninstall登録、更新後起動を確認。外部変更は未実施。
-- 2026-07-16: [`Handy_m v1.0.2`](https://github.com/shotaro311/Handy/releases/tag/handy-m-v1.0.2)を公開。release workflow `29506603157`は全job成功。公開NSIS・MSIのupdater署名を独立検証し、`latest.json`のversion 1.0.2、Windows x64のNSIS/MSI target、asset API経路のbinary hash一致を確認。
+- 2026-07-16: [`Handy_m v1.0.2`](https://github.com/shotaro311/KoeTsumugi/releases/tag/handy-m-v1.0.2)を公開。release workflow `29506603157`は全job成功。公開NSIS・MSIのupdater署名を独立検証し、`latest.json`のversion 1.0.2、Windows x64のNSIS/MSI target、asset API経路のbinary hash一致を確認。
 - 2026-07-16: VADオンのCohere長文で文章が省かれる問題を修正。Cohereだけ30秒以下へ低エネルギー境界で非重複分割し、truncation時は20秒以下へ再試行する。57.6秒・120.8秒・300.9秒の番号付き日本語TTSで全4/9/23区間、順序、重複なし、末尾文を確認。旧single-shotは1/2/5分相当で3/4/4区間までだった。Rust test 142件、Clippy、frontend lint/build、21言語、release build、インストール先hash一致、起動・マイク初期化を確認。環境変数でCohereだけ旧動作へ戻せる。
 - 2026-07-15: WindowsでOSの既定マイクを切り替えた後、Handy_mが古い常時オン入力ストリームを保持する問題を修正。録音開始時にWASAPIエンドポイントIDとCPALストリーム健全性を確認し、変更・切断時だけ自動再生成する。音声コールバック停止中も50ms周期で終了指示を処理する。Rust test 132件、Clippy、frontend lint/build、21言語、release build、インストール先hash一致、起動・マイク初期化・最初の音声チャンクを確認。
 - 2026-07-14: WindowsのAlt+Space音声入力で、ブラウザがAlt単独操作としてメニューフォーカスへ移る問題を修正。割り当てを変えず、Alt+Space検出時だけAlt単独扱いを抑止する。Chrome実入力欄でフォーカス維持と`HANDY_FIXED_PASTE_OK`の貼り付け、抑止ログ、ローカル本番buildのインストールを確認。
@@ -24,10 +26,10 @@ status: active
 - 2026-07-14: ローカル辞書候補画面で各候補の別名・読みを編集可能にした。変更はブラウザへ保存され、検索、コピー結果、登録用JSONへ反映。重複・空白・正しい表記と同一の読みは保存時に除去する。
 - 2026-07-14: 辞書候補29件をワンクリックで除外指定できるローカルHTMLを`docs/custom-dictionary-review.html`へ追加。選択の自動保存、検索、表示絞り込み、除外結果のコピー、登録用JSON保存を実装し、構文・整形・候補データを検証。
 - 2026-07-14: 最近3日分の利用記録と現在の辞書を基に、誤認識しやすい固有名詞29件を`docs/custom-dictionary-candidates.md`へ整理。`[x]`を除外指定とし、既存の`ChatGPT`登録との重複や一般語を巻き込む危険なaliasを避けた。
-- 2026-07-13: [`Handy_m v1.0.1`](https://github.com/shotaro311/Handy/releases/tag/handy-m-v1.0.1)を公開。release workflow `29222247004`は全job成功し、公開NSISのSHA-256とupdater署名を独立検証。インストール済み1.0.0で「アップデートあり」の表示まで確認。
+- 2026-07-13: [`Handy_m v1.0.1`](https://github.com/shotaro311/KoeTsumugi/releases/tag/handy-m-v1.0.1)を公開。release workflow `29222247004`は全job成功し、公開NSISのSHA-256とupdater署名を独立検証。インストール済み1.0.0で「アップデートあり」の表示まで確認。
 - 2026-07-13: Handy_m 1.0.1としてWindowsのHugging Faceモデル取得を安定化。reqwest既定経路でWinSock 10054が再現し、WindowsのみIPv4 + HTTP/1.1へ固定すると連続通信試験とWhisper Medium 831,538,144 bytesの実ダウンロードが成功。
 - 2026-07-13: 一時的なHugging Face通信失敗を最大4回再試行し、並列数を4へ抑制、同一モデルの重複要求を集約。frontend、21言語、`cargo check`、Rust unit test 123件、署名付きMSI/NSIS build、1.0.1起動・応答を検証。
-- 2026-07-13: GitHub Actions Secrets登録と`shotaro/custom`のpushを完了し、[`handy-m-v1.0.0`](https://github.com/shotaro311/Handy/releases/tag/handy-m-v1.0.0)を公開。release workflow `29218527825` は約30分で成功。
+- 2026-07-13: GitHub Actions Secrets登録と`shotaro/custom`のpushを完了し、[`handy-m-v1.0.0`](https://github.com/shotaro311/KoeTsumugi/releases/tag/handy-m-v1.0.0)を公開。release workflow `29218527825` は約30分で成功。
 - 2026-07-13: 公開`latest.json`はHTTP 200、version 1.0.0、Windows x64 NSIS/MSI targetと署名を保持。NSIS downloadは`application/octet-stream`で20,881,530 bytes、公開鍵によるminisign検証に成功。
 - 2026-07-13: Handy_m専用の更新経路を実装。独立version `1.0.0`、専用GitHub Releases endpoint、専用updater署名鍵、アプリ内download/install/relaunch、Windows x64公開workflowを整備。
 - 2026-07-13: 署名付きrelease buildに成功し、MSI/NSISと両方のTauri updater `.sig`を生成。`handy.exe` 1.0.0の起動・応答、Vulkan 3デバイスとCPU backend初期化を確認。
@@ -45,7 +47,7 @@ status: active
 
 ## 進行中
 
-- 人物の横顔からテキストが出る円形メダリオン案を正式アイコンとして選定・反映済み。`KoeFumi` / `コエフミ` は既存商品との完全一致と近接カテゴリの類似名が判明したためrenameせず、最終名称は再選定待ち。
+- `codex/upstream-v0.9.5`上でKoeTsumugi 1.0.4の未commit mergeを検証中。source、署名付きWindows NSIS、1.0.3からの実更新、データ/登録保持、更新後起動は検証済み。push/releaseは未実施。
 - KoeTsumugi 1.0.3のsourceとWindows NSISはreview/upload可能。実更新、データ保持、旧登録移行、更新後起動まで確認済み。full uninstall/rollback、Windows Authenticode、正式な商標クリアランスは未完了。MSIとmacOSは公開対象外。
 - Windows実機: VADオンのCohereで5分程度の自然発話をホットキーから録音し、履歴保存と実利用アプリへの貼り付けまで確認する。保存済み音声と番号付きTTSのheadless検証、インストール済みbinaryの起動は確認済み。
 - Windows実機: OSの既定マイクを別エンドポイントへ切り替え、設定画面で再選択せず次の録音が自動復旧することを確認する。自動判定・再生成の単体テストと現在のマイクでの起動は確認済み。
@@ -54,6 +56,8 @@ status: active
 
 ## 次アクション
 
+- 1.0.4の検証済み変更を`shotaro/custom`へ反映・pushし、Windows NSIS release workflowの成功と公開updater metadata/binary/署名をreadbackする。
+- 前回監査で確認した既存辞書の曖昧trigger 2件は、設定画面で意図する表記を選び片方のaliasを修正する。1.0.4では曖昧なままでも登録順による誤置換はせず、そのtriggerだけ無視する。
 - Windows binary公開前に、必要ならfull uninstall/rollbackを追加検証する。公開操作はsource push、Windows NSIS releaseとも別途明示承認後に行う。
 - macOS配布前にライセンス不明の `tauri-nspanel 2.1.0` を解決する。
 - VADオンのCohereで実際の長文を録音し、文章欠落、境界重複、停止後待ち時間、最終貼り付けを確認する。問題があれば `HANDY_DISABLE_COHERE_LONG_FORM_CHUNKING=1` を設定して再起動し、旧single-shotへ戻す。
@@ -65,7 +69,8 @@ status: active
 
 ## Blocker / Risk
 
-- 現公開fork/releaseは旧表示と旧アイコンのまま。ローカルsourceは独自化済みだが未pushであり、既存公開releaseをKoeTsumugi公開済みとは扱わない。
+- 公開中のKoeTsumugi v1.0.3は引き続き現行版。1.0.4はsource、NSIS、updater署名、既存環境への実更新受入まで完了し、Windows NSISは公開可。release workflowは明示的な手動実行専用。
+- Rust 1.96の`cargo clippy -- -D warnings`は公式v0.9.5由来の既存警告で失敗する。通常Clippyは完了し、今回追加した辞書コードの警告は解消済み。CIのRust版または公式側修正に合わせて厳格化を再確認する。
 - 1.0.2から1.0.3へのNSIS実更新は成功したが、full uninstall/rollbackは未実施。更新前退避は `C:\Users\shotaro\.codex\backups\koetsumugi-migration-20260808-180030` に保持する。
 - `tauri-nspanel 2.1.0`のlicense不明はmacOS配布ブロッカー。Windows targetには含まれない。GigaAM語彙と通知WAVの由来問題は解消済み。
 - Windows dependency本文束は542 package中486 packageから285 unique textを収集。package-local本文がない56 packageは宣言・source・authorsを保持しているがrelease review対象として残る。
@@ -89,6 +94,7 @@ status: active
 
 ## 詳細ログ
 
+- [2026-08-10](2026-08/2026-08-10_handy-m.md)
 - [2026-08-09](2026-08/2026-08-09_handy-m.md)
 - [2026-08-08](2026-08/2026-08-08_handy-m.md)
 - [2026-07-16](2026-07/2026-07-16_handy-m.md)
@@ -107,6 +113,8 @@ status: active
 
 ## 最近の更新
 
+- 2026-08-10: 1.0.3から1.0.4へWindows NSIS実更新し、データ/登録保持、更新後起動、旧Handy_m自動起動登録の除去まで確認。push/releaseは未実施。
+- 2026-08-10: 公式Handy v0.9.5をKoeTsumugi 1.0.4開発版へ統合し、構造化辞書のUnicode/競合安全性、独自mic/Alt+Space/Cohere改善、独立配布経路を維持。source、署名付きNSIS、updater署名とNote下書きの事実修正まで完了し、install/push/release/Note公開は未実施。
 - 2026-08-09: KoeTsumugi 1.0.3差分を新worktreeへ完全移行し、現sourceから最終署名NSISを再生成・独立検証。インストール済み状態と退避データをreadbackし、Windows NSISをupload可と最終受入。push/release/installは未実施。
 - 2026-08-08: 声を直接イメージできる新アイコン案をVoice Pearl、Breath Ribbon、Resonance Bloomの3方向で生成。名称候補KoeFumi、KoeLume、OtoLoomとともに選択待ち。現行アプリは未変更。
 - 2026-08-08: 横顔の開いた口からテキスト行が出るアイコン案を、青色グラデーション、暖色フラット、円形メダリオンの3方向で追加。現行アプリは未変更。

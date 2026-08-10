@@ -15,13 +15,6 @@ unofficial forks. This derivative uses independently created branding. The
 upstream project is named here only to identify the source of the MIT-licensed
 code.
 
-## Vendored source
-
-- `src-tauri/vendor/hf-hub` is derived from `cjpais/hf-hub` commit
-  `63b60347570622bf898f49e7f10c2429b8dd21b6` and is licensed under
-  Apache-2.0. Its complete license is retained at
-  `src-tauri/vendor/hf-hub/LICENSE`.
-
 ## Bundled model assets
 
 - `src-tauri/resources/models/silero_vad_v4.onnx` is a Silero VAD model. The
@@ -60,9 +53,9 @@ bun run licenses:inventory
 The same command also generates `THIRD_PARTY_LICENSE_TEXTS.txt` from
 package-local license, copying, and notice files and synchronizes both files
 into the Windows bundle resources. The current Windows x64 inventory contains
-542 Rust and JavaScript packages, no unknown license declarations, 285 unique
-collected license/notice texts, and 56 Rust packages without a package-local
-license file. Those 56 retain their declared license expression, source URL,
+567 Rust and JavaScript packages, no unknown license declarations, 289 unique
+collected license/notice texts, and 57 packages without a package-local license
+file. Those 57 retain their declared license expression, source URL,
 and manifest authors in the inventory and remain visible for release review.
 
 The all-platform dependency review separately flags `tauri-nspanel` 2.1.0. Its package manifest does

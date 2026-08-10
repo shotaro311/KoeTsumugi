@@ -61,6 +61,38 @@ const localizedAbout = {
   },
 };
 
+const sharedDictionarySafety = {
+  triggerConflict:
+    '"{{trigger}}" conflicts between "{{first}}" and "{{second}}" for {{usage}}.',
+  conflictUsage: {
+    model: "model prompt",
+    postProcess: "post-processing",
+  },
+};
+
+const localizedDictionarySafety = {
+  en: sharedDictionarySafety,
+  ja: {
+    triggerConflict:
+      "「{{trigger}}」が「{{first}}」と「{{second}}」の両方で{{usage}}に使われています。別の読みを指定してください。",
+    conflictUsage: {
+      model: "モデル用ヒント",
+      postProcess: "後処理置換",
+    },
+  },
+};
+
+const englishTranslation = replaceBrand(
+  JSON.parse(
+    await readFile(
+      path.join(localesDirectory, "en", "translation.json"),
+      "utf8",
+    ),
+  ),
+);
+const structuredDictionaryFallback =
+  englishTranslation.settings.advanced.customWords;
+
 for (const localeEntry of await readdir(localesDirectory, {
   withFileTypes: true,
 })) {
@@ -75,6 +107,13 @@ for (const localeEntry of await readdir(localesDirectory, {
   const about = localizedAbout[localeEntry.name] ?? sharedAbout;
   translation.settings.about.derivativeStatus = about.derivativeStatus;
   translation.settings.about.sourceCode = about.sourceCode;
+  const dictionarySafety =
+    localizedDictionarySafety[localeEntry.name] ?? sharedDictionarySafety;
+  translation.settings.advanced.customWords = {
+    ...structuredDictionaryFallback,
+    ...translation.settings.advanced.customWords,
+    ...dictionarySafety,
+  };
   await writeFile(
     translationPath,
     `${JSON.stringify(translation, null, 2)}\n`,

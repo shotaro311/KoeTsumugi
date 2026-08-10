@@ -159,10 +159,41 @@ function Save-TranscribingIcon([string]$Path, [bool]$Monochrome, [bool]$Dark) {
     }
 }
 
+function Save-WarningIcon([string]$SourcePath, [string]$Path) {
+    $source = [System.Drawing.Image]::FromFile($SourcePath)
+    $bitmap = New-Canvas
+    $graphics = New-Graphics $bitmap
+    try {
+        $graphics.DrawImage($source, 0, 0, 64, 64)
+        $badgeBrush = [System.Drawing.SolidBrush]::new(
+            [System.Drawing.ColorTranslator]::FromHtml("#FFB84D")
+        )
+        $markPen = New-RoundedPen ([System.Drawing.ColorTranslator]::FromHtml("#292230")) 3
+        try {
+            $graphics.FillEllipse($badgeBrush, 42, 2, 20, 20)
+            $graphics.DrawLine($markPen, 52, 7, 52, 14)
+            $graphics.DrawLine($markPen, 52, 18, 52, 18)
+        }
+        finally {
+            $badgeBrush.Dispose()
+            $markPen.Dispose()
+        }
+        $bitmap.Save($Path, [System.Drawing.Imaging.ImageFormat]::Png)
+    }
+    finally {
+        $graphics.Dispose()
+        $bitmap.Dispose()
+        $source.Dispose()
+    }
+}
+
 New-Item -ItemType Directory -Force -Path $OutputDirectory | Out-Null
 Save-ScaledIcon (Join-Path $OutputDirectory "app_idle.png")
 Save-BrandIcon (Join-Path $OutputDirectory "tray_idle.png") $true $false
 Save-BrandIcon (Join-Path $OutputDirectory "tray_idle_dark.png") $true $true
+Save-WarningIcon (Join-Path $OutputDirectory "tray_idle.png") (Join-Path $OutputDirectory "tray_idle_warning.png")
+Save-WarningIcon (Join-Path $OutputDirectory "tray_idle_dark.png") (Join-Path $OutputDirectory "tray_idle_warning_dark.png")
+Save-WarningIcon (Join-Path $OutputDirectory "app_idle.png") (Join-Path $OutputDirectory "app_idle_warning.png")
 Save-RecordingIcon (Join-Path $OutputDirectory "recording.png") $false $false
 Save-RecordingIcon (Join-Path $OutputDirectory "tray_recording.png") $true $false
 Save-RecordingIcon (Join-Path $OutputDirectory "tray_recording_dark.png") $true $true

@@ -20,7 +20,6 @@ const files = [
     "docs/generated/THIRD_PARTY_LICENSE_TEXTS.txt",
     "THIRD_PARTY_LICENSE_TEXTS.txt",
   ],
-  ["src-tauri/vendor/hf-hub/LICENSE", "HF_HUB_APACHE_2_0_LICENSE.txt"],
 ];
 
 await mkdir(legalDirectory, { recursive: true });

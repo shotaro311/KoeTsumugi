@@ -60,8 +60,13 @@ Windows x64 build and package audit succeed.
 ```powershell
 $keyPath = Join-Path $env:USERPROFILE ".tauri\handy-m.key"
 $credentialPath = Join-Path $env:USERPROFILE ".tauri\handy-m.key.password.clixml"
-$credential = Import-Clixml -LiteralPath $credentialPath
-$env:TAURI_SIGNING_PRIVATE_KEY_PASSWORD = $credential.GetNetworkCredential().Password
+$storedSecret = Import-Clixml -LiteralPath $credentialPath
+$securePassword = if ($storedSecret -is [System.Security.SecureString]) {
+    $storedSecret
+} else {
+    $storedSecret.Password
+}
+$env:TAURI_SIGNING_PRIVATE_KEY_PASSWORD = [System.Net.NetworkCredential]::new("", $securePassword).Password
 $env:TAURI_SIGNING_PRIVATE_KEY = Get-Content -Raw -LiteralPath $keyPath
 $env:LIBCLANG_PATH = "C:\Program Files\LLVM\bin"
 $env:VULKAN_SDK = "C:\VulkanSDK\1.4.350.0"

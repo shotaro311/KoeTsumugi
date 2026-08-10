@@ -835,6 +835,7 @@ Section Install
       DeleteRegKey SHCTX "${LEGACYUNINSTKEY}"
       DeleteRegKey SHCTX "${LEGACYMANUPRODUCTKEY}"
     ${EndIf}
+    Call RemoveStaleLegacyAutostart
 
     ${GetSize} "$INSTDIR" "/M=uninstall.exe /S=0K /G=0" $0 $1 $2
     IntOp $0 $0 + ${ESTIMATEDSIZE}
@@ -1082,6 +1083,17 @@ Function MigrateLegacyAutostart
     WriteRegStr HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "${PRODUCTNAME}" '$"$INSTDIR\${MAINBINARYNAME}.exe$"'
     DeleteRegValue HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "${LEGACYPRODUCTNAME}"
     DeleteRegValue HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "Handy"
+  ${EndIf}
+FunctionEnd
+
+Function RemoveStaleLegacyAutostart
+  ; Earlier KoeTsumugi installers could leave a Handy_m Run value after
+  ; the product registry had already migrated. Remove the old product-specific
+  ; value only when the current KoeTsumugi value is enabled, without changing
+  ; the user's current autostart preference or a separate official Handy entry.
+  ReadRegStr $4 HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "${PRODUCTNAME}"
+  ${If} $4 != ""
+    DeleteRegValue HKCU "Software\Microsoft\Windows\CurrentVersion\Run" "${LEGACYPRODUCTNAME}"
   ${EndIf}
 FunctionEnd
 

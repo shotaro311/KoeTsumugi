@@ -21,7 +21,59 @@ const splitAliases = (value: string) =>
     .map((alias) => sanitizeText(alias))
     .filter(Boolean);
 
-const normalizeKey = (value: string) => sanitizeText(value).toLowerCase();
+const normalizeKey = (value: string) =>
+  Array.from(sanitizeText(value).toLowerCase())
+    .filter((character) => /[\p{L}\p{N}]/u.test(character))
+    .join("");
+
+interface DictionaryConflict {
+  signature: string;
+  trigger: string;
+  firstOutput: string;
+  secondOutput: string;
+  usage: "model" | "postProcess";
+}
+
+const findDictionaryConflicts = (entries: CustomDictionaryEntry[]) => {
+  const owners = new Map<string, { output: string; trigger: string }>();
+  const conflicts = new Map<string, DictionaryConflict>();
+
+  for (const entry of entries) {
+    const usages: DictionaryConflict["usage"][] = [];
+    if (entry.use_in_model_prompt) usages.push("model");
+    if (entry.use_in_post_process) usages.push("postProcess");
+
+    for (const trigger of [entry.output, ...entry.aliases]) {
+      const normalized = normalizeKey(trigger);
+      if (!normalized) continue;
+
+      for (const usage of usages) {
+        const ownerKey = `${usage}:${normalized}`;
+        const existing = owners.get(ownerKey);
+        if (!existing) {
+          owners.set(ownerKey, { output: entry.output, trigger });
+          continue;
+        }
+        if (existing.output === entry.output) continue;
+
+        const [firstOutput, secondOutput] = [
+          existing.output,
+          entry.output,
+        ].sort((left, right) => left.localeCompare(right));
+        const signature = `${ownerKey}:${firstOutput}:${secondOutput}`;
+        conflicts.set(signature, {
+          signature,
+          trigger,
+          firstOutput,
+          secondOutput,
+          usage,
+        });
+      }
+    }
+  }
+
+  return conflicts;
+};
 
 export const CustomWords: React.FC<CustomWordsProps> = React.memo(
   ({ descriptionMode = "tooltip", grouped = false }) => {
@@ -110,6 +162,24 @@ export const CustomWords: React.FC<CustomWordsProps> = React.memo(
           : customWords.map((entry, index) =>
               index === editingIndex ? nextEntry : entry,
             );
+
+      const existingConflicts = findDictionaryConflicts(customWords);
+      const newConflict = Array.from(
+        findDictionaryConflicts(nextEntries).values(),
+      ).find((conflict) => !existingConflicts.has(conflict.signature));
+      if (newConflict) {
+        toast.error(
+          t("settings.advanced.customWords.triggerConflict", {
+            trigger: newConflict.trigger,
+            first: newConflict.firstOutput,
+            second: newConflict.secondOutput,
+            usage: t(
+              `settings.advanced.customWords.conflictUsage.${newConflict.usage}`,
+            ),
+          }),
+        );
+        return;
+      }
 
       updateSetting("custom_words", nextEntries);
       resetForm();
