@@ -117,7 +117,7 @@ jobs:
     with:
       platform: macos-26
       target: aarch64-apple-darwin
-      build-args: "--config src-tauri/tauri.updater.conf.json --target aarch64-apple-darwin --bundles dmg"
+      build-args: "--config src-tauri/tauri.updater.conf.json --target aarch64-apple-darwin --bundles app,dmg"
       sign-binaries: true
       asset-prefix: koetsumugi
       release-id: ${{ needs.create-release.outputs.release-id }}
