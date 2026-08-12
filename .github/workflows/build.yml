@@ -690,43 +690,62 @@ jobs:
           cp "$UPDATE_ARCHIVE" "$STAGE/$ARCHIVE_NAME"
           cp "$UPDATE_SIGNATURE" "$STAGE/$SIGNATURE_NAME"
 
+          api_get() {
+            curl --fail --silent --show-error --retry 3 --retry-all-errors \
+              -H "Authorization: Bearer $GH_TOKEN" \
+              -H 'Accept: application/vnd.github+json' \
+              -H 'X-GitHub-Api-Version: 2022-11-28' \
+              "$1"
+          }
+
+          list_assets() {
+            api_get "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID/assets?per_page=100"
+          }
+
           upload_asset() {
             local file="$1"
             local name
+            local encoded_name
             local existing_id
             name=$(basename "$file")
-            existing_id=$(gh api \
-              "repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID/assets" \
-              --paginate \
-              --jq ".[] | select(.name == \"$name\") | .id" | head -1)
+            encoded_name=$(jq -rn --arg value "$name" '$value | @uri')
+            existing_id=$(list_assets | jq -r --arg name "$name" \
+              '.[] | select(.name == $name) | .id' | head -1)
             if [ -n "$existing_id" ]; then
-              gh api --method DELETE \
-                "repos/$GITHUB_REPOSITORY/releases/assets/$existing_id"
+              curl --fail --silent --show-error --retry 3 --retry-all-errors \
+                --request DELETE \
+                -H "Authorization: Bearer $GH_TOKEN" \
+                -H 'Accept: application/vnd.github+json' \
+                -H 'X-GitHub-Api-Version: 2022-11-28' \
+                "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/assets/$existing_id"
             fi
-            gh api \
-              --hostname uploads.github.com \
-              --method POST \
-              "repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID/assets?name=$name" \
+            curl --fail --silent --show-error --retry 3 --retry-all-errors \
+              --request POST \
+              -H "Authorization: Bearer $GH_TOKEN" \
               -H 'Content-Type: application/octet-stream' \
-              --input "$file" >/dev/null
+              -H 'X-GitHub-Api-Version: 2022-11-28' \
+              --data-binary "@$file" \
+              "https://uploads.github.com/repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID/assets?name=$encoded_name" \
+              >/dev/null
           }
 
           upload_asset "$STAGE/$DMG_NAME"
           upload_asset "$STAGE/$ARCHIVE_NAME"
           upload_asset "$STAGE/$SIGNATURE_NAME"
 
-          LATEST_ASSET_ID=$(gh api \
-            "repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID/assets" \
-            --paginate \
-            --jq '.[] | select(.name == "latest.json") | .id' | head -1)
+          LATEST_ASSET_ID=$(list_assets | jq -r \
+            '.[] | select(.name == "latest.json") | .id' | head -1)
           if [ -z "$LATEST_ASSET_ID" ]; then
             echo "Windows updater manifest is missing" >&2
             exit 1
           fi
 
-          gh api \
-            "repos/$GITHUB_REPOSITORY/releases/assets/$LATEST_ASSET_ID" \
-            -H 'Accept: application/octet-stream' > "$STAGE/latest.json"
+          curl --location --fail --silent --show-error --retry 3 --retry-all-errors \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H 'Accept: application/octet-stream' \
+            -H 'X-GitHub-Api-Version: 2022-11-28' \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/assets/$LATEST_ASSET_ID" \
+            > "$STAGE/latest.json"
 
           SIGNATURE=$(<"$STAGE/$SIGNATURE_NAME")
           DOWNLOAD_BASE="https://github.com/$GITHUB_REPOSITORY/releases/download/$TAG"
@@ -740,10 +759,7 @@ jobs:
 
           upload_asset "$STAGE/latest.json"
 
-          gh api \
-            "repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID/assets" \
-            --paginate \
-            --jq '.[].name' | sort
+          list_assets | jq -r '.[].name' | sort
 
       - name: Upload artifacts (macOS)
         if: inputs.upload-artifacts && contains(inputs.platform, 'macos')
