@@ -2,7 +2,7 @@
 
 ![KoeTsumugi app icon](assets/branding/app-icon-master.png)
 
-KoeTsumugi is a Windows-focused local speech-to-text application with a
+KoeTsumugi is a Windows and macOS local speech-to-text application with a
 structured Japanese custom dictionary. Press a shortcut, speak, and the
 transcribed text is pasted into the active application.
 
@@ -15,16 +15,13 @@ transcribed text is pasted into the active application.
 
 ## Current status
 
-- The customized binary and NSIS installer are currently supported on Windows
-  x64. The MSI produced by a default local build does not implement the
-  Handy_m-to-KoeTsumugi migration and is not a release artifact.
-- The latest public Windows release is
-  [KoeTsumugi v1.0.3](https://github.com/shotaro311/KoeTsumugi/releases/tag/handy-m-v1.0.3).
-  The current development source is 1.0.4 and includes the upstream Handy
-  v0.9.5 changes; it has not been published.
-- macOS and Linux source paths remain in the repository because they come from
-  the upstream codebase, but this derivative does not currently offer or claim
-  verified macOS/Linux releases.
+- Signed release binaries are supported on Windows x64 and Apple Silicon Macs
+  running macOS 11 or later. The MSI produced by a default local build does not
+  implement the Handy_m-to-KoeTsumugi migration and is not a release artifact.
+- The latest public release is available from
+  [GitHub Releases](https://github.com/shotaro311/KoeTsumugi/releases/latest).
+  Windows uses the NSIS installer. Apple Silicon Macs use the signed and
+  Apple-notarized DMG. Intel Mac and Linux binaries are not currently offered.
 - Windows Authenticode signing is not configured. Windows SmartScreen may warn
   when opening a downloaded installer.
 
@@ -56,7 +53,7 @@ model for commercial work.
 
 ## Install and update compatibility
 
-Approved Windows releases are available from the
+Approved Windows and Apple Silicon macOS releases are available from the
 [derivative release page](https://github.com/shotaro311/KoeTsumugi/releases/latest).
 Do not use the upstream Handy download page to install KoeTsumugi.
 
@@ -114,16 +111,17 @@ Dependencies, bundled resources, and downloadable speech-recognition models
 have their own terms. See [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md) and
 the generated
 [third-party license inventory](docs/generated/THIRD_PARTY_LICENSE_INVENTORY.md).
-Windows release resources also include the generated package-local
+Release resources also include the generated package-local
 [license and notice text bundle](docs/generated/THIRD_PARTY_LICENSE_TEXTS.txt).
 Do not describe the entire distribution or every downloadable model as MIT
 licensed or commercially usable.
 
 ## Known redistribution checks
 
-- `tauri-nspanel` 2.1.0 does not currently expose a license declaration in its
-  manifest or a root license file in its referenced repository. macOS
-  distribution remains blocked.
+- `tauri-nspanel` 2.1.0 does not declare a license in its package manifest, but
+  the exact locked source revision includes both MIT and Apache-2.0 license
+  files. The release inventory records the package as `MIT OR Apache-2.0` and
+  includes both texts.
 - The bundled GigaAM vocabulary is byte-identical to the fixed, MIT-declared
   source revision and is documented with its SHA-256 in
   [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).

@@ -43,7 +43,7 @@ licensed or suitable for commercial use.
 
 ## Rust and JavaScript dependencies
 
-The locked Windows x64 dependency inventory is generated at
+The locked Windows x64 and Apple Silicon macOS dependency inventory is generated at
 `docs/generated/THIRD_PARTY_LICENSE_INVENTORY.md` by running:
 
 ```shell
@@ -52,14 +52,12 @@ bun run licenses:inventory
 
 The same command also generates `THIRD_PARTY_LICENSE_TEXTS.txt` from
 package-local license, copying, and notice files and synchronizes both files
-into the Windows bundle resources. The current Windows x64 inventory contains
-567 Rust and JavaScript packages, no unknown license declarations, 289 unique
-collected license/notice texts, and 57 packages without a package-local license
-file. Those 57 retain their declared license expression, source URL,
-and manifest authors in the inventory and remain visible for release review.
+into every bundle's legal resources. The inventory retains each package's
+declared license expression, source URL, applicable release platforms, and
+package-local license or notice files for release review.
 
-The all-platform dependency review separately flags `tauri-nspanel` 2.1.0. Its package manifest does
-not declare a license and the referenced repository does not currently expose
-a root license file. It is a macOS-only dependency, so it is not expected in a
-Windows binary, but macOS redistribution must remain blocked until permission
-or an applicable license is confirmed.
+`tauri-nspanel` 2.1.0 does not declare a license expression in its package
+manifest. The exact locked source revision
+`da9c9a8d4eb7f0524a2508988df1a7d9585b4904` includes `LICENSE_MIT` and
+`LICENSE_APACHE-2.0`, which predate that revision. The release inventory
+therefore records it as `MIT OR Apache-2.0` and includes both license texts.

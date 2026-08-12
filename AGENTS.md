@@ -31,9 +31,9 @@ git merge main
 - Keep the versions in `package.json`, `src-tauri/Cargo.toml`, `src-tauri/Cargo.lock`, and `src-tauri/tauri.conf.json` synchronized. Handy_m starts at `1.0.0` and normally increments the patch version for each user-facing release.
 - Build updater artifacts with `src-tauri/tauri.updater.conf.json`; normal local builds keep updater artifact generation disabled.
 - The updater private key lives outside the repository at `%USERPROFILE%\.tauri\handy-m.key`, and its password is stored as a user-scoped DPAPI credential at `%USERPROFILE%\.tauri\handy-m.key.password.clixml`. Never print, commit, copy into progress logs, or replace either one after a release has shipped. Back them up securely because losing either one prevents updates to installed copies.
-- GitHub Actions uses the repository secrets `TAURI_SIGNING_PRIVATE_KEY` and `TAURI_SIGNING_PRIVATE_KEY_PASSWORD`.
-- Before a release, add user-facing notes under `src/content/release-notes/<version>.md`, run the standard verification commands, and confirm the Windows updater bundle and `.sig` are generated.
-- Publishing requires an explicit user confirmation for that release. After approval, push `shotaro/custom` and run `.github/workflows/handy-m-release.yml` on that branch. The workflow publishes only after the signed Windows build succeeds.
+- GitHub Actions uses `TAURI_SIGNING_PRIVATE_KEY` and `TAURI_SIGNING_PRIVATE_KEY_PASSWORD` for updater signatures. macOS releases additionally require the Apple Developer certificate and notarization secrets documented in `docs/RELEASING_KOETSUMUGI.md`.
+- Before a release, add user-facing notes under `src/content/release-notes/<version>.md`, run the standard verification commands, and confirm the Windows updater bundle and `.sig`, Apple Silicon DMG, and macOS updater archive and `.sig` are generated.
+- Publishing requires an explicit user confirmation for that release. After approval, push `shotaro/custom` and run `.github/workflows/handy-m-release.yml` on that branch. The workflow publishes only after the Windows build and the Developer ID-signed, Apple-notarized macOS build both succeed.
 
 ## Development Commands
 

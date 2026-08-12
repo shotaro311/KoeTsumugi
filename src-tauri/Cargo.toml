@@ -1,6 +1,6 @@
 [package]
 name = "koetsumugi"
-version = "1.0.4"
+version = "1.0.5"
 description = "KoeTsumugi - local speech-to-text with a structured Japanese dictionary"
 authors = ["Shotaro Matsumoto", "CJ Pais and contributors"]
 edition = "2021"

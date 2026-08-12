@@ -32,6 +32,10 @@ on:
         required: false
         type: boolean
         default: false
+      upload-release-assets:
+        required: false
+        type: boolean
+        default: true
       sign-binaries:
         required: false
         type: boolean
@@ -542,13 +546,13 @@ jobs:
           # X-AppImage-Version for desktop integration tools such as Gear Lever.
           LINUXDEPLOY_OUTPUT_VERSION: ${{ contains(inputs.platform, 'ubuntu') && steps.get-version.outputs.version || '' }}
         with:
-          tagName: ${{ inputs.release-id && format('{0}{1}', inputs.release-tag-prefix, steps.get-version.outputs.version) || '' }}
-          releaseName: ${{ inputs.release-id && format('v{0}', steps.get-version.outputs.version) || '' }}
-          releaseId: ${{ inputs.release-id }}
+          tagName: ${{ inputs.upload-release-assets && inputs.release-id && format('{0}{1}', inputs.release-tag-prefix, steps.get-version.outputs.version) || '' }}
+          releaseName: ${{ inputs.upload-release-assets && inputs.release-id && format('v{0}', steps.get-version.outputs.version) || '' }}
+          releaseId: ${{ inputs.upload-release-assets && inputs.release-id || '' }}
           releaseAssetNamePattern: ${{ steps.patch-release-name.outputs.platform }}
           updaterJsonPreferNsis: true
-          uploadUpdaterJson: ${{ inputs.release-id != '' }}
-          uploadUpdaterSignatures: ${{ inputs.release-id != '' }}
+          uploadUpdaterJson: ${{ inputs.upload-release-assets && inputs.release-id != '' }}
+          uploadUpdaterSignatures: ${{ inputs.upload-release-assets && inputs.release-id != '' }}
           tauriScript: bun tauri
           args: ${{ inputs.build-args }}
 
@@ -606,6 +610,138 @@ jobs:
               echo "OK: $libname"
             fi
           done
+
+      - name: Sign and notarize macOS disk image
+        if: contains(inputs.platform, 'macos') && inputs.sign-binaries
+        shell: bash
+        env:
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          set -euo pipefail
+          DMG=$(find src-tauri/target -path '*/bundle/dmg/*.dmg' -type f -print -quit)
+          if [ -z "$DMG" ] || [ ! -f "$DMG" ]; then
+            echo "Required macOS disk image is missing" >&2
+            exit 1
+          fi
+
+          codesign --force --timestamp --sign "$CERT_ID" "$DMG"
+          xcrun notarytool submit "$DMG" \
+            --apple-id "$APPLE_ID" \
+            --password "$APPLE_PASSWORD" \
+            --team-id "$APPLE_TEAM_ID" \
+            --wait \
+            --output-format json
+          xcrun stapler staple "$DMG"
+
+      - name: Audit signed and notarized macOS release
+        if: contains(inputs.platform, 'macos') && inputs.sign-binaries
+        shell: bash
+        run: |
+          set -euo pipefail
+          APP=$(find src-tauri/target -path '*/bundle/macos/*.app' -type d -print -quit)
+          DMG=$(find src-tauri/target -path '*/bundle/dmg/*.dmg' -type f -print -quit)
+          UPDATE_ARCHIVE=$(find src-tauri/target -path '*/bundle/macos/*.app.tar.gz' -type f -print -quit)
+          UPDATE_SIGNATURE=$(find src-tauri/target -path '*/bundle/macos/*.app.tar.gz.sig' -type f -print -quit)
+
+          for artifact in "$APP" "$DMG" "$UPDATE_ARCHIVE" "$UPDATE_SIGNATURE"; do
+            if [ -z "$artifact" ] || [ ! -e "$artifact" ]; then
+              echo "Required macOS artifact is missing: $artifact" >&2
+              exit 1
+            fi
+          done
+
+          codesign --verify --deep --strict --verbose=2 "$APP"
+          SIGNING_DETAILS=$(codesign -dv --verbose=4 "$APP" 2>&1)
+          echo "$SIGNING_DETAILS" | grep -q 'Authority=Developer ID Application:'
+          echo "$SIGNING_DETAILS" | grep -q 'TeamIdentifier='
+          xcrun stapler validate "$APP"
+          xcrun stapler validate "$DMG"
+          spctl --assess --type execute --verbose=2 "$APP"
+          spctl --assess --type open --context context:primary-signature --verbose=2 "$DMG"
+          test -s "$UPDATE_ARCHIVE"
+          test -s "$UPDATE_SIGNATURE"
+
+      - name: Upload notarized macOS release assets
+        if: contains(inputs.platform, 'macos') && inputs.sign-binaries && inputs.release-id != '' && !inputs.upload-release-assets
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          VERSION='${{ steps.get-version.outputs.version }}'
+          TAG='${{ inputs.release-tag-prefix }}${{ steps.get-version.outputs.version }}'
+          RELEASE_ID='${{ inputs.release-id }}'
+          STAGE="$RUNNER_TEMP/koetsumugi-release"
+          mkdir -p "$STAGE"
+
+          DMG=$(find src-tauri/target -path '*/bundle/dmg/*.dmg' -type f -print -quit)
+          UPDATE_ARCHIVE=$(find src-tauri/target -path '*/bundle/macos/*.app.tar.gz' -type f -print -quit)
+          UPDATE_SIGNATURE=$(find src-tauri/target -path '*/bundle/macos/*.app.tar.gz.sig' -type f -print -quit)
+
+          DMG_NAME="KoeTsumugi_${VERSION}_aarch64.dmg"
+          ARCHIVE_NAME="KoeTsumugi_${VERSION}_aarch64.app.tar.gz"
+          SIGNATURE_NAME="${ARCHIVE_NAME}.sig"
+
+          cp "$DMG" "$STAGE/$DMG_NAME"
+          cp "$UPDATE_ARCHIVE" "$STAGE/$ARCHIVE_NAME"
+          cp "$UPDATE_SIGNATURE" "$STAGE/$SIGNATURE_NAME"
+
+          upload_asset() {
+            local file="$1"
+            local name
+            local existing_id
+            name=$(basename "$file")
+            existing_id=$(gh api \
+              "repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID/assets" \
+              --paginate \
+              --jq ".[] | select(.name == \"$name\") | .id" | head -1)
+            if [ -n "$existing_id" ]; then
+              gh api --method DELETE \
+                "repos/$GITHUB_REPOSITORY/releases/assets/$existing_id"
+            fi
+            gh api \
+              --hostname uploads.github.com \
+              --method POST \
+              "repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID/assets?name=$name" \
+              -H 'Content-Type: application/octet-stream' \
+              --input "$file" >/dev/null
+          }
+
+          upload_asset "$STAGE/$DMG_NAME"
+          upload_asset "$STAGE/$ARCHIVE_NAME"
+          upload_asset "$STAGE/$SIGNATURE_NAME"
+
+          LATEST_ASSET_ID=$(gh api \
+            "repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID/assets" \
+            --paginate \
+            --jq '.[] | select(.name == "latest.json") | .id' | head -1)
+          if [ -z "$LATEST_ASSET_ID" ]; then
+            echo "Windows updater manifest is missing" >&2
+            exit 1
+          fi
+
+          gh api \
+            "repos/$GITHUB_REPOSITORY/releases/assets/$LATEST_ASSET_ID" \
+            -H 'Accept: application/octet-stream' > "$STAGE/latest.json"
+
+          SIGNATURE=$(<"$STAGE/$SIGNATURE_NAME")
+          DOWNLOAD_BASE="https://github.com/$GITHUB_REPOSITORY/releases/download/$TAG"
+          jq \
+            --arg signature "$SIGNATURE" \
+            --arg url "$DOWNLOAD_BASE/$ARCHIVE_NAME" \
+            '.platforms["darwin-aarch64"] = {signature: $signature, url: $url}
+             | .platforms["darwin-aarch64-app"] = {signature: $signature, url: $url}' \
+            "$STAGE/latest.json" > "$STAGE/latest.updated.json"
+          mv "$STAGE/latest.updated.json" "$STAGE/latest.json"
+
+          upload_asset "$STAGE/latest.json"
+
+          gh api \
+            "repos/$GITHUB_REPOSITORY/releases/$RELEASE_ID/assets" \
+            --paginate \
+            --jq '.[].name' | sort
 
       - name: Upload artifacts (macOS)
         if: inputs.upload-artifacts && contains(inputs.platform, 'macos')

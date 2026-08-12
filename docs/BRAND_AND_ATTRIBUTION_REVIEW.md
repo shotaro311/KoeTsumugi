@@ -118,13 +118,13 @@ Statements to avoid until separately verified:
   single-instance path. Full uninstall and rollback recovery remain untested.
 - The exact vocabulary provenance and notification WAV redistribution issues
   are resolved as documented in [THIRD_PARTY_NOTICES.md](../THIRD_PARTY_NOTICES.md).
-- Regenerate the Windows x64 dependency inventory and collected license-text
+- Regenerate the Windows x64 and Apple Silicon macOS dependency inventory and collected license-text
   bundle before each release. The 56 packages without package-local license
   files remain explicitly listed with their declarations and authors for
   release review.
-- Resolve `tauri-nspanel` 2.1.0 before macOS distribution. Its manifest has no
-  license declaration and its source repository currently has no root license
-  file; it is not expected to be linked into Windows builds.
+- `tauri-nspanel` 2.1.0 is resolved for redistribution: the locked source
+  revision includes both MIT and Apache-2.0 license files. Keep the manifest
+  override and bundled license texts synchronized with that pinned revision.
 - Ensure the app exposes derivative source, upstream attribution, license, and
   third-party notices without presenting upstream donation/support as support
   for the derivative.
@@ -141,6 +141,8 @@ Statements to avoid until separately verified:
   Disclose that Windows Authenticode signing and formal trademark clearance
   are not complete. Full uninstall/rollback testing is still recommended
   before presenting it as broadly validated.
-- **Windows MSI and macOS:** not approved for publication in this review. The
-  MSI lacks the legacy migration path, and the macOS-only `tauri-nspanel`
-  license remains unresolved.
+- **Windows MSI:** not approved for publication in this review because it lacks
+  the legacy migration path.
+- **Apple Silicon macOS:** publishable only when the exact DMG is Developer ID
+  signed, Apple-notarized and stapled, accepted by Gatekeeper, contains the
+  release legal bundle, and has a signed updater artifact in `latest.json`.

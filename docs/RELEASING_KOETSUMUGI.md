@@ -22,12 +22,18 @@ Windows user account that created it.
 
 ## One-time GitHub setup
 
-Create the following Actions secret in `shotaro311/KoeTsumugi`:
+Create the following Actions secrets in `shotaro311/KoeTsumugi`:
 
 - `TAURI_SIGNING_PRIVATE_KEY`: the complete contents of
   `%USERPROFILE%\.tauri\handy-m.key`
 - `TAURI_SIGNING_PRIVATE_KEY_PASSWORD`: the decrypted value stored in
   `%USERPROFILE%\.tauri\handy-m.key.password.clixml`
+- `APPLE_CERTIFICATE`: base64-encoded Developer ID Application `.p12`
+- `APPLE_CERTIFICATE_PASSWORD`: password used when exporting that `.p12`
+- `KEYCHAIN_PASSWORD`: temporary CI keychain password
+- `APPLE_ID`: Apple Developer account email
+- `APPLE_PASSWORD`: app-specific password used for notarization
+- `APPLE_TEAM_ID`: Apple Developer team identifier
 
 Do not paste either value into logs, issues, release notes, or chat messages.
 
@@ -38,7 +44,7 @@ Do not paste either value into logs, issues, release notes, or chat messages.
    `src-tauri/Cargo.lock`.
 2. Add `src/content/release-notes/<version>.md` with user-facing changes.
 3. Run formatting, lint, frontend build, translation validation, Rust tests,
-   and a signed updater build.
+   the combined Windows/macOS license inventory, and a signed updater build.
 4. Commit the release changes on `shotaro/custom`.
 5. Obtain explicit approval before push or publication.
 6. Push `shotaro/custom`, then run:
@@ -48,12 +54,17 @@ Do not paste either value into logs, issues, release notes, or chat messages.
    ```
 
 7. Confirm that the published release contains `latest.json`, the NSIS
-   installer, and its `.sig` signature. Confirm that the `windows-x86_64-nsis`
-   URL returns the installer when requested with
-   `Accept: application/octet-stream`.
+   installer and signature, the Apple Silicon DMG, and the macOS updater
+   archive and signature. Confirm that `latest.json` contains both
+   `windows-x86_64-nsis` and `darwin-aarch64` entries.
+8. Download the public DMG through an anonymous URL. Validate Developer ID
+   signing, the stapled notarization ticket, Gatekeeper acceptance, version,
+   bundle identifier, and a start-hidden runtime launch from the mounted DMG.
 
 The workflow creates a draft release first and publishes it only after the
-Windows x64 build and package audit succeed.
+Windows x64 build and the signed, notarized Apple Silicon macOS build both
+succeed. The app and DMG are notarized and stapled separately before upload.
+Missing signing credentials or release assets stop publication.
 
 ## Local signed updater build
 

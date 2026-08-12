@@ -1,6 +1,7 @@
 import { readdir, readFile, writeFile, mkdir } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import path from "node:path";
+import { format, resolveConfig } from "prettier";
 
 const projectRoot = path.resolve(import.meta.dirname, "..");
 const cargoDirectory = path.join(projectRoot, "src-tauri");
@@ -17,42 +18,70 @@ const licenseTextsPath = path.join(
   "THIRD_PARTY_LICENSE_TEXTS.txt",
 );
 
-const cargoProcess = Bun.spawnSync(
+const releaseTargets = new Map([
+  ["x86_64-pc-windows-msvc", "Windows x64"],
+  ["aarch64-apple-darwin", "macOS arm64"],
+]);
+
+const licenseOverrides = new Map([
   [
-    "cargo",
-    "metadata",
-    "--locked",
-    "--format-version",
-    "1",
-    "--filter-platform",
-    "x86_64-pc-windows-msvc",
+    "Rust:tauri-nspanel:2.1.0",
+    {
+      license: "MIT OR Apache-2.0",
+      note: "The locked source revision contains LICENSE_MIT and LICENSE_APACHE-2.0.",
+      source:
+        "https://github.com/ahkohd/tauri-nspanel/tree/da9c9a8d4eb7f0524a2508988df1a7d9585b4904",
+    },
   ],
-  {
-    cwd: cargoDirectory,
-    stdout: "pipe",
-    stderr: "inherit",
-  },
-);
+]);
 
-if (cargoProcess.exitCode !== 0) {
-  throw new Error("cargo metadata failed");
+const rustPackageMap = new Map();
+for (const [target, platformLabel] of releaseTargets) {
+  const cargoProcess = Bun.spawnSync(
+    [
+      "cargo",
+      "metadata",
+      "--locked",
+      "--format-version",
+      "1",
+      "--filter-platform",
+      target,
+    ],
+    {
+      cwd: cargoDirectory,
+      stdout: "pipe",
+      stderr: "inherit",
+    },
+  );
+
+  if (cargoProcess.exitCode !== 0) {
+    throw new Error(`cargo metadata failed for ${target}`);
+  }
+
+  const cargoMetadata = JSON.parse(cargoProcess.stdout.toString());
+  const workspaceMembers = new Set(cargoMetadata.workspace_members);
+  for (const item of cargoMetadata.packages) {
+    if (workspaceMembers.has(item.id)) continue;
+    const key = `Rust:${item.name}:${item.version}`;
+    const override = licenseOverrides.get(key);
+    const existing = rustPackageMap.get(key) ?? {
+      ecosystem: "Rust",
+      name: item.name,
+      version: item.version,
+      license: override?.license ?? item.license ?? "REVIEW REQUIRED",
+      licenseNote: override?.note ?? null,
+      authors: item.authors,
+      source:
+        override?.source ??
+        item.repository ??
+        `https://crates.io/crates/${encodeURIComponent(item.name)}/${encodeURIComponent(item.version)}`,
+      directory: path.dirname(item.manifest_path),
+      platforms: new Set(),
+    };
+    existing.platforms.add(platformLabel);
+    rustPackageMap.set(key, existing);
+  }
 }
-
-const cargoMetadata = JSON.parse(cargoProcess.stdout.toString());
-const workspaceMembers = new Set(cargoMetadata.workspace_members);
-const rustPackages = cargoMetadata.packages
-  .filter((item) => !workspaceMembers.has(item.id))
-  .map((item) => ({
-    ecosystem: "Rust",
-    name: item.name,
-    version: item.version,
-    license: item.license ?? "REVIEW REQUIRED",
-    authors: item.authors,
-    source:
-      item.repository ??
-      `https://crates.io/crates/${encodeURIComponent(item.name)}/${encodeURIComponent(item.version)}`,
-    directory: path.dirname(item.manifest_path),
-  }));
 
 const packageJsonPaths = [];
 const bunStore = path.join(projectRoot, "node_modules", ".bun");
@@ -113,6 +142,7 @@ for (const packageJsonPath of packageJsonPaths) {
     name: manifest.name,
     version: manifest.version,
     license: normalizeLicense(manifest.license ?? manifest.licenses),
+    licenseNote: null,
     authors: [
       typeof manifest.author === "string"
         ? manifest.author
@@ -123,10 +153,11 @@ for (const packageJsonPath of packageJsonPaths) {
       manifest.homepage ??
       `https://www.npmjs.com/package/${encodeURIComponent(manifest.name)}/v/${encodeURIComponent(manifest.version)}`,
     directory: path.dirname(packageJsonPath),
+    platforms: new Set(["Windows x64", "macOS arm64"]),
   });
 }
 
-const packages = [...rustPackages, ...javascriptPackages]
+const packages = [...rustPackageMap.values(), ...javascriptPackages]
   .filter(
     (item, index, all) =>
       all.findIndex(
@@ -145,6 +176,13 @@ const packages = [...rustPackages, ...javascriptPackages]
 const reviewRequired = packages.filter(
   (item) => item.license === "REVIEW REQUIRED",
 );
+if (reviewRequired.length > 0) {
+  throw new Error(
+    `Manual license review required for: ${reviewRequired
+      .map((item) => `${item.ecosystem} ${item.name} ${item.version}`)
+      .join(", ")}`,
+  );
+}
 
 const licenseFilePattern = /^(licen[cs]e|copying|notice|unlicense)([-._].*)?$/i;
 const licenseGroups = new Map();
@@ -168,6 +206,7 @@ for (const item of packages) {
       await readFile(path.join(item.directory, licenseFile.name), "utf8")
     )
       .replaceAll("\r\n", "\n")
+      .replace(/[ \t]+$/gm, "")
       .trim();
     if (!text) continue;
     const hash = createHash("sha256").update(text).digest("hex");
@@ -184,9 +223,9 @@ for (const item of packages) {
 
 const generatedAt = new Date().toISOString();
 const lines = [
-  "# Windows x64 third-party license inventory",
+  "# Windows x64 and macOS arm64 third-party license inventory",
   "",
-  `Generated from the locked Windows x64 Rust and Bun dependency trees at ${generatedAt}.`,
+  `Generated from the locked Windows x64, macOS arm64, and Bun dependency trees at ${generatedAt}.`,
   "This inventory records declared license metadata; it does not replace the corresponding license texts or a release-specific legal review.",
   "",
   `- Rust and JavaScript packages: ${packages.length}`,
@@ -194,12 +233,25 @@ const lines = [
   `- Packages with locally collected license/notice files: ${packages.length - packagesWithoutLicenseFiles.length}`,
   `- Packages without a locally collected license/notice file: ${packagesWithoutLicenseFiles.length}`,
   "",
-  "| Ecosystem | Package | Version | Declared license | Source |",
-  "| --- | --- | --- | --- | --- |",
+  "| Ecosystem | Package | Version | Release platforms | Declared license | Source |",
+  "| --- | --- | --- | --- | --- | --- |",
   ...packages.map(
     (item) =>
-      `| ${item.ecosystem} | ${item.name.replaceAll("|", "\\|")} | ${item.version} | ${item.license.replaceAll("|", "\\|")} | [source](${item.source}) |`,
+      `| ${item.ecosystem} | ${item.name.replaceAll("|", "\\|")} | ${item.version} | ${[...item.platforms].sort().join(", ")} | ${item.license.replaceAll("|", "\\|")} | [source](${item.source}) |`,
   ),
+  ...(licenseOverrides.size > 0
+    ? [
+        "",
+        "## Verified manifest license overrides",
+        "",
+        ...packages
+          .filter((item) => item.licenseNote)
+          .map(
+            (item) =>
+              `- ${item.ecosystem} ${item.name} ${item.version}: ${item.license}. ${item.licenseNote}`,
+          ),
+      ]
+    : []),
   ...(packagesWithoutLicenseFiles.length > 0
     ? [
         "",
@@ -217,12 +269,12 @@ const lines = [
 ];
 
 const licenseTextLines = [
-  "KoeTsumugi Windows x64 third-party license and notice texts",
-  `Generated at ${generatedAt} from locked Windows x64 Cargo and Bun package contents.`,
-  "See THIRD_PARTY_LICENSE_INVENTORY.md for package source URLs and declared license expressions.",
+  "KoeTsumugi Windows x64 and macOS arm64 third-party license and notice texts",
+  `Generated at ${generatedAt} from locked Windows x64, macOS arm64, and Bun package contents.`,
+  "See THIRD_PARTY_LICENSE_INVENTORY.md for package source URLs, release platforms, and declared license expressions.",
   "",
   `Packages covered by local license/notice files: ${packages.length - packagesWithoutLicenseFiles.length}`,
-  `Packages without a local license/notice file: ${packagesWithoutLicenseFiles.length}`,
+  `Packages without a package-local license file: ${packagesWithoutLicenseFiles.length}`,
   "",
   ...(packagesWithoutLicenseFiles.length > 0
     ? [
@@ -243,9 +295,17 @@ const licenseTextLines = [
 ];
 
 await mkdir(path.dirname(outputPath), { recursive: true });
-await writeFile(outputPath, lines.join("\n"), "utf8");
-await writeFile(licenseTextsPath, licenseTextLines.join("\n"), "utf8");
+
+const prettierConfig = (await resolveConfig(outputPath)) ?? {};
+const formattedInventory = await format(lines.join("\n"), {
+  ...prettierConfig,
+  parser: "markdown",
+});
+const licenseTexts = licenseTextLines.join("\n");
+
+await writeFile(outputPath, formattedInventory, "utf8");
+await writeFile(licenseTextsPath, licenseTexts, "utf8");
 
 console.log(
-  `Wrote third-party inventory and ${licenseGroups.size} unique license/notice texts for ${packages.length} packages (${reviewRequired.length} requiring review, ${packagesWithoutLicenseFiles.length} without a local text).`,
+  `Wrote release-platform inventory and ${licenseGroups.size} unique license/notice texts for ${packages.length} packages (${reviewRequired.length} requiring review, ${packagesWithoutLicenseFiles.length} without a local text).`,
 );

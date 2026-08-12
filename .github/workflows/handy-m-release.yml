@@ -42,6 +42,23 @@ jobs:
 
           echo "version=$TAURI_VERSION" >> "$GITHUB_OUTPUT"
 
+      - name: Require macOS signing and notarization secrets
+        shell: bash
+        env:
+          APPLE_CERTIFICATE: ${{ secrets.APPLE_CERTIFICATE }}
+          APPLE_CERTIFICATE_PASSWORD: ${{ secrets.APPLE_CERTIFICATE_PASSWORD }}
+          KEYCHAIN_PASSWORD: ${{ secrets.KEYCHAIN_PASSWORD }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_PASSWORD: ${{ secrets.APPLE_PASSWORD }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+        run: |
+          for name in APPLE_CERTIFICATE APPLE_CERTIFICATE_PASSWORD KEYCHAIN_PASSWORD APPLE_ID APPLE_PASSWORD APPLE_TEAM_ID; do
+            if [ -z "${!name}" ]; then
+              echo "Required macOS release secret is missing: $name" >&2
+              exit 1
+            fi
+          done
+
       - name: Create draft KoeTsumugi release
         id: create-release
         uses: actions/github-script@v9
@@ -68,7 +85,7 @@ jobs:
               tag_name: `handy-m-v${version}`,
               target_commitish: context.sha,
               name: `KoeTsumugi v${version}`,
-              body: `KoeTsumugi ${version} — an unofficial Handy derivative with an independent update channel.`,
+              body: `KoeTsumugi ${version} — an unofficial Handy derivative for Windows x64 and Apple Silicon Macs, with an independent update channel.`,
               draft: true,
               prerelease: false,
               generate_release_notes: true
@@ -92,19 +109,59 @@ jobs:
       no-cache: true
     secrets: inherit
 
-  publish-release:
+  build-macos-arm64:
     permissions:
       contents: write
     needs: [create-release, build-windows]
+    uses: ./.github/workflows/build.yml
+    with:
+      platform: macos-26
+      target: aarch64-apple-darwin
+      build-args: "--config src-tauri/tauri.updater.conf.json --target aarch64-apple-darwin --bundles dmg"
+      sign-binaries: true
+      asset-prefix: koetsumugi
+      release-id: ${{ needs.create-release.outputs.release-id }}
+      release-tag-prefix: handy-m-v
+      upload-artifacts: false
+      upload-release-assets: false
+      no-cache: true
+    secrets: inherit
+
+  publish-release:
+    permissions:
+      contents: write
+    needs: [create-release, build-windows, build-macos-arm64]
     runs-on: ubuntu-latest
     steps:
       - name: Publish completed KoeTsumugi release
         uses: actions/github-script@v9
         with:
           script: |
+            const releaseId = Number('${{ needs.create-release.outputs.release-id }}');
+            const { data: assets } = await github.rest.repos.listReleaseAssets({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              release_id: releaseId,
+              per_page: 100
+            });
+            const names = assets.map((asset) => asset.name);
+            const required = [
+              /x64-setup\.exe$/,
+              /x64-setup\.exe\.sig$/,
+              /aarch64\.dmg$/,
+              /aarch64\.app\.tar\.gz$/,
+              /aarch64\.app\.tar\.gz\.sig$/,
+              /^latest\.json$/
+            ];
+            for (const pattern of required) {
+              if (!names.some((name) => pattern.test(name))) {
+                core.setFailed(`Required release asset is missing: ${pattern}; found: ${names.join(', ')}`);
+                return;
+              }
+            }
             await github.rest.repos.updateRelease({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              release_id: Number('${{ needs.create-release.outputs.release-id }}'),
+              release_id: releaseId,
               draft: false
             });
