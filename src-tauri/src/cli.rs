@@ -38,9 +38,9 @@ pub struct CliArgs {
     #[arg(long)]
     pub model: Option<String>,
 
-    /// Hard-select the compute device for --transcribe-file by its registry
-    /// index (see --list-devices). Omit to use the persisted accelerator
-    /// setting. transcribe-cpp (whisper-family) models only.
+    /// Hard-select the transcribe-cpp compute device for this process by its
+    /// registry index (see --list-devices). This is a runtime-only override and
+    /// does not change the persisted accelerator setting.
     #[arg(long, value_name = "N")]
     pub device_index: Option<usize>,
 
@@ -60,4 +60,19 @@ pub struct CliArgs {
     /// Emit --transcribe-file results as JSON.
     #[arg(long)]
     pub json: bool,
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn device_index_can_override_the_normal_desktop_process() {
+        let args = CliArgs::try_parse_from(["koetsumugi", "--device-index", "1"])
+            .expect("runtime device override should parse");
+
+        assert_eq!(args.device_index, Some(1));
+        assert!(args.transcribe_file.is_none());
+        assert!(!args.list_devices);
+    }
 }

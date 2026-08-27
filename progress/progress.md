@@ -1,6 +1,6 @@
 ---
 project_slug: handy-m
-updated: 2026-08-12
+updated: 2026-08-27
 updated_by: codex
 status: active
 ---
@@ -14,6 +14,7 @@ status: active
 
 ## 最新の検証済み状態
 
+- 2026-08-27: Windowsのクラッシュと音声入力中断を調査。`vulkan-1.dll`の異常終了に加え、表示GPUがRTX 5070 Tiなのに音声モデル設定がRTX 5060 Tiのため、GPU追従監視が約30秒ごとにKoeTsumugiを再起動していた。通常起動の`--device-index`対応、表示GPU別モデル指定、同一PIDへの再起動1回制限、監視の多重起動防止を実装。Rust test 201件、Clippy、format、lint、frontend build、23言語447 key、release EXE、両GPUでの実推論を確認し、修正版をWindowsへローカル導入した。旧周期を越えてPID維持、新規Application Error 0件を確認。外部公開は未実施。
 - 2026-08-12: [`KoeTsumugi v1.0.5`](https://github.com/shotaro311/KoeTsumugi/releases/tag/handy-m-v1.0.5)をcommit `a1500fc`から正式公開。workflow `31579237160`は全job成功。公開DMGとappはDeveloper ID署名、Apple公証、Gatekeeperを通過し、Mac updater署名も独立検証した。公開DMGから`/Applications/KoeTsumugi.app`へ1.0.5を再導入し、既存データ28ファイル、DB v4、マイク、Metal、updater manifest、起動を確認。Note記事もMac対応へ公開更新した。
 - 2026-08-12: Macの`shotaro/custom`を公開リポジトリ移転後のcommit `a2fc387`へfast-forwardし、KoeTsumugi 1.0.4をApple Silicon向けにローカルbuildした。format、lint、frontend build、23言語447 key、Tauri release app bundleが成功。`/Applications/Handy_m.app`はゴミ箱へ移し、`/Applications/KoeTsumugi.app`へinstallした。build/install binaryのSHA-256一致、ad-hoc署名整合性、version 1.0.4、bundle ID `com.shotaro.handym`、起動中process、既存履歴DB v4、app data 28ファイル、model 491,852,915 bytes、マイク初期化、Metal/CPU backendをreadbackした。
 - 2026-08-10: [`KoeTsumugi v1.0.4`](https://github.com/shotaro311/KoeTsumugi/releases/tag/handy-m-v1.0.4)をcommit `d6eeacd`から公開。release workflow `31354337886`は全job成功。公開NSISは21,175,456 bytes（SHA-256 `C7F9A06F26BCA090002F7E16FD4597FC26F5D0502F31EC0F4D13DE38F9991601`）でGitHub asset digestと一致し、公開updater署名、`latest.json`のversion 1.0.4と`windows-x86_64-nsis`経路、asset API downloadのbinary一致を確認した。
@@ -49,6 +50,7 @@ status: active
 
 ## 進行中
 
+- Windows実機: 修正版はRTX 5070 Ti向け`--device-index 0`で稼働し、GPU追従監視も1プロセスで稼働中。新しい実音声録音は行わず、通常利用で長時間録音時の安定性を継続観察する。
 - Macローカル環境は公開DMG由来のKoeTsumugi 1.0.5へ移行済み。旧Handy_mとローカルbuild版1.0.4はゴミ箱に保持し、既存設定・履歴・録音・モデルは共通bundle IDの保存先に残している。
 - KoeTsumugi 1.0.5のsource、Windows NSIS、Apple Silicon Mac DMG、両OSのupdater metadataは公開済み。full uninstall/rollback、Windows Authenticode、正式な商標クリアランスは未完了。MSI、Intel Mac、Linuxは公開対象外。
 - Windows実機: VADオンのCohereで5分程度の自然発話をホットキーから録音し、履歴保存と実利用アプリへの貼り付けまで確認する。保存済み音声と番号付きTTSのheadless検証、インストール済みbinaryの起動は確認済み。
@@ -94,6 +96,7 @@ status: active
 
 ## 詳細ログ
 
+- [2026-08-27](2026-08/2026-08-27_handy-m.md)
 - [2026-08-12](2026-08/2026-08-12_handy-m.md)
 - [2026-08-10](2026-08/2026-08-10_handy-m.md)
 - [2026-08-09](2026-08/2026-08-09_handy-m.md)
@@ -114,6 +117,7 @@ status: active
 
 ## 最近の更新
 
+- 2026-08-27: Windowsの表示GPU追従が音声モデルGPUを切り替えず、録音中に約30秒周期でKoeTsumugiを再起動する問題を修正。通常起動のdevice override、再起動ループ防止、監視多重起動防止を実装し、両GPU実推論とローカル導入後のPID維持を確認した。
 - 2026-08-12: KoeTsumugi 1.0.5を正式公開。公開Mac DMG/appのDeveloper ID署名、Apple公証、Gatekeeper、updater署名、SHA-256を再確認し、このMacへ正式版を再導入。Note記事のMac対応案内も公開更新した。
 - 2026-08-12: KoeTsumugi 1.0.5としてApple Silicon向けDeveloper ID署名、app/DMG別公証、staple、Gatekeeper、macOS updater assetを必須化する正式配布workflowを実装。統合license台帳とローカル公証済みappを検証し、Apple配布Secret 5件を登録した。
 - 2026-08-12: Macの旧Handy_m 1.0.2をゴミ箱へ移し、公式release v1.0.4相当のKoeTsumugiをローカルbuildして`/Applications`へinstall。既存app data、履歴DB、model、マイク、Metal backend、起動状態をreadbackした。

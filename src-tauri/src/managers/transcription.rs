@@ -460,7 +460,17 @@ impl TranscriptionManager {
     }
 
     pub fn load_model(&self, model_id: &str) -> Result<()> {
-        self.load_model_with_device(model_id, None)
+        let runtime_device_index = self
+            .app_handle
+            .try_state::<crate::CliArgs>()
+            .and_then(|args| args.device_index);
+        if let Some(index) = runtime_device_index {
+            info!(
+                "Using runtime transcribe device override: registry index {}",
+                index
+            );
+        }
+        self.load_model_with_device(model_id, runtime_device_index)
     }
 
     /// Like [`load_model`](Self::load_model), but lets a caller hard-select the
