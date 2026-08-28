@@ -1,5 +1,5 @@
 KoeTsumugi Windows x64 and macOS arm64 third-party license and notice texts
-Generated at 2026-08-12T05:19:54.519Z from locked Windows x64, macOS arm64, and Bun package contents.
+Generated at 2026-08-28T03:53:14.641Z from locked Windows x64, macOS arm64, and Bun package contents.
 See THIRD_PARTY_LICENSE_INVENTORY.md for package source URLs, release platforms, and declared license expressions.
 
 Packages covered by local license/notice files: 548
@@ -8,7 +8,26 @@ Packages without a package-local license file: 85
 Packages without a package-local license file retain their declared license expression, source URL, and manifest authors in the inventory. Their license families are also represented by texts collected from other locked packages, but they remain listed for release review.
 
 ===============================================================================
-Text 1 (SHA-256 1BC86297D03201537284DC3F7BC105C8AB7B053B3372D96AB935BC54ACC7A430)
+Text 1 (SHA-256 A21C914647D33E48CB4D213DFB0749DBB45491514DA9D3A8FFC4763CF456217D)
+Files: LICENSE-0BSD
+Packages:
+- Rust adler2 2.0.1
+-------------------------------------------------------------------------------
+Copyright (C) Jonas Schievink <jonasschievink@gmail.com>
+
+Permission to use, copy, modify, and/or distribute this software for
+any purpose with or without fee is hereby granted.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN
+AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT
+OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+===============================================================================
+Text 2 (SHA-256 1BC86297D03201537284DC3F7BC105C8AB7B053B3372D96AB935BC54ACC7A430)
 Files: LICENSE-APACHE
 Packages:
 - Rust adler2 2.0.1
@@ -216,25 +235,6 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-
-===============================================================================
-Text 2 (SHA-256 A21C914647D33E48CB4D213DFB0749DBB45491514DA9D3A8FFC4763CF456217D)
-Files: LICENSE-0BSD
-Packages:
-- Rust adler2 2.0.1
--------------------------------------------------------------------------------
-Copyright (C) Jonas Schievink <jonasschievink@gmail.com>
-
-Permission to use, copy, modify, and/or distribute this software for
-any purpose with or without fee is hereby granted.
-
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
-WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
-MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
-ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
-WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN
-AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT
-OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 ===============================================================================
 Text 3 (SHA-256 30FEFC3A7D6A0041541858293BCBEA2DDE4CAA4C0A5802F996A7F7E8C0085652)
@@ -711,7 +711,41 @@ This project is dual-licensed under the Unlicense and MIT licenses.
 You may use this code under the terms of either license.
 
 ===============================================================================
-Text 7 (SHA-256 CA2ABDF695884C77EA4B4A5B64CA7B732D9D9DBADE4EEBC1C2E76C53E9E3BC83)
+Text 7 (SHA-256 154C1AF2B38E25E5C18613DFE352EED29B0863CB39E494007822CDEB39150AC5)
+Files: LICENSE-MIT
+Packages:
+- Rust aho-corasick 1.1.4
+- Rust byteorder 1.5.0
+- Rust byteorder-lite 0.1.0
+- Rust fst 0.4.7
+- Rust memchr 2.8.0
+- Rust termcolor 1.4.1
+- Rust walkdir 2.5.0
+-------------------------------------------------------------------------------
+The MIT License (MIT)
+
+Copyright (c) 2015 Andrew Gallant
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+===============================================================================
+Text 8 (SHA-256 CA2ABDF695884C77EA4B4A5B64CA7B732D9D9DBADE4EEBC1C2E76C53E9E3BC83)
 Files: UNLICENSE
 Packages:
 - Rust aho-corasick 1.1.4
@@ -748,40 +782,6 @@ ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
 OTHER DEALINGS IN THE SOFTWARE.
 
 For more information, please refer to <http://unlicense.org/>
-
-===============================================================================
-Text 8 (SHA-256 154C1AF2B38E25E5C18613DFE352EED29B0863CB39E494007822CDEB39150AC5)
-Files: LICENSE-MIT
-Packages:
-- Rust aho-corasick 1.1.4
-- Rust byteorder 1.5.0
-- Rust byteorder-lite 0.1.0
-- Rust fst 0.4.7
-- Rust memchr 2.8.0
-- Rust termcolor 1.4.1
-- Rust walkdir 2.5.0
--------------------------------------------------------------------------------
-The MIT License (MIT)
-
-Copyright (c) 2015 Andrew Gallant
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
 
 ===============================================================================
 Text 9 (SHA-256 6C91EC82929F91FFA341A9928E5C98B44767C6A1BB8D7789EDAD88D3FA5681AF)
@@ -2742,7 +2742,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 ===============================================================================
-Text 34 (SHA-256 943F36FD309FB5EA67A82F577433F4ED3BC877E5B00F9B874E2F8B7F72BF0BDC)
+Text 34 (SHA-256 DFBD1C2A36DCF9AF64E31F070485C57A51961A2767ED0A48541EC065A9C3A5F1)
+Files: LICENSE-MIT
+Packages:
+- Rust bytemuck 1.25.0
+-------------------------------------------------------------------------------
+MIT License
+
+Copyright (c) 2019 Daniel "Lokathor" Gee.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice (including the next paragraph) shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+===============================================================================
+Text 35 (SHA-256 943F36FD309FB5EA67A82F577433F4ED3BC877E5B00F9B874E2F8B7F72BF0BDC)
 Files: LICENSE-ZLIB, LICENSE-ZLIB.md
 Packages:
 - Rust bytemuck 1.25.0
@@ -2759,22 +2775,6 @@ Permission is granted to anyone to use this software for any purpose, including 
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 
 3. This notice may not be removed or altered from any source distribution.
-
-===============================================================================
-Text 35 (SHA-256 DFBD1C2A36DCF9AF64E31F070485C57A51961A2767ED0A48541EC065A9C3A5F1)
-Files: LICENSE-MIT
-Packages:
-- Rust bytemuck 1.25.0
--------------------------------------------------------------------------------
-MIT License
-
-Copyright (c) 2019 Daniel "Lokathor" Gee.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice (including the next paragraph) shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 ===============================================================================
 Text 36 (SHA-256 51F778FFFF2C0705F0392F4202C932C7C93124850CED31ABB7EEF1E937DA42C4)
@@ -4435,7 +4435,42 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 ===============================================================================
-Text 53 (SHA-256 D10FA7C720BCB4DAAD01D60873373DC82A099CB71DDE5D143E8D7F6B99325E2E)
+Text 53 (SHA-256 5A7D13C6710CDEC29E74EB3172B80712049C34099AB7259661ADA051FC90777B)
+Files: LICENSE-MIT
+Packages:
+- Rust crossbeam-channel 0.5.15
+- Rust crossbeam-utils 0.8.21
+-------------------------------------------------------------------------------
+The MIT License (MIT)
+
+Copyright (c) 2019 The Crossbeam Project Developers
+
+Permission is hereby granted, free of charge, to any
+person obtaining a copy of this software and associated
+documentation files (the "Software"), to deal in the
+Software without restriction, including without
+limitation the rights to use, copy, modify, merge,
+publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software
+is furnished to do so, subject to the following
+conditions:
+
+The above copyright notice and this permission notice
+shall be included in all copies or substantial portions
+of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF
+ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
+TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT
+SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
+IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+DEALINGS IN THE SOFTWARE.
+
+===============================================================================
+Text 54 (SHA-256 D10FA7C720BCB4DAAD01D60873373DC82A099CB71DDE5D143E8D7F6B99325E2E)
 Files: LICENSE-THIRD-PARTY
 Packages:
 - Rust crossbeam-channel 0.5.15
@@ -5033,41 +5068,6 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-
-===============================================================================
-Text 54 (SHA-256 5A7D13C6710CDEC29E74EB3172B80712049C34099AB7259661ADA051FC90777B)
-Files: LICENSE-MIT
-Packages:
-- Rust crossbeam-channel 0.5.15
-- Rust crossbeam-utils 0.8.21
--------------------------------------------------------------------------------
-The MIT License (MIT)
-
-Copyright (c) 2019 The Crossbeam Project Developers
-
-Permission is hereby granted, free of charge, to any
-person obtaining a copy of this software and associated
-documentation files (the "Software"), to deal in the
-Software without restriction, including without
-limitation the rights to use, copy, modify, merge,
-publish, distribute, sublicense, and/or sell copies of
-the Software, and to permit persons to whom the Software
-is furnished to do so, subject to the following
-conditions:
-
-The above copyright notice and this permission notice
-shall be included in all copies or substantial portions
-of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF
-ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
-TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT
-SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
-IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-DEALINGS IN THE SOFTWARE.
 
 ===============================================================================
 Text 55 (SHA-256 692B1604961DD580CFCDE8CC33D2C587F5F6349B00C449662194FB1586E850C5)
@@ -6128,40 +6128,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE
 
 ===============================================================================
-Text 74 (SHA-256 B1D6D97B0476A82862312E776BD4F2B902FB6C53E46F28166CCD2F63B17D4F8A)
-Files: LICENSE-WHATWG
-Packages:
-- Rust encoding_rs 0.8.35
--------------------------------------------------------------------------------
-Copyright © WHATWG (Apple, Google, Mozilla, Microsoft).
-
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
-
-1. Redistributions of source code must retain the above copyright notice, this
-   list of conditions and the following disclaimer.
-
-2. Redistributions in binary form must reproduce the above copyright notice,
-   this list of conditions and the following disclaimer in the documentation
-   and/or other materials provided with the distribution.
-
-3. Neither the name of the copyright holder nor the names of its
-   contributors may be used to endorse or promote products derived from
-   this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-===============================================================================
-Text 75 (SHA-256 7DC2F64024477C92B147AE4A93BBCEF90031B33BA0DE6A84BD570D59E6C0688B)
+Text 74 (SHA-256 7DC2F64024477C92B147AE4A93BBCEF90031B33BA0DE6A84BD570D59E6C0688B)
 Files: LICENSE-MIT
 Packages:
 - Rust encoding_rs 0.8.35
@@ -6192,6 +6159,39 @@ CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR
 IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
+
+===============================================================================
+Text 75 (SHA-256 B1D6D97B0476A82862312E776BD4F2B902FB6C53E46F28166CCD2F63B17D4F8A)
+Files: LICENSE-WHATWG
+Packages:
+- Rust encoding_rs 0.8.35
+-------------------------------------------------------------------------------
+Copyright © WHATWG (Apple, Google, Mozilla, Microsoft).
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ===============================================================================
 Text 76 (SHA-256 46C7AFC75C51F09B8BF9F168AB935760B02F5A612D84CE3785115F8887F07AF6)
@@ -7300,33 +7300,7 @@ IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 
 ===============================================================================
-Text 100 (SHA-256 3B3A242FA1704327A51563C614C1043DEAB014F58EBBBDD173262C990104497E)
-Files: LICENSE.spdx
-Packages:
-- Rust global-hotkey 0.8.0
--------------------------------------------------------------------------------
-SPDXVersion: SPDX-2.1
-DataLicense: CC0-1.0
-PackageName: global-hotkey
-DataFormat: SPDXRef-1
-PackageSupplier: Organization: The Tauri Programme in the Commons Conservancy
-PackageHomePage: https://tauri.app
-PackageLicenseDeclared: Apache-2.0
-PackageLicenseDeclared: MIT
-PackageCopyrightText: 2020-2022, The Tauri Programme in the Commons Conservancy
-PackageSummary: <text>Menu Utilities for Desktop Applications.
-                </text>
-PackageComment: <text>The package includes the following libraries; see
-Relationship information.
-                </text>
-Created: 2022-12-05T09:00:00Z
-PackageDownloadLocation: git://github.com/tauri-apps/global-hotkey
-PackageDownloadLocation: git+https://github.com/tauri-apps/global-hotkey.git
-PackageDownloadLocation: git+ssh://github.com/tauri-apps/global-hotkey.git
-Creator: Person: Daniel Thompson-Yvetot
-
-===============================================================================
-Text 101 (SHA-256 859A90323B684E4618786EB5AFFA0454D3A14872D433F0BB7E70E8E6F05D8AD4)
+Text 100 (SHA-256 859A90323B684E4618786EB5AFFA0454D3A14872D433F0BB7E70E8E6F05D8AD4)
 Files: LICENSE-MIT
 Packages:
 - Rust global-hotkey 0.8.0
@@ -7354,6 +7328,32 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+===============================================================================
+Text 101 (SHA-256 3B3A242FA1704327A51563C614C1043DEAB014F58EBBBDD173262C990104497E)
+Files: LICENSE.spdx
+Packages:
+- Rust global-hotkey 0.8.0
+-------------------------------------------------------------------------------
+SPDXVersion: SPDX-2.1
+DataLicense: CC0-1.0
+PackageName: global-hotkey
+DataFormat: SPDXRef-1
+PackageSupplier: Organization: The Tauri Programme in the Commons Conservancy
+PackageHomePage: https://tauri.app
+PackageLicenseDeclared: Apache-2.0
+PackageLicenseDeclared: MIT
+PackageCopyrightText: 2020-2022, The Tauri Programme in the Commons Conservancy
+PackageSummary: <text>Menu Utilities for Desktop Applications.
+                </text>
+PackageComment: <text>The package includes the following libraries; see
+Relationship information.
+                </text>
+Created: 2022-12-05T09:00:00Z
+PackageDownloadLocation: git://github.com/tauri-apps/global-hotkey
+PackageDownloadLocation: git+https://github.com/tauri-apps/global-hotkey.git
+PackageDownloadLocation: git+ssh://github.com/tauri-apps/global-hotkey.git
+Creator: Person: Daniel Thompson-Yvetot
 
 ===============================================================================
 Text 102 (SHA-256 F5352EAA5597C02C95E541596FE44C4CD73CA822230BD7283287EBB8B5D56CDA)
@@ -9822,7 +9822,39 @@ IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 
 ===============================================================================
-Text 151 (SHA-256 AC9859CE4E9A80A4846EE0B453981427F4FC2BA9AC7D0E568DE61AB80A53D86D)
+Text 151 (SHA-256 7427ABC630365F6335B3CED8B620B6C8A87B3793EDEA701D15CDDE01EC7A6CDE)
+Files: LICENSE
+Packages:
+- Rust miniz_oxide 0.8.9
+-------------------------------------------------------------------------------
+MIT License
+
+Copyright 2013-2014 RAD Game Tools and Valve Software
+Copyright 2010-2014 Rich Geldreich and Tenacious Software LLC
+Copyright (c) 2017 Frommi
+Copyright (c) 2017-2024 oyvindln
+
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+===============================================================================
+Text 152 (SHA-256 AC9859CE4E9A80A4846EE0B453981427F4FC2BA9AC7D0E568DE61AB80A53D86D)
 Files: LICENSE-MIT.md
 Packages:
 - Rust miniz_oxide 0.8.9
@@ -9853,7 +9885,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 ===============================================================================
-Text 152 (SHA-256 EAC3911CC3D41FFB7DE705EDEEC755D3F83189B61839389CC9079ACB54D8C5AF)
+Text 153 (SHA-256 EAC3911CC3D41FFB7DE705EDEEC755D3F83189B61839389CC9079ACB54D8C5AF)
 Files: LICENSE-ZLIB.md
 Packages:
 - Rust miniz_oxide 0.8.9
@@ -9872,38 +9904,6 @@ Permission is granted to anyone to use this software for any purpose, including 
 2. Altered source versions must be plainly marked as such, and must not be misrepresented as being the original software.
 
 3. This notice may not be removed or altered from any source distribution.
-
-===============================================================================
-Text 153 (SHA-256 7427ABC630365F6335B3CED8B620B6C8A87B3793EDEA701D15CDDE01EC7A6CDE)
-Files: LICENSE
-Packages:
-- Rust miniz_oxide 0.8.9
--------------------------------------------------------------------------------
-MIT License
-
-Copyright 2013-2014 RAD Game Tools and Valve Software
-Copyright 2010-2014 Rich Geldreich and Tenacious Software LLC
-Copyright (c) 2017 Frommi
-Copyright (c) 2017-2024 oyvindln
-
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
 
 ===============================================================================
 Text 154 (SHA-256 C804065B0956D00A65CE119456EC48EE456F5446B904B07EE85225BA5A88CE41)
@@ -9932,41 +9932,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 ===============================================================================
-Text 155 (SHA-256 2AA92CADA6431E75615E3FE6CB1A9082C98F777D48AE1C087C0DA0E37F7B8BFF)
-Files: LICENSE.md
-Packages:
-- Rust moxcms 0.7.11
-- Rust pxfm 0.1.27
--------------------------------------------------------------------------------
-Copyright (c) Radzivon Bartoshyk. All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification,
-are permitted provided that the following conditions are met:
-
-1.  Redistributions of source code must retain the above copyright notice, this
-    list of conditions and the following disclaimer.
-
-2.  Redistributions in binary form must reproduce the above copyright notice,
-    this list of conditions and the following disclaimer in the documentation
-    and/or other materials provided with the distribution.
-
-3.  Neither the name of the copyright holder nor the names of its
-    contributors may be used to endorse or promote products derived from
-    this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-===============================================================================
-Text 156 (SHA-256 836A9C1227C6446925BEE567ECFBCD4620780B4CC020C2C6019BA4B8D1295520)
+Text 155 (SHA-256 836A9C1227C6446925BEE567ECFBCD4620780B4CC020C2C6019BA4B8D1295520)
 Files: LICENSE-APACHE.md
 Packages:
 - Rust moxcms 0.7.11
@@ -10173,6 +10139,40 @@ Apache License
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
+
+===============================================================================
+Text 156 (SHA-256 2AA92CADA6431E75615E3FE6CB1A9082C98F777D48AE1C087C0DA0E37F7B8BFF)
+Files: LICENSE.md
+Packages:
+- Rust moxcms 0.7.11
+- Rust pxfm 0.1.27
+-------------------------------------------------------------------------------
+Copyright (c) Radzivon Bartoshyk. All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+
+1.  Redistributions of source code must retain the above copyright notice, this
+    list of conditions and the following disclaimer.
+
+2.  Redistributions in binary form must reproduce the above copyright notice,
+    this list of conditions and the following disclaimer in the documentation
+    and/or other materials provided with the distribution.
+
+3.  Neither the name of the copyright holder nor the names of its
+    contributors may be used to endorse or promote products derived from
+    this software without specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ===============================================================================
 Text 157 (SHA-256 B99F9D43803F2AC979C50949DF630BD8EEAF2FCD1B9FDB9093710D70F5DFB63D)
@@ -13470,27 +13470,7 @@ See src/polyfill/once_cell/LICENSE-APACHE and src/polyfill/once_cell/LICENSE-MIT
 for the license to code that was sourced from the once_cell project.
 
 ===============================================================================
-Text 205 (SHA-256 07414B6C33F30ACFD5E0DDA512E77DDBEB9F8A37290568FD056A01A0B50244C1)
-Files: LICENSE-other-bits
-Packages:
-- Rust ring 0.17.14
--------------------------------------------------------------------------------
-Copyright 2015-2025 Brian Smith.
-
-Permission to use, copy, modify, and/or distribute this software for any
-purpose with or without fee is hereby granted, provided that the above
-copyright notice and this permission notice appear in all copies.
-
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
-WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
-MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
-SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
-WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION
-OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
-CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
-
-===============================================================================
-Text 206 (SHA-256 473867FCF89F75954018EE72124015779A1B9CA0D1A33328F2DDCF538690C067)
+Text 205 (SHA-256 473867FCF89F75954018EE72124015779A1B9CA0D1A33328F2DDCF538690C067)
 Files: LICENSE-BoringSSL
 Packages:
 - Rust ring 0.17.14
@@ -13766,6 +13746,26 @@ DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
 THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+===============================================================================
+Text 206 (SHA-256 07414B6C33F30ACFD5E0DDA512E77DDBEB9F8A37290568FD056A01A0B50244C1)
+Files: LICENSE-other-bits
+Packages:
+- Rust ring 0.17.14
+-------------------------------------------------------------------------------
+Copyright 2015-2025 Brian Smith.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION
+OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
+CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 ===============================================================================
 Text 207 (SHA-256 D87A225BF490162673DA789D7249E920B333C2F322AAD6738C4130B78CA9E516)
@@ -16102,61 +16102,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 ===============================================================================
-Text 257 (SHA-256 D9EC1D89801F4EA76D05DBDE2C3A09697C1B10001FEEDED1A2AE721321FF5AA6)
-Files: LICENSE-MIT.md
-Packages:
-- Rust tinyvec_macros 0.1.1
--------------------------------------------------------------------------------
-MIT License
-
-Copyright (c) 2020 Soveu
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-
-===============================================================================
-Text 258 (SHA-256 26D1E12FDA78C82891263C8F1251BC22E629EF732C6CA4346FBFDDC3594A0DD9)
-Files: LICENSE-ZLIB.md
-Packages:
-- Rust tinyvec_macros 0.1.1
--------------------------------------------------------------------------------
-zlib License
-
-(C) 2020 Tomasz "Soveu" Marx
-
-This software is provided 'as-is', without any express or implied
-warranty.  In no event will the authors be held liable for any damages
-arising from the use of this software.
-
-Permission is granted to anyone to use this software for any purpose,
-including commercial applications, and to alter it and redistribute it
-freely, subject to the following restrictions:
-
-1. The origin of this software must not be misrepresented; you must not
-   claim that you wrote the original software. If you use this software
-   in a product, an acknowledgment in the product documentation would be
-   appreciated but is not required.
-2. Altered source versions must be plainly marked as such, and must not be
-   misrepresented as being the original software.
-3. This notice may not be removed or altered from any source distribution.
-
-===============================================================================
-Text 259 (SHA-256 FE1C9E29858FE97AFDC7C88C8C59C232D30A3309E284E1765E28F240537C72C6)
+Text 257 (SHA-256 FE1C9E29858FE97AFDC7C88C8C59C232D30A3309E284E1765E28F240537C72C6)
 Files: LICENSE-APACHE.md
 Packages:
 - Rust tinyvec_macros 0.1.1
@@ -16362,6 +16308,60 @@ Apache License
    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
    See the License for the specific language governing permissions and
    limitations under the License.
+
+===============================================================================
+Text 258 (SHA-256 D9EC1D89801F4EA76D05DBDE2C3A09697C1B10001FEEDED1A2AE721321FF5AA6)
+Files: LICENSE-MIT.md
+Packages:
+- Rust tinyvec_macros 0.1.1
+-------------------------------------------------------------------------------
+MIT License
+
+Copyright (c) 2020 Soveu
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+===============================================================================
+Text 259 (SHA-256 26D1E12FDA78C82891263C8F1251BC22E629EF732C6CA4346FBFDDC3594A0DD9)
+Files: LICENSE-ZLIB.md
+Packages:
+- Rust tinyvec_macros 0.1.1
+-------------------------------------------------------------------------------
+zlib License
+
+(C) 2020 Tomasz "Soveu" Marx
+
+This software is provided 'as-is', without any express or implied
+warranty.  In no event will the authors be held liable for any damages
+arising from the use of this software.
+
+Permission is granted to anyone to use this software for any purpose,
+including commercial applications, and to alter it and redistribute it
+freely, subject to the following restrictions:
+
+1. The origin of this software must not be misrepresented; you must not
+   claim that you wrote the original software. If you use this software
+   in a product, an acknowledgment in the product documentation would be
+   appreciated but is not required.
+2. Altered source versions must be plainly marked as such, and must not be
+   misrepresented as being the original software.
+3. This notice may not be removed or altered from any source distribution.
 
 ===============================================================================
 Text 260 (SHA-256 C0FDCDA1A4FFC5FD63C452E40CE25E54F2098669E3415033B228773EEA24A871)
@@ -17113,7 +17113,15 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 ===============================================================================
-Text 273 (SHA-256 65DC2A869FF7FE71D6C062F9F0977B0274E109E0A407FA4EEA2570063902C2E7)
+Text 273 (SHA-256 DB11FEC9946737DF39CA3898D9CD8C10EC6F6C3A884A6802B0AD0B81B4E8F23A)
+Files: LICENSE
+Packages:
+- Rust typenum 1.19.0
+-------------------------------------------------------------------------------
+MIT OR Apache-2.0
+
+===============================================================================
+Text 274 (SHA-256 65DC2A869FF7FE71D6C062F9F0977B0274E109E0A407FA4EEA2570063902C2E7)
 Files: LICENSE-APACHE
 Packages:
 - Rust typenum 1.19.0
@@ -17319,14 +17327,6 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-
-===============================================================================
-Text 274 (SHA-256 DB11FEC9946737DF39CA3898D9CD8C10EC6F6C3A884A6802B0AD0B81B4E8F23A)
-Files: LICENSE
-Packages:
-- Rust typenum 1.19.0
--------------------------------------------------------------------------------
-MIT OR Apache-2.0
 
 ===============================================================================
 Text 275 (SHA-256 87EBB37988EFC3285A41635C6A9FD38147E1E581B5F0556A284D5AB8FA5CDD4C)
@@ -18142,33 +18142,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 ===============================================================================
-Text 296 (SHA-256 BB8278137F730FD0445C79E2144DF32B6A4A8226EC01194A50A7DED93A070A2D)
-Files: LICENSE.spdx
-Packages:
-- Rust window-vibrancy 0.6.0
--------------------------------------------------------------------------------
-SPDXVersion: SPDX-2.1
-DataLicense: CC0-1.0
-PackageName: window-vibrancy
-DataFormat: SPDXRef-1
-PackageSupplier: Organization: The Tauri Programme in the Commons Conservancy
-PackageHomePage: https://tauri.app
-PackageLicenseDeclared: Apache-2.0
-PackageLicenseDeclared: MIT
-PackageCopyrightText: 2020-2022, The Tauri Programme in the Commons Conservancy
-PackageSummary: <text>Make your windows vibrant.
-                </text>
-PackageComment: <text>The package includes the following libraries; see
-Relationship information.
-                </text>
-Created: 2020-05-20T09:00:00Z
-PackageDownloadLocation: git://github.com/tauri-apps/window-vibrancy
-PackageDownloadLocation: git+https://github.com/tauri-apps/window-vibrancy.git
-PackageDownloadLocation: git+ssh://github.com/tauri-apps/window-vibrancy.git
-Creator: Person: Daniel Thompson-Yvetot
-
-===============================================================================
-Text 297 (SHA-256 B46700117441967DCCAA4F348E7D774953A3863861EFE1FE86F5AF8AD73FA1BE)
+Text 296 (SHA-256 B46700117441967DCCAA4F348E7D774953A3863861EFE1FE86F5AF8AD73FA1BE)
 Files: LICENSE-MIT
 Packages:
 - Rust window-vibrancy 0.6.0
@@ -18194,6 +18168,32 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+===============================================================================
+Text 297 (SHA-256 BB8278137F730FD0445C79E2144DF32B6A4A8226EC01194A50A7DED93A070A2D)
+Files: LICENSE.spdx
+Packages:
+- Rust window-vibrancy 0.6.0
+-------------------------------------------------------------------------------
+SPDXVersion: SPDX-2.1
+DataLicense: CC0-1.0
+PackageName: window-vibrancy
+DataFormat: SPDXRef-1
+PackageSupplier: Organization: The Tauri Programme in the Commons Conservancy
+PackageHomePage: https://tauri.app
+PackageLicenseDeclared: Apache-2.0
+PackageLicenseDeclared: MIT
+PackageCopyrightText: 2020-2022, The Tauri Programme in the Commons Conservancy
+PackageSummary: <text>Make your windows vibrant.
+                </text>
+PackageComment: <text>The package includes the following libraries; see
+Relationship information.
+                </text>
+Created: 2020-05-20T09:00:00Z
+PackageDownloadLocation: git://github.com/tauri-apps/window-vibrancy
+PackageDownloadLocation: git+https://github.com/tauri-apps/window-vibrancy.git
+PackageDownloadLocation: git+ssh://github.com/tauri-apps/window-vibrancy.git
+Creator: Person: Daniel Thompson-Yvetot
 
 ===============================================================================
 Text 298 (SHA-256 783829B43AACB86CB8E6CEDCD777210C13F2081AAE94419CC7A30E112977D488)
@@ -18546,34 +18546,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
 ===============================================================================
-Text 302 (SHA-256 26235C41E314FB0DA35B33B2BB5BCBC4DD523839F8EECA52EFCD43586F441FB5)
-Files: LICENSE.spdx
-Packages:
-- Rust wry 0.55.1
--------------------------------------------------------------------------------
-SPDXVersion: SPDX-2.1
-DataLicense: CC0-1.0
-PackageName: wry
-DataFormat: SPDXRef-1
-PackageSupplier: Organization: The Tauri Programme in the Commons Conservancy
-PackageHomePage: https://tauri.app
-PackageLicenseDeclared: Apache-2.0
-PackageLicenseDeclared: MIT
-PackageCopyrightText: 2020-2023, The Tauri Programme in the Commons Conservancy
-PackageSummary: <text>Wry is the official, rust-based webview
-windowing service for Tauri.
-                </text>
-PackageComment: <text>The package includes the following libraries; see
-Relationship information.
-                </text>
-Created: 2020-05-20T09:00:00Z
-PackageDownloadLocation: git://github.com/tauri-apps/wry
-PackageDownloadLocation: git+https://github.com/tauri-apps/wry.git
-PackageDownloadLocation: git+ssh://github.com/tauri-apps/wry.git
-Creator: Person: Daniel Thompson-Yvetot
-
-===============================================================================
-Text 303 (SHA-256 86EB6A41EF640B92AC12ED824F287F4C41101D31AC58C85D4D37FFEAA1A8B239)
+Text 302 (SHA-256 86EB6A41EF640B92AC12ED824F287F4C41101D31AC58C85D4D37FFEAA1A8B239)
 Files: LICENSE-MIT
 Packages:
 - Rust wry 0.55.1
@@ -18599,6 +18572,33 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+===============================================================================
+Text 303 (SHA-256 26235C41E314FB0DA35B33B2BB5BCBC4DD523839F8EECA52EFCD43586F441FB5)
+Files: LICENSE.spdx
+Packages:
+- Rust wry 0.55.1
+-------------------------------------------------------------------------------
+SPDXVersion: SPDX-2.1
+DataLicense: CC0-1.0
+PackageName: wry
+DataFormat: SPDXRef-1
+PackageSupplier: Organization: The Tauri Programme in the Commons Conservancy
+PackageHomePage: https://tauri.app
+PackageLicenseDeclared: Apache-2.0
+PackageLicenseDeclared: MIT
+PackageCopyrightText: 2020-2023, The Tauri Programme in the Commons Conservancy
+PackageSummary: <text>Wry is the official, rust-based webview
+windowing service for Tauri.
+                </text>
+PackageComment: <text>The package includes the following libraries; see
+Relationship information.
+                </text>
+Created: 2020-05-20T09:00:00Z
+PackageDownloadLocation: git://github.com/tauri-apps/wry
+PackageDownloadLocation: git+https://github.com/tauri-apps/wry.git
+PackageDownloadLocation: git+ssh://github.com/tauri-apps/wry.git
+Creator: Person: Daniel Thompson-Yvetot
 
 ===============================================================================
 Text 304 (SHA-256 98ED0AD9DB8A72957B9C45941FE2ED31933A3BEACBD193E662DF483D0643A13D)

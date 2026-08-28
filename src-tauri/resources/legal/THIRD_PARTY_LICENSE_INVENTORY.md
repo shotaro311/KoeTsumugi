@@ -1,6 +1,6 @@
 # Windows x64 and macOS arm64 third-party license inventory
 
-Generated from the locked Windows x64, macOS arm64, and Bun dependency trees at 2026-08-12T05:19:54.519Z.
+Generated from the locked Windows x64, macOS arm64, and Bun dependency trees at 2026-08-28T03:53:14.641Z.
 This inventory records declared license metadata; it does not replace the corresponding license texts or a release-specific legal review.
 
 - Rust and JavaScript packages: 633
