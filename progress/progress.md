@@ -14,6 +14,7 @@ status: active
 
 ## 最新の検証済み状態
 
+- 2026-08-28: [`KoeTsumugi v1.0.6`](https://github.com/shotaro311/KoeTsumugi/releases/tag/handy-m-v1.0.6)をcommit `7ae3001`から正式公開。workflow `33140845078`は全4 job成功。6 assetを認証なしで再取得し全GitHub digest一致、Windows/Mac updater署名、`latest.json` 1.0.6と両OS経路を確認した。Mac app/DMGはDeveloper ID署名、Apple公証`Accepted`、staple、GatekeeperをCIで通過した。Windows公開NSISは21,175,652 bytes、SHA-256 `8DA5B6E8BADCF84C3AAFF0A0A1195B787ED406B1062FC196B441AC06A31208D9`。
 - 2026-08-28: 23:52の再発はWindowsクラッシュではなく、引数なしで通常起動したKoeTsumugiが保存設定のVulkan1 / RTX 5060 Tiへモデルをロードし、表示GPU RTX 5070 Tiとの不一致を監視が検出して再起動したもの。監視の正本をGPUカウンターから`--device-index`へ変更し、正しい引数があれば別GPUの補助contextを観測しても再起動しないよう修正。短時間のsingle-instanceプロセスも除外した。引数なし通常起動を実際に行い、監視が`--device-index 0`付きへ一度だけ補正し、その後複数周期でPID維持・追加同期0件を確認した。
 - 2026-08-27: Windowsのクラッシュと音声入力中断を調査。`vulkan-1.dll`の異常終了に加え、表示GPUがRTX 5070 Tiなのに音声モデル設定がRTX 5060 Tiのため、GPU追従監視が約30秒ごとにKoeTsumugiを再起動していた。通常起動の`--device-index`対応、表示GPU別モデル指定、同一PIDへの再起動1回制限、監視の多重起動防止を実装。Rust test 201件、Clippy、format、lint、frontend build、23言語447 key、release EXE、両GPUでの実推論を確認し、修正版をWindowsへローカル導入した。旧周期を越えてPID維持、新規Application Error 0件を確認。外部公開は未実施。
 - 2026-08-12: [`KoeTsumugi v1.0.5`](https://github.com/shotaro311/KoeTsumugi/releases/tag/handy-m-v1.0.5)をcommit `a1500fc`から正式公開。workflow `31579237160`は全job成功。公開DMGとappはDeveloper ID署名、Apple公証、Gatekeeperを通過し、Mac updater署名も独立検証した。公開DMGから`/Applications/KoeTsumugi.app`へ1.0.5を再導入し、既存データ28ファイル、DB v4、マイク、Metal、updater manifest、起動を確認。Note記事もMac対応へ公開更新した。
@@ -53,7 +54,7 @@ status: active
 
 - Windows実機: RTX 5070 Ti向け`--device-index 0`で稼働し、GPU追従監視も1プロセスで稼働中。通常起動時の引数補正と補正後のPID維持は確認済み。新しい実音声録音は行わず、通常利用で長時間録音時の安定性を継続観察する。
 - Macローカル環境は公開DMG由来のKoeTsumugi 1.0.5へ移行済み。旧Handy_mとローカルbuild版1.0.4はゴミ箱に保持し、既存設定・履歴・録音・モデルは共通bundle IDの保存先に残している。
-- KoeTsumugi 1.0.5のsource、Windows NSIS、Apple Silicon Mac DMG、両OSのupdater metadataは公開済み。full uninstall/rollback、Windows Authenticode、正式な商標クリアランスは未完了。MSI、Intel Mac、Linuxは公開対象外。
+- KoeTsumugi 1.0.6のsource、Windows NSIS、Apple Silicon Mac DMG、両OSのupdater metadataは公開済み。full uninstall/rollback、Windows Authenticode、正式な商標クリアランスは未完了。MSI、Intel Mac、Linuxは公開対象外。
 - Windows実機: VADオンのCohereで5分程度の自然発話をホットキーから録音し、履歴保存と実利用アプリへの貼り付けまで確認する。保存済み音声と番号付きTTSのheadless検証、インストール済みbinaryの起動は確認済み。
 - Windows実機: OSの既定マイクを別エンドポイントへ切り替え、設定画面で再選択せず次の録音が自動復旧することを確認する。自動判定・再生成の単体テストと現在のマイクでの起動は確認済み。
 - インストール済み1.0.1から1.0.2へのdownload、install、relaunchは未実施。公開metadata、binary transport、署名検証までは確認済み。
@@ -72,7 +73,7 @@ status: active
 
 ## Blocker / Risk
 
-- 公開中の現行版はKoeTsumugi v1.0.5。Windows NSIS、Apple Silicon Mac DMG、両OSのupdater署名、公開assetの匿名download readbackは完了。release workflowは明示的な手動実行専用。
+- 公開中の現行版はKoeTsumugi v1.0.6。Windows NSIS、Apple Silicon Mac DMG、両OSのupdater署名、公開assetの匿名download readbackは完了。Macの公開DMG実起動とWindows公開NSISの実インストールは今回未実施。release workflowは明示的な手動実行専用。
 - Rust 1.96の`cargo clippy -- -D warnings`は公式v0.9.5由来の既存警告で失敗する。通常Clippyは完了し、今回追加した辞書コードの警告は解消済み。CIのRust版または公式側修正に合わせて厳格化を再確認する。
 - 1.0.2から1.0.3へのNSIS実更新は成功したが、full uninstall/rollbackは未実施。更新前退避は `C:\Users\shotaro\.codex\backups\koetsumugi-migration-20260808-180030` に保持する。
 - `tauri-nspanel 2.1.0`はlocked sourceのMIT/Apache-2.0本文を確認し、macOS配布ブロッカーを解消した。GigaAM語彙と通知WAVの由来問題も解消済み。
