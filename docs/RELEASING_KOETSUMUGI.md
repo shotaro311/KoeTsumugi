@@ -82,7 +82,7 @@ $env:TAURI_SIGNING_PRIVATE_KEY = Get-Content -Raw -LiteralPath $keyPath
 $env:LIBCLANG_PATH = "C:\Program Files\LLVM\bin"
 $env:VULKAN_SDK = "C:\VulkanSDK\1.4.350.0"
 $env:CARGO_TARGET_DIR = "C:\hm-target"
-$env:TRANSCRIBE_CMAKE_ARGS = "-DCMAKE_CXX_FLAGS=/utf-8 -DCMAKE_CXX_FLAGS_RELEASE=/utf-8"
+$env:TRANSCRIBE_CMAKE_ARGS = "-DCMAKE_CXX_FLAGS=/utf-8"
 bun tauri build --config src-tauri/tauri.updater.conf.json --bundles nsis
 ```
 

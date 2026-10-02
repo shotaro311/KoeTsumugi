@@ -1,6 +1,6 @@
 ---
 project_slug: handy-m
-updated: 2026-08-28
+updated: 2026-10-02
 updated_by: codex
 status: active
 ---
@@ -14,6 +14,7 @@ status: active
 
 ## 最新の検証済み状態
 
+- 2026-10-02: 本家`29bd2c0`を声紬1.0.7へ統合中。日本語辞書とCohere長文処理を維持し、Rust 300件、frontend、lint、25言語の翻訳、モデル言語対応が通過。設定・37件の辞書・履歴・旧実行ファイルを退避済み。署名付きbuildと正式公開、Windows更新後の確認を進めている。詳細は[本日の作業ログ](2026-10/2026-10-02_handy-m.md)。
 - 2026-08-28: [`KoeTsumugi v1.0.6`](https://github.com/shotaro311/KoeTsumugi/releases/tag/handy-m-v1.0.6)をcommit `7ae3001`から正式公開。workflow `33140845078`は全4 job成功。6 assetを認証なしで再取得し全GitHub digest一致、Windows/Mac updater署名、`latest.json` 1.0.6と両OS経路を確認した。Mac app/DMGはDeveloper ID署名、Apple公証`Accepted`、staple、GatekeeperをCIで通過した。Windows公開NSISは21,175,652 bytes、SHA-256 `8DA5B6E8BADCF84C3AAFF0A0A1195B787ED406B1062FC196B441AC06A31208D9`。
 - 2026-08-28: 23:52の再発はWindowsクラッシュではなく、引数なしで通常起動したKoeTsumugiが保存設定のVulkan1 / RTX 5060 Tiへモデルをロードし、表示GPU RTX 5070 Tiとの不一致を監視が検出して再起動したもの。監視の正本をGPUカウンターから`--device-index`へ変更し、正しい引数があれば別GPUの補助contextを観測しても再起動しないよう修正。短時間のsingle-instanceプロセスも除外した。引数なし通常起動を実際に行い、監視が`--device-index 0`付きへ一度だけ補正し、その後複数周期でPID維持・追加同期0件を確認した。
 - 2026-08-27: Windowsのクラッシュと音声入力中断を調査。`vulkan-1.dll`の異常終了に加え、表示GPUがRTX 5070 Tiなのに音声モデル設定がRTX 5060 Tiのため、GPU追従監視が約30秒ごとにKoeTsumugiを再起動していた。通常起動の`--device-index`対応、表示GPU別モデル指定、同一PIDへの再起動1回制限、監視の多重起動防止を実装。Rust test 201件、Clippy、format、lint、frontend build、23言語447 key、release EXE、両GPUでの実推論を確認し、修正版をWindowsへローカル導入した。旧周期を越えてPID維持、新規Application Error 0件を確認。外部公開は未実施。

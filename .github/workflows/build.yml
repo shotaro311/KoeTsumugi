@@ -123,7 +123,8 @@ jobs:
         uses: swatinem/rust-cache@v2
         with:
           workspaces: "./src-tauri -> target"
-          key: ${{ inputs.platform }}-${{ inputs.target }}
+          key: ${{ inputs.platform }}-${{ inputs.target }}-no-bin-v1
+          cache-bin: false
 
       - name: install dependencies (ubuntu 24.04 x64)
         if: contains(inputs.platform, 'ubuntu-24.04') && !contains(inputs.platform, 'arm')
@@ -180,7 +181,7 @@ jobs:
 
       - name: Install trusted-signing-cli
         if: contains(inputs.platform, 'windows') && inputs.sign-binaries && steps.cache-tsc.outputs.cache-hit != 'true'
-        run: cargo install trusted-signing-cli@${{ env.TSC_VERSION }}
+        run: cargo install --locked --force trusted-signing-cli@${{ env.TSC_VERSION }}
 
       - name: Prepare Vulkan SDK for Ubuntu 24.04
         if: contains(inputs.platform, 'ubuntu-24.04') && !contains(inputs.platform, 'arm')
@@ -665,6 +666,13 @@ jobs:
           test -s "$UPDATE_ARCHIVE"
           test -s "$UPDATE_SIGNATURE"
 
+          "$APP/Contents/MacOS/koetsumugi" --list-devices
+          "$APP/Contents/MacOS/koetsumugi" --start-hidden > "$RUNNER_TEMP/koetsumugi-startup.log" 2>&1 &
+          APP_PID=$!
+          trap 'kill "$APP_PID" 2>/dev/null || true' EXIT
+          sleep 5
+          kill -0 "$APP_PID"
+
       - name: Upload notarized macOS release assets
         if: contains(inputs.platform, 'macos') && inputs.sign-binaries && inputs.release-id != '' && !inputs.upload-release-assets
         shell: bash
@@ -834,7 +842,7 @@ jobs:
               listing="$(mktemp)"
               dpkg-deb -c "$deb" > "$listing"
               require_pattern "$listing" 'usr/bin/koetsumugi$' "koetsumugi binary"
-              require_pattern "$listing" 'usr/lib/KoeTsumugi/libtranscribe\.so\.[0-9]+$' "transcribe runtime library (SONAME)"
+              require_pattern "$listing" 'usr/lib/KoeTsumugi/libtranscribe\.so(\.[0-9]+)+$' "transcribe runtime library (SONAME)"
               require_pattern "$listing" 'usr/lib/KoeTsumugi/libggml-cpu.*\.so' "ggml CPU backend module"
               if [[ "${{ inputs.platform }}" == *"ubuntu-22.04"* && "${{ inputs.target }}" == "x86_64-unknown-linux-gnu" ]]; then
                 require_pattern "$listing" 'usr/lib/KoeTsumugi/libonnxruntime\.so\.[0-9]+$' "ONNX Runtime library (SONAME)"
@@ -863,7 +871,7 @@ jobs:
               listing="$(mktemp)"
               rpm -qpl "$rpm_pkg" > "$listing"
               require_pattern "$listing" '/usr/bin/koetsumugi$' "koetsumugi binary"
-              require_pattern "$listing" '/usr/lib/KoeTsumugi/libtranscribe\.so\.[0-9]+$' "transcribe runtime library (SONAME)"
+              require_pattern "$listing" '/usr/lib/KoeTsumugi/libtranscribe\.so(\.[0-9]+)+$' "transcribe runtime library (SONAME)"
               require_pattern "$listing" '/usr/lib/KoeTsumugi/libggml-cpu.*\.so' "ggml CPU backend module"
               # Same /usr/lib pollution guard as the deb audit (issue #1639).
               if grep -Eq 'usr/lib/[^/]+\.so' "$listing"; then

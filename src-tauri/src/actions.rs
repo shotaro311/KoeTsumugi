@@ -9,7 +9,7 @@ use crate::managers::transcription::StreamWorkKind;
 use crate::managers::transcription::TranscriptionManager;
 use crate::settings::{get_settings, AppSettings, OverlayStyle, APPLE_INTELLIGENCE_PROVIDER_ID};
 use crate::shortcut;
-use crate::tray::{change_tray_icon, TrayIconState};
+use crate::tray::{set_tray_state, TrayIconState};
 use crate::utils::{
     self, show_processing_overlay, show_recording_overlay, show_transcribing_overlay,
 };
@@ -32,11 +32,12 @@ struct RecordingErrorEvent {
     detail: Option<String>,
 }
 
-/// Drop guard that notifies the [`TranscriptionCoordinator`] when the
-/// transcription pipeline finishes — whether it completes normally or panics.
-struct FinishGuard(AppHandle);
+/// Drop guard that finishes the transcription pipeline, including immediate
+/// model unloading on early exits.
+struct FinishGuard(AppHandle, Arc<TranscriptionManager>);
 impl Drop for FinishGuard {
     fn drop(&mut self) {
+        self.1.maybe_unload_immediately("transcription session");
         if let Some(c) = self.0.try_state::<TranscriptionCoordinator>() {
             c.notify_processing_finished();
         }
@@ -485,9 +486,22 @@ impl ShortcutAction for TranscribeAction {
         });
         let kickoff_elapsed = kickoff_started.elapsed();
 
+        // Don't open the mic if nothing can transcribe the recording; the load
+        // kicked off above fails and reports why.
+        if !tm.is_model_loaded() {
+            let selected_model = get_settings(app).selected_model;
+            if let Err(e) = app
+                .state::<Arc<ModelManager>>()
+                .get_model_path(&selected_model)
+            {
+                warn!("Not starting recording: no model can transcribe it ({})", e);
+                return;
+            }
+        }
+
         let binding_id = binding_id.to_string();
         let tray_started = Instant::now();
-        change_tray_icon(app, TrayIconState::Recording);
+        set_tray_state(app, TrayIconState::Recording);
         let tray_elapsed = tray_started.elapsed();
 
         // Get the microphone mode to determine audio feedback timing
@@ -539,51 +553,60 @@ impl ShortcutAction for TranscribeAction {
         debug!("Microphone mode - always_on: {}", is_always_on);
 
         let mut recording_error: Option<String> = None;
-        if is_always_on {
-            // Usually this only sends the capture command. After an OS default-device
-            // switch it first rebuilds the stream, so play feedback only once capture
-            // is ready and the user's first word cannot land in the reconnect gap.
-            match rm.try_start_recording(&binding_id, vad_policy) {
-                Ok(()) => {
-                    debug!("Always-on mode: Playing audio feedback after capture is ready");
-                    let rm_clone = Arc::clone(&rm);
-                    let app_clone = app.clone();
-                    // The blocking helper exits immediately if audio feedback is disabled,
-                    // so we can always reuse this thread to ensure mute happens right after playback.
-                    std::thread::spawn(move || {
+        let recording_start_time = Instant::now();
+        match rm.try_start_recording(&binding_id, vad_policy) {
+            Ok(readiness) => {
+                debug!(
+                    "Recording request accepted in {:?}; waiting for first microphone samples",
+                    recording_start_time.elapsed()
+                );
+                let generation = readiness.generation();
+                let app_clone = app.clone();
+                let rm_clone = Arc::clone(&rm);
+                std::thread::spawn(move || {
+                    if !readiness.wait() {
+                        debug!("Microphone readiness wait ended without receiving samples");
+                        return;
+                    }
+
+                    // Development-only preview hook for evaluating the brief
+                    // arming animation on hardware that normally starts too fast
+                    // to make it visible.
+                    #[cfg(debug_assertions)]
+                    if let Ok(delay_ms) = std::env::var("HANDY_DEBUG_MIC_READY_DELAY_MS")
+                        .unwrap_or_default()
+                        .parse::<u64>()
+                    {
+                        let delay_ms = delay_ms.min(10_000);
+                        if delay_ms > 0 {
+                            debug!("Delaying microphone-ready cue by {delay_ms}ms for UI preview");
+                            std::thread::sleep(Duration::from_millis(delay_ms));
+                        }
+                    }
+
+                    if !rm_clone.is_recording_readiness_current(generation) {
+                        debug!("Microphone became ready for an inactive recording");
+                        return;
+                    }
+
+                    debug!("Microphone is receiving samples; recording is ready");
+                    utils::emit_recording_ready(&app_clone);
+
+                    // The start chime is a readiness cue, so it must follow the
+                    // first real input callback rather than Stream::play() or a
+                    // fixed delay. The helper returns immediately when feedback
+                    // is disabled; mute still follows the same readiness point.
+                    if rm_clone.is_recording_readiness_current(generation) {
                         play_feedback_sound_blocking(&app_clone, SoundType::Start);
+                    }
+                    if rm_clone.is_recording_readiness_current(generation) {
                         rm_clone.apply_mute();
-                    });
-                }
-                Err(e) => {
-                    debug!("Recording failed: {}", e);
-                    recording_error = Some(e);
-                }
+                    }
+                });
             }
-        } else {
-            // On-demand mode: Start recording first, then play audio feedback, then apply mute
-            // This allows the microphone to be activated before playing the sound
-            debug!("On-demand mode: Starting recording first, then audio feedback");
-            let recording_start_time = Instant::now();
-            match rm.try_start_recording(&binding_id, vad_policy) {
-                Ok(()) => {
-                    debug!("Recording started in {:?}", recording_start_time.elapsed());
-                    // Small delay to ensure microphone stream is active
-                    let app_clone = app.clone();
-                    let rm_clone = Arc::clone(&rm);
-                    std::thread::spawn(move || {
-                        std::thread::sleep(std::time::Duration::from_millis(100));
-                        debug!("Handling delayed audio feedback/mute sequence");
-                        // Helper handles disabled audio feedback by returning early, so we reuse it
-                        // to keep mute sequencing consistent in every mode.
-                        play_feedback_sound_blocking(&app_clone, SoundType::Start);
-                        rm_clone.apply_mute();
-                    });
-                }
-                Err(e) => {
-                    debug!("Failed to start recording: {}", e);
-                    recording_error = Some(e);
-                }
+            Err(e) => {
+                debug!("Failed to start recording: {}", e);
+                recording_error = Some(e);
             }
         }
 
@@ -595,7 +618,7 @@ impl ShortcutAction for TranscribeAction {
             // Revert UI state so we don't stay stuck in the recording overlay.
             tm.cancel_stream();
             utils::hide_recording_overlay(app);
-            change_tray_icon(app, TrayIconState::Idle);
+            set_tray_state(app, TrayIconState::Idle);
             if let Some(err) = recording_error {
                 let error_type = if is_microphone_access_denied(&err) {
                     "microphone_permission_denied"
@@ -621,6 +644,11 @@ impl ShortcutAction for TranscribeAction {
     }
 
     fn stop(&self, app: &AppHandle, binding_id: &str, _shortcut_str: &str) {
+        // Prevent a slow microphone from emitting a ready event or start chime
+        // after the user has already requested stop.
+        app.state::<Arc<AudioRecordingManager>>()
+            .invalidate_recording_readiness();
+
         // Unregister the cancel shortcut when transcription stops
         shortcut::unregister_cancel_shortcut(app);
 
@@ -632,7 +660,7 @@ impl ShortcutAction for TranscribeAction {
         let tm = Arc::clone(&app.state::<Arc<TranscriptionManager>>());
         let hm = Arc::clone(&app.state::<Arc<HistoryManager>>());
 
-        change_tray_icon(app, TrayIconState::Transcribing);
+        set_tray_state(app, TrayIconState::Transcribing);
         // Stop should give immediate visual feedback. Live streaming can keep
         // the larger panel, but it still switches from listening to a working
         // spinner while the stream finalizes. Non-streaming paths use the
@@ -658,7 +686,7 @@ impl ShortcutAction for TranscribeAction {
         let cancel_generation = rm.cancel_generation();
 
         tauri::async_runtime::spawn(async move {
-            let _guard = FinishGuard(ah.clone());
+            let _guard = FinishGuard(ah.clone(), Arc::clone(&tm));
             debug!(
                 "Starting async transcription task for binding: {}",
                 binding_id
@@ -676,7 +704,7 @@ impl ShortcutAction for TranscribeAction {
                     debug!("Transcription operation cancelled after recording stop");
                     tm.cancel_stream();
                     utils::hide_recording_overlay(&ah);
-                    change_tray_icon(&ah, TrayIconState::Idle);
+                    set_tray_state(&ah, TrayIconState::Idle);
                     return;
                 }
 
@@ -686,7 +714,7 @@ impl ShortcutAction for TranscribeAction {
                     // and block the next start_stream.
                     tm.cancel_stream();
                     utils::hide_recording_overlay(&ah);
-                    change_tray_icon(&ah, TrayIconState::Idle);
+                    set_tray_state(&ah, TrayIconState::Idle);
                 } else {
                     // Save WAV concurrently with transcription
                     let sample_count = samples.len();
@@ -741,7 +769,7 @@ impl ShortcutAction for TranscribeAction {
                     if rm.was_cancelled_since(cancel_generation) {
                         debug!("Transcription operation cancelled before output handling");
                         utils::hide_recording_overlay(&ah);
-                        change_tray_icon(&ah, TrayIconState::Idle);
+                        set_tray_state(&ah, TrayIconState::Idle);
                         return;
                     }
 
@@ -750,7 +778,7 @@ impl ShortcutAction for TranscribeAction {
                             debug!(
                                 "Transcription completed in {:?}: '{}'",
                                 transcription_time.elapsed(),
-                                transcription
+                                utils::redact_text(&transcription)
                             );
 
                             if post_process {
@@ -768,14 +796,14 @@ impl ShortcutAction for TranscribeAction {
                             else {
                                 debug!("Transcription operation cancelled during output handling");
                                 utils::hide_recording_overlay(&ah);
-                                change_tray_icon(&ah, TrayIconState::Idle);
+                                set_tray_state(&ah, TrayIconState::Idle);
                                 return;
                             };
 
                             if rm.was_cancelled_since(cancel_generation) {
                                 debug!("Transcription operation cancelled before paste");
                                 utils::hide_recording_overlay(&ah);
-                                change_tray_icon(&ah, TrayIconState::Idle);
+                                set_tray_state(&ah, TrayIconState::Idle);
                                 return;
                             }
 
@@ -794,7 +822,7 @@ impl ShortcutAction for TranscribeAction {
 
                             if processed.final_text.is_empty() {
                                 utils::hide_recording_overlay(&ah);
-                                change_tray_icon(&ah, TrayIconState::Idle);
+                                set_tray_state(&ah, TrayIconState::Idle);
                             } else {
                                 let ah_clone = ah.clone();
                                 let paste_time = Instant::now();
@@ -804,7 +832,7 @@ impl ShortcutAction for TranscribeAction {
                                     if rm_for_paste.was_cancelled_since(cancel_generation) {
                                         debug!("Transcription operation cancelled before paste");
                                         utils::hide_recording_overlay(&ah_clone);
-                                        change_tray_icon(&ah_clone, TrayIconState::Idle);
+                                        set_tray_state(&ah_clone, TrayIconState::Idle);
                                         return;
                                     }
 
@@ -819,12 +847,12 @@ impl ShortcutAction for TranscribeAction {
                                         }
                                     }
                                     utils::hide_recording_overlay(&ah_clone);
-                                    change_tray_icon(&ah_clone, TrayIconState::Idle);
+                                    set_tray_state(&ah_clone, TrayIconState::Idle);
                                 })
                                 .unwrap_or_else(|e| {
                                     error!("Failed to run paste on main thread: {:?}", e);
                                     utils::hide_recording_overlay(&ah);
-                                    change_tray_icon(&ah, TrayIconState::Idle);
+                                    set_tray_state(&ah, TrayIconState::Idle);
                                 });
                             }
                         }
@@ -834,7 +862,7 @@ impl ShortcutAction for TranscribeAction {
                                     "Transcription operation cancelled after transcription error"
                                 );
                                 utils::hide_recording_overlay(&ah);
-                                change_tray_icon(&ah, TrayIconState::Idle);
+                                set_tray_state(&ah, TrayIconState::Idle);
                                 return;
                             }
 
@@ -855,7 +883,7 @@ impl ShortcutAction for TranscribeAction {
                                 }
                             }
                             utils::hide_recording_overlay(&ah);
-                            change_tray_icon(&ah, TrayIconState::Idle);
+                            set_tray_state(&ah, TrayIconState::Idle);
                         }
                     }
                 }
@@ -864,7 +892,7 @@ impl ShortcutAction for TranscribeAction {
                 // Tear down any streaming worker so its channel doesn't leak.
                 tm.cancel_stream();
                 utils::hide_recording_overlay(&ah);
-                change_tray_icon(&ah, TrayIconState::Idle);
+                set_tray_state(&ah, TrayIconState::Idle);
             }
         });
 

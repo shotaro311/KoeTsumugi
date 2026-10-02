@@ -1,20 +1,22 @@
 # Windows x64 and macOS arm64 third-party license inventory
 
-Generated from the locked Windows x64, macOS arm64, and Bun dependency trees at 2026-08-28T03:53:14.641Z.
+Generated from the locked Windows x64, macOS arm64, and Bun dependency trees at 2026-10-02T01:40:23.981Z.
 This inventory records declared license metadata; it does not replace the corresponding license texts or a release-specific legal review.
 
-- Rust and JavaScript packages: 633
+- Rust and JavaScript packages: 643
 - Packages requiring manual license review: 0
-- Packages with locally collected license/notice files: 548
-- Packages without a locally collected license/notice file: 85
+- Packages with locally collected license/notice files: 556
+- Packages without a locally collected license/notice file: 87
 
 | Ecosystem | Package                        | Version            | Release platforms        | Declared license                                    | Source                                                                                          |
 | --------- | ------------------------------ | ------------------ | ------------------------ | --------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
 | Rust      | adler2                         | 2.0.1              | Windows x64, macOS arm64 | 0BSD OR MIT OR Apache-2.0                           | [source](https://github.com/oyvindln/adler2)                                                    |
 | Rust      | ahash                          | 0.7.8              | Windows x64, macOS arm64 | MIT OR Apache-2.0                                   | [source](https://github.com/tkaitchuck/ahash)                                                   |
+| Rust      | ahash                          | 0.8.12             | Windows x64, macOS arm64 | MIT OR Apache-2.0                                   | [source](https://github.com/tkaitchuck/ahash)                                                   |
 | Rust      | aho-corasick                   | 1.1.4              | Windows x64, macOS arm64 | Unlicense OR MIT                                    | [source](https://github.com/BurntSushi/aho-corasick)                                            |
 | Rust      | alloc-no-stdlib                | 2.0.4              | Windows x64, macOS arm64 | BSD-3-Clause                                        | [source](https://github.com/dropbox/rust-alloc-no-stdlib)                                       |
 | Rust      | alloc-stdlib                   | 0.2.2              | Windows x64, macOS arm64 | BSD-3-Clause                                        | [source](https://github.com/dropbox/rust-alloc-no-stdlib)                                       |
+| Rust      | allocator-api2                 | 0.2.21             | Windows x64, macOS arm64 | MIT OR Apache-2.0                                   | [source](https://github.com/zakarumych/allocator-api2)                                          |
 | Rust      | anstream                       | 0.6.21             | Windows x64, macOS arm64 | MIT OR Apache-2.0                                   | [source](https://github.com/rust-cli/anstyle.git)                                               |
 | Rust      | anstyle-parse                  | 0.2.7              | Windows x64, macOS arm64 | MIT OR Apache-2.0                                   | [source](https://github.com/rust-cli/anstyle.git)                                               |
 | Rust      | anstyle-query                  | 1.1.5              | Windows x64, macOS arm64 | MIT OR Apache-2.0                                   | [source](https://github.com/rust-cli/anstyle.git)                                               |
@@ -23,6 +25,7 @@ This inventory records declared license metadata; it does not replace the corres
 | Rust      | anyhow                         | 1.0.102            | Windows x64, macOS arm64 | MIT OR Apache-2.0                                   | [source](https://github.com/dtolnay/anyhow)                                                     |
 | Rust      | arboard                        | 3.6.1              | Windows x64, macOS arm64 | MIT OR Apache-2.0                                   | [source](https://github.com/1Password/arboard)                                                  |
 | Rust      | arrayvec                       | 0.7.6              | Windows x64, macOS arm64 | MIT OR Apache-2.0                                   | [source](https://github.com/bluss/arrayvec)                                                     |
+| Rust      | async-compression              | 0.4.43             | Windows x64, macOS arm64 | MIT OR Apache-2.0                                   | [source](https://github.com/Nullus157/async-compression)                                        |
 | Rust      | async-trait                    | 0.1.89             | Windows x64, macOS arm64 | MIT OR Apache-2.0                                   | [source](https://github.com/dtolnay/async-trait)                                                |
 | Rust      | atomic-waker                   | 1.1.2              | Windows x64, macOS arm64 | Apache-2.0 OR MIT                                   | [source](https://github.com/smol-rs/atomic-waker)                                               |
 | Rust      | auto-launch                    | 0.5.0              | Windows x64, macOS arm64 | MIT                                                 | [source](https://github.com/zzzgydi/auto-launch.git)                                            |
@@ -72,6 +75,8 @@ This inventory records declared license metadata; it does not replace the corres
 | Rust      | cocoa-foundation               | 0.1.2              | macOS arm64              | MIT OR Apache-2.0                                   | [source](https://github.com/servo/core-foundation-rs)                                           |
 | Rust      | cocoa                          | 0.24.1             | macOS arm64              | MIT / Apache-2.0                                    | [source](https://github.com/servo/core-foundation-rs)                                           |
 | Rust      | colorchoice                    | 1.0.5              | Windows x64, macOS arm64 | MIT OR Apache-2.0                                   | [source](https://github.com/rust-cli/anstyle.git)                                               |
+| Rust      | compression-codecs             | 0.4.38             | Windows x64, macOS arm64 | MIT OR Apache-2.0                                   | [source](https://github.com/Nullus157/async-compression)                                        |
+| Rust      | compression-core               | 0.4.32             | Windows x64, macOS arm64 | MIT OR Apache-2.0                                   | [source](https://github.com/Nullus157/async-compression)                                        |
 | Rust      | console                        | 0.16.3             | Windows x64, macOS arm64 | MIT                                                 | [source](https://github.com/console-rs/console)                                                 |
 | Rust      | convert_case                   | 0.4.0              | Windows x64, macOS arm64 | MIT                                                 | [source](https://github.com/rutrum/convert-case)                                                |
 | Rust      | cookie_store                   | 0.22.1             | Windows x64, macOS arm64 | MIT OR Apache-2.0                                   | [source](https://github.com/pfernie/cookie_store)                                               |
@@ -127,6 +132,7 @@ This inventory records declared license metadata; it does not replace the corres
 | Rust      | dtor                           | 0.3.0              | Windows x64, macOS arm64 | Apache-2.0 OR MIT                                   | [source](https://github.com/mmastrac/rust-ctor)                                                 |
 | Rust      | dunce                          | 1.0.5              | Windows x64, macOS arm64 | CC0-1.0 OR MIT-0 OR Apache-2.0                      | [source](https://gitlab.com/kornelski/dunce)                                                    |
 | Rust      | dyn-clone                      | 1.0.20             | Windows x64, macOS arm64 | MIT OR Apache-2.0                                   | [source](https://github.com/dtolnay/dyn-clone)                                                  |
+| Rust      | earshot                        | 1.2.2              | Windows x64, macOS arm64 | MIT OR Apache-2.0                                   | [source](https://github.com/pykeio/earshot)                                                     |
 | Rust      | embed_plist                    | 1.2.2              | macOS arm64              | MIT OR Apache-2.0                                   | [source](https://github.com/nvzqz/embed-plist-rs)                                               |
 | Rust      | embed-resource                 | 3.0.6              | Windows x64, macOS arm64 | MIT                                                 | [source](https://github.com/nabijaczleweli/rust-embed-resource)                                 |
 | Rust      | encode_unicode                 | 1.0.0              | Windows x64              | Apache-2.0 OR MIT                                   | [source](https://github.com/tormol/encode_unicode)                                              |
@@ -186,8 +192,9 @@ This inventory records declared license metadata; it does not replace the corres
 | Rust      | global-hotkey                  | 0.8.0              | Windows x64, macOS arm64 | Apache-2.0 OR MIT                                   | [source](https://github.com/tauri-apps/global-hotkey)                                           |
 | Rust      | h2                             | 0.4.13             | Windows x64, macOS arm64 | MIT                                                 | [source](https://github.com/hyperium/h2)                                                        |
 | Rust      | half                           | 2.7.1              | Windows x64, macOS arm64 | MIT OR Apache-2.0                                   | [source](https://github.com/VoidStarKat/half-rs)                                                |
-| Rust      | handy-keys                     | 0.3.3              | Windows x64, macOS arm64 | MIT                                                 | [source](https://github.com/handy-computer/handy-keys)                                          |
+| Rust      | handy-keys                     | 0.3.4              | Windows x64, macOS arm64 | MIT                                                 | [source](https://github.com/handy-computer/handy-keys)                                          |
 | Rust      | hashbrown                      | 0.12.3             | Windows x64, macOS arm64 | MIT OR Apache-2.0                                   | [source](https://github.com/rust-lang/hashbrown)                                                |
+| Rust      | hashbrown                      | 0.14.5             | Windows x64, macOS arm64 | MIT OR Apache-2.0                                   | [source](https://github.com/rust-lang/hashbrown)                                                |
 | Rust      | hashbrown                      | 0.15.5             | Windows x64, macOS arm64 | MIT OR Apache-2.0                                   | [source](https://github.com/rust-lang/hashbrown)                                                |
 | Rust      | hashbrown                      | 0.16.1             | Windows x64, macOS arm64 | MIT OR Apache-2.0                                   | [source](https://github.com/rust-lang/hashbrown)                                                |
 | Rust      | hashlink                       | 0.10.0             | Windows x64, macOS arm64 | MIT OR Apache-2.0                                   | [source](https://github.com/kyren/hashlink)                                                     |
@@ -232,6 +239,7 @@ This inventory records declared license metadata; it does not replace the corres
 | Rust      | iri-string                     | 0.7.10             | Windows x64, macOS arm64 | MIT OR Apache-2.0                                   | [source](https://github.com/lo48576/iri-string)                                                 |
 | Rust      | is_terminal_polyfill           | 1.70.2             | Windows x64, macOS arm64 | MIT OR Apache-2.0                                   | [source](https://github.com/polyfill-rs/is_terminal_polyfill)                                   |
 | Rust      | is-terminal                    | 0.4.17             | Windows x64, macOS arm64 | MIT                                                 | [source](https://github.com/sunfishcode/is-terminal)                                            |
+| Rust      | isolang                        | 2.4.0              | Windows x64, macOS arm64 | Apache-2.0                                          | [source](https://github.com/humenda/isolang-rs)                                                 |
 | Rust      | itoa                           | 1.0.17             | Windows x64, macOS arm64 | MIT OR Apache-2.0                                   | [source](https://github.com/dtolnay/itoa)                                                       |
 | Rust      | js-sys                         | 0.3.87             | Windows x64, macOS arm64 | MIT OR Apache-2.0                                   | [source](https://github.com/wasm-bindgen/wasm-bindgen/tree/master/crates/js-sys)                |
 | Rust      | json-patch                     | 3.0.1              | Windows x64, macOS arm64 | MIT/Apache-2.0                                      | [source](https://github.com/idubrov/json-patch)                                                 |
@@ -384,6 +392,7 @@ This inventory records declared license metadata; it does not replace the corres
 | Rust      | rkyv_derive                    | 0.7.46             | Windows x64, macOS arm64 | MIT                                                 | [source](https://github.com/rkyv/rkyv)                                                          |
 | Rust      | rkyv                           | 0.7.46             | Windows x64, macOS arm64 | MIT                                                 | [source](https://github.com/rkyv/rkyv)                                                          |
 | Rust      | rodio                          | 0.20.1             | Windows x64, macOS arm64 | MIT OR Apache-2.0                                   | [source](https://github.com/RustAudio/rodio)                                                    |
+| Rust      | rtrb                           | 0.4.0              | Windows x64, macOS arm64 | MIT OR Apache-2.0                                   | [source](https://github.com/mgeier/rtrb)                                                        |
 | Rust      | rubato                         | 0.16.2             | Windows x64, macOS arm64 | MIT                                                 | [source](https://github.com/HEnquist/rubato)                                                    |
 | Rust      | rusqlite_migration             | 2.3.0              | Windows x64, macOS arm64 | Apache-2.0                                          | [source](https://github.com/cljoly/rusqlite_migration)                                          |
 | Rust      | rusqlite                       | 0.37.0             | Windows x64, macOS arm64 | MIT                                                 | [source](https://github.com/rusqlite/rusqlite)                                                  |
@@ -493,7 +502,7 @@ This inventory records declared license metadata; it does not replace the corres
 | Rust      | tauri-plugin-process           | 2.3.1              | Windows x64, macOS arm64 | Apache-2.0 OR MIT                                   | [source](https://github.com/tauri-apps/plugins-workspace)                                       |
 | Rust      | tauri-plugin-single-instance   | 2.4.0              | Windows x64, macOS arm64 | Apache-2.0 OR MIT                                   | [source](https://github.com/tauri-apps/plugins-workspace)                                       |
 | Rust      | tauri-plugin-store             | 2.4.2              | Windows x64, macOS arm64 | Apache-2.0 OR MIT                                   | [source](https://github.com/tauri-apps/plugins-workspace)                                       |
-| Rust      | tauri-plugin-updater           | 2.10.0             | Windows x64, macOS arm64 | Apache-2.0 OR MIT                                   | [source](https://github.com/tauri-apps/plugins-workspace)                                       |
+| Rust      | tauri-plugin-updater           | 2.10.1             | Windows x64, macOS arm64 | Apache-2.0 OR MIT                                   | [source](https://github.com/tauri-apps/plugins-workspace)                                       |
 | Rust      | tauri-plugin                   | 2.5.3              | Windows x64, macOS arm64 | Apache-2.0 OR MIT                                   | [source](https://github.com/tauri-apps/tauri)                                                   |
 | Rust      | tauri-runtime-wry              | 2.11.4             | Windows x64, macOS arm64 | Apache-2.0 OR MIT                                   | [source](https://github.com/tauri-apps/tauri)                                                   |
 | Rust      | tauri-runtime                  | 2.11.3             | Windows x64, macOS arm64 | Apache-2.0 OR MIT                                   | [source](https://github.com/tauri-apps/tauri)                                                   |
@@ -534,8 +543,8 @@ This inventory records declared license metadata; it does not replace the corres
 | Rust      | tracing-attributes             | 0.1.31             | Windows x64, macOS arm64 | MIT                                                 | [source](https://github.com/tokio-rs/tracing)                                                   |
 | Rust      | tracing-core                   | 0.1.36             | Windows x64, macOS arm64 | MIT                                                 | [source](https://github.com/tokio-rs/tracing)                                                   |
 | Rust      | tracing                        | 0.1.44             | Windows x64, macOS arm64 | MIT                                                 | [source](https://github.com/tokio-rs/tracing)                                                   |
-| Rust      | transcribe-cpp-sys             | 0.1.3              | Windows x64, macOS arm64 | MIT                                                 | [source](https://github.com/handy-computer/transcribe.cpp)                                      |
-| Rust      | transcribe-cpp                 | 0.1.3              | Windows x64, macOS arm64 | MIT                                                 | [source](https://github.com/handy-computer/transcribe.cpp)                                      |
+| Rust      | transcribe-cpp-sys             | 0.2.4              | Windows x64, macOS arm64 | MIT                                                 | [source](https://github.com/handy-computer/transcribe.cpp)                                      |
+| Rust      | transcribe-cpp                 | 0.2.4              | Windows x64, macOS arm64 | MIT                                                 | [source](https://github.com/handy-computer/transcribe.cpp)                                      |
 | Rust      | transcribe-rs                  | 0.3.8              | Windows x64, macOS arm64 | MIT                                                 | [source](https://github.com/cjpais/transcribe-rs)                                               |
 | Rust      | transpose                      | 0.2.3              | Windows x64, macOS arm64 | MIT OR Apache-2.0                                   | [source](https://github.com/ejmahler/transpose)                                                 |
 | Rust      | tray-icon                      | 0.24.1             | Windows x64, macOS arm64 | MIT OR Apache-2.0                                   | [source](https://github.com/tauri-apps/tray-icon)                                               |
@@ -586,6 +595,7 @@ This inventory records declared license metadata; it does not replace the corres
 | Rust      | webview2-com-sys               | 0.38.2             | Windows x64              | MIT                                                 | [source](https://github.com/wravery/webview2-rs)                                                |
 | Rust      | webview2-com                   | 0.38.2             | Windows x64              | MIT                                                 | [source](https://github.com/wravery/webview2-rs)                                                |
 | Rust      | weezl                          | 0.1.12             | Windows x64, macOS arm64 | MIT OR Apache-2.0                                   | [source](https://github.com/image-rs/weezl)                                                     |
+| Rust      | whatlang                       | 0.16.4             | Windows x64, macOS arm64 | MIT                                                 | [source](https://github.com/greyblake/whatlang-rs)                                              |
 | Rust      | widestring                     | 1.2.1              | Windows x64, macOS arm64 | MIT OR Apache-2.0                                   | [source](https://github.com/VoidStarKat/widestring-rs)                                          |
 | Rust      | winapi-util                    | 0.1.11             | Windows x64              | Unlicense OR MIT                                    | [source](https://github.com/BurntSushi/winapi-util)                                             |
 | Rust      | winapi                         | 0.3.9              | Windows x64              | MIT/Apache-2.0                                      | [source](https://github.com/retep998/winapi-rs)                                                 |
@@ -666,6 +676,8 @@ This inventory records declared license metadata; it does not replace the corres
   Authors: Steven Sheldon
 - Rust dispatch2 0.3.0 (Zlib OR Apache-2.0 OR MIT)
   Authors: Mads Marquart <mads@marquart.dk>, Mary <mary@mary.zone>
+- Rust earshot 1.2.2 (MIT OR Apache-2.0)
+  Authors: Carson M <carson@pyke.io>
 - Rust enum-map-derive 0.17.0 (MIT OR Apache-2.0)
   Authors: Kamila Borowska <kamila@borowska.pw>
 - Rust enum-map 2.7.3 (MIT OR Apache-2.0)
@@ -791,6 +803,8 @@ This inventory records declared license metadata; it does not replace the corres
 - Rust webview2-com-macros 0.8.1 (MIT)
 - Rust webview2-com-sys 0.38.2 (MIT)
 - Rust webview2-com 0.38.2 (MIT)
+- Rust whatlang 0.16.4 (MIT)
+  Authors: Serhii Potapov <blake131313@gmail.com>
 - Rust zune-core 0.4.12 (MIT OR Apache-2.0 OR Zlib)
 - Rust zune-jpeg 0.4.21 (MIT OR Apache-2.0 OR Zlib)
   Authors: caleb <etemesicaleb@gmail.com>

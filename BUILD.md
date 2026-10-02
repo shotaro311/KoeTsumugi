@@ -68,7 +68,7 @@ variables remain useful when diagnosing local toolchain discovery issues:
 $env:LIBCLANG_PATH = "C:\Program Files\LLVM\bin"
 $env:VULKAN_SDK = "C:\VulkanSDK\1.4.350.0"
 $env:CARGO_TARGET_DIR = "C:\hm-target"
-$env:TRANSCRIBE_CMAKE_ARGS = "-DCMAKE_CXX_FLAGS=/utf-8 -DCMAKE_CXX_FLAGS_RELEASE=/utf-8"
+$env:TRANSCRIBE_CMAKE_ARGS = "-DCMAKE_CXX_FLAGS=/utf-8"
 ```
 
 The UTF-8 flags are required when MSVC runs under a non-UTF-8 Windows locale;
@@ -168,6 +168,38 @@ sudo cp -a src-tauri/transcribe-libs/. /usr/lib/KoeTsumugi/
 Resources only need re-copying if they change upstream (new icons, sounds, models, etc.).
 
 ## Troubleshooting
+
+### macOS Accessibility remains enabled after a local rebuild
+
+Local builds use the ad-hoc `signingIdentity: "-"`. A rebuild can have a new macOS code
+identity while the old **System Settings > Privacy & Security > Accessibility** entry
+remains visibly enabled, leaving Handy on `Waiting...`.
+
+After installing the final bundle at `/Applications/Handy.app`, quit Handy, clear only its
+stale Accessibility record, then reopen it:
+
+```bash
+osascript -e 'tell application id "com.pais.handy" to quit' || true
+tccutil reset Accessibility com.pais.handy
+open /Applications/Handy.app
+```
+
+Grant Accessibility again when prompted. This does not reset Microphone or other TCC
+services, and official releases normally do not need it.
+
+For optional diagnosis, compare the designated requirements of the previous and rebuilt
+bundles:
+
+```bash
+codesign -dr - /path/to/previous/Handy.app 2>&1
+codesign -dr - /Applications/Handy.app 2>&1
+```
+
+An ad-hoc requirement contains a `cdhash`; a changed requirement confirms the rebuild is
+not covered by the old grant. The reset procedure does not require this check.
+
+See [issue #1618](https://github.com/cjpais/Handy/issues/1618) for the related onboarding
+and stale-permission report.
 
 ### AppImage build fails on Arch / rolling-release distros
 

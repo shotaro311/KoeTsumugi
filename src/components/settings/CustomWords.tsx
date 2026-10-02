@@ -34,7 +34,9 @@ interface DictionaryConflict {
   usage: "model" | "postProcess";
 }
 
-const findDictionaryConflicts = (entries: CustomDictionaryEntry[]) => {
+const findDictionaryConflicts = (
+  entries: Required<CustomDictionaryEntry>[],
+) => {
   const owners = new Map<string, { output: string; trigger: string }>();
   const conflicts = new Map<string, DictionaryConflict>();
 
@@ -79,8 +81,17 @@ export const CustomWords: React.FC<CustomWordsProps> = React.memo(
   ({ descriptionMode = "tooltip", grouped = false }) => {
     const { t } = useTranslation();
     const { getSetting, updateSetting, isUpdating } = useSettings();
-    const customWords = (getSetting("custom_words") ||
-      []) as CustomDictionaryEntry[];
+    const storedWords = getSetting("custom_words");
+    const customWords = useMemo(
+      () =>
+        (storedWords ?? []).map((entry) => ({
+          ...entry,
+          aliases: entry.aliases ?? [],
+          use_in_model_prompt: entry.use_in_model_prompt ?? true,
+          use_in_post_process: entry.use_in_post_process ?? true,
+        })),
+      [storedWords],
+    );
 
     const [output, setOutput] = useState("");
     const [aliasesText, setAliasesText] = useState("");
@@ -149,7 +160,7 @@ export const CustomWords: React.FC<CustomWordsProps> = React.memo(
         return;
       }
 
-      const nextEntry: CustomDictionaryEntry = {
+      const nextEntry: Required<CustomDictionaryEntry> = {
         output: sanitizedOutput,
         aliases: parsedAliases,
         use_in_model_prompt: useInModelPrompt,
@@ -196,7 +207,10 @@ export const CustomWords: React.FC<CustomWordsProps> = React.memo(
       }
     };
 
-    const handleEdit = (entry: CustomDictionaryEntry, index: number) => {
+    const handleEdit = (
+      entry: Required<CustomDictionaryEntry>,
+      index: number,
+    ) => {
       setOutput(entry.output);
       setAliasesText(entry.aliases.join(", "));
       setUseInModelPrompt(entry.use_in_model_prompt);
