@@ -169,54 +169,8 @@ jobs:
 
   verify-public-macos:
     needs: [create-release, publish-release]
-    runs-on: macos-26
     permissions:
       contents: read
-    env:
-      RELEASE_VERSION: ${{ needs.create-release.outputs.version }}
-    steps:
-      - name: Verify anonymous public DMG and runtime launch
-        shell: bash
-        run: |
-          set -euo pipefail
-          export AUDIT_DIR="$RUNNER_TEMP/koetsumugi-public-audit"
-          mkdir -p "$AUDIT_DIR"
-          python3 - <<'PY'
-          import hashlib, json, os, pathlib, urllib.request
-          root = pathlib.Path(os.environ['AUDIT_DIR'])
-          url = f"https://api.github.com/repos/{os.environ['GITHUB_REPOSITORY']}/releases/tags/handy-m-v{os.environ['RELEASE_VERSION']}"
-          request = urllib.request.Request(url, headers={'User-Agent': 'KoeTsumugi-release-audit'})
-          with urllib.request.urlopen(request, timeout=60) as response:
-              release = json.load(response)
-          assert not release['draft'] and not release['prerelease']
-          asset = next(asset for asset in release['assets'] if asset['name'].endswith('_aarch64.dmg'))
-          with urllib.request.urlopen(asset['browser_download_url'], timeout=120) as response:
-              content = response.read()
-          assert len(content) == asset['size']
-          assert 'sha256:' + hashlib.sha256(content).hexdigest() == asset['digest']
-          (root / 'KoeTsumugi.dmg').write_bytes(content)
-          print('Anonymous DMG download and GitHub digest verified')
-          PY
-          MOUNT="$AUDIT_DIR/mounted"
-          APP_PID=""
-          cleanup() {
-            if [ -n "$APP_PID" ]; then kill "$APP_PID" 2>/dev/null || true; fi
-            hdiutil detach "$MOUNT" -quiet 2>/dev/null || true
-          }
-          trap cleanup EXIT
-          hdiutil attach "$AUDIT_DIR/KoeTsumugi.dmg" -mountpoint "$MOUNT" -readonly -nobrowse
-          APP="$MOUNT/KoeTsumugi.app"
-          codesign --verify --deep --strict --verbose=2 "$APP"
-          codesign -dv --verbose=4 "$APP" 2>&1 | grep 'Authority=Developer ID Application:'
-          xcrun stapler validate "$APP"
-          xcrun stapler validate "$AUDIT_DIR/KoeTsumugi.dmg"
-          spctl --assess --type execute --verbose=2 "$APP"
-          spctl --assess --type open --context context:primary-signature --verbose=2 "$AUDIT_DIR/KoeTsumugi.dmg"
-          test "$(/usr/libexec/PlistBuddy -c 'Print CFBundleShortVersionString' "$APP/Contents/Info.plist")" = "$RELEASE_VERSION"
-          test "$(/usr/libexec/PlistBuddy -c 'Print CFBundleIdentifier' "$APP/Contents/Info.plist")" = 'com.shotaro.handym'
-          "$APP/Contents/MacOS/koetsumugi" --list-devices
-          "$APP/Contents/MacOS/koetsumugi" --start-hidden > "$AUDIT_DIR/startup.log" 2>&1 &
-          APP_PID=$!
-          sleep 5
-          kill -0 "$APP_PID"
-          echo 'Public macOS signing, notarization, Gatekeeper, version and runtime launch verified'
+    uses: ./.github/workflows/verify-public-release.yml
+    with:
+      version: ${{ needs.create-release.outputs.version }}
